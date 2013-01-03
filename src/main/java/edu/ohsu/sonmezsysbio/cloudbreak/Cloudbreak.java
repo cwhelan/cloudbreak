@@ -83,9 +83,6 @@ public class Cloudbreak extends Configured implements Tool
         CommandGMMFitSingleEndInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitSingleEndInsertSizes();
         jc.addCommand("GMMFitSingleEndInsertSizes", GMMFitSingleEndInsertSizes);
 
-        CommandVESingleEndDeletionScores veSingleEndDeletionScores = new CommandVESingleEndDeletionScores();
-        jc.addCommand("veSingleEndDeletionScores", veSingleEndDeletionScores);
-
         CommandAverageWigOverSlidingWindow averageWigOverSlidingWindow = new CommandAverageWigOverSlidingWindow();
         jc.addCommand("averageWigOverSlidingWindow", averageWigOverSlidingWindow);
 
