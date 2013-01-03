@@ -133,7 +133,6 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
     public void testMap_real1() throws Exception {
         String key = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd/";
         String val = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//1\tS\tTAAAAAGCCGCGGCGACTAAAAGCCGCTGAGAGGGGGCAAAAAGCAGCGG\t66554410000////1.0000/----,/,.,.,,++++-----+*-****\tU\t25\t139.09267\t>2\t132512583\tF\t.\t.\t.\t18A>T\tSVP_READ\t@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//2\tS\tCCCCTGCCCCGCCGCGGCTTTTTGCGGCTTTCCGCCCCGGCCGCCGCGGA\t33324110000////...000//---,,...,,,++++++++++*****,\tU\t23\t135.68983\t>2\t132512814\tR\t.\t.\t.\t1G>T";
-        String va2 = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bf17d//1\tS\tTAAAAAGCCGCGGCGACTAAAAGCCGCTGAGAGGGGGCAAAAAGCAGCGG\t66554410000////1.0000/----,/,.,.,,++++-----+*-****\tU\t25\t139.09267\t>2\t132512583\tF\t.\t.\t.\t18A>T\tSVP_READ\t@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bf17d//2\tS\tCCCCTGCCCCGCCGCGGCTTTTTGCGGCTTTCCGCCCCGGCCGCCGCGGA\t33324110000////...000//---,,...,,,++++++++++*****,\t23\t135.68983\t>2\t132512814\tR\t.\t.\t.\t1G>T";
 
         mapper.setFaix(new FaidxFileHelper("foo") {
             @Override

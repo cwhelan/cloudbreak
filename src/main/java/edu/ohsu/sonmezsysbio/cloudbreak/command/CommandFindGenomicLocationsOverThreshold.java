@@ -44,8 +44,6 @@ public class CommandFindGenomicLocationsOverThreshold implements CloudbreakComma
         conf.setJobName("Find Genomic Locations Over Threshold");
         conf.setJarByClass(Cloudbreak.class);
 
-        FileSystem dfs = DistributedFileSystem.get(conf);
-
         FileInputFormat.addInputPath(conf, new Path(inputHDFSDir));
 
         Path outputDir = new Path(outputHDFSDir);

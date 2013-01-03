@@ -35,8 +35,6 @@ public class CommandSortGMMResults extends BaseCloudbreakCommand {
         jobConf.setJobName("Sort and merge GMM Results");
         jobConf.setJarByClass(Cloudbreak.class);
 
-        FileSystem dfs = DistributedFileSystem.get(jobConf);
-
         FileInputFormat.addInputPath(jobConf, new Path(inputHDFSDir));
         Path outputDirPath = new Path(outputHDFSDir);
 

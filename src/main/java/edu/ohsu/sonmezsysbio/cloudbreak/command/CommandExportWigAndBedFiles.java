@@ -47,9 +47,6 @@ public class CommandExportWigAndBedFiles implements CloudbreakCommand {
     @Parameter(names = {"--medianFilterWindow"})
     int medianFilterWindow = 1;
 
-    @Parameter(names = {"--averageOverSlidingWindow"})
-    boolean averageOverSlidingWindow = false;
-
     @Parameter(names = {"--resolution"})
     int resolution = Cloudbreak.DEFAULT_RESOLUTION;
 
@@ -67,8 +64,6 @@ public class CommandExportWigAndBedFiles implements CloudbreakCommand {
 
         String pileupFileName = outputPrefix + "_piledup_deletion_scores.wig.gz";
         String pileupBedFileName = outputPrefix + "_piledup_positive_score_regions.bed";
-        String averagedFileName = outputPrefix + "_windowed_average_deletion_scores.wig";
-        String averagedBedFileName = outputPrefix + "_averaged_positive_score_regions.bed";
 
         File outputFile = new File(pileupFileName);
         if (! outputFile.createNewFile()) {
@@ -90,28 +85,6 @@ public class CommandExportWigAndBedFiles implements CloudbreakCommand {
         } finally {
             pileupWigFileReader.close();
             piledupBedFileWriter.close();
-        }
-
-        if (averageOverSlidingWindow) {
-            System.err.println("Averaging scores over sliding window into " + averagedFileName);
-            BufferedReader inFileReader = new BufferedReader(new FileReader(new File(pileupFileName)));
-            BufferedWriter outFileWriter = new BufferedWriter(new FileWriter(new File(averagedFileName)));
-            try {
-                WigFileHelper.averageWigOverSlidingWindow(resolution, Cloudbreak.WINDOW_SIZE_IN_LINES, inFileReader, outFileWriter);
-            } finally {
-                inFileReader.close();
-                outFileWriter.close();
-            }
-
-            System.err.println("Exporting averaged regions with positive scores into " + averagedBedFileName);
-            BufferedReader averagedWigFileReader = new BufferedReader(new FileReader(new File(averagedFileName)));
-            BufferedWriter averageBedFileWriter = new BufferedWriter(new FileWriter(new File(averagedBedFileName)));
-            try {
-                WigFileHelper.exportRegionsOverThresholdFromWig(outputPrefix, averagedWigFileReader, averageBedFileWriter, 0.0, faidx, medianFilterWindow);
-            } finally {
-                averagedWigFileReader.close();
-                piledupBedFileWriter.close();
-            }
         }
 
     }

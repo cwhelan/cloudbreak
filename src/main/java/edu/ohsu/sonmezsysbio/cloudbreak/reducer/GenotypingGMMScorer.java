@@ -62,8 +62,7 @@ public class GenotypingGMMScorer {
         }
 
         double sumWeightedLikelihoods = 0;
-        int i = 0;
-        for (i = 0; i < y.length; i++) {
+        for (int i = 0; i < y.length; i++) {
             double[] weightedPointLikelihoods = new double[w.length];
             for (int j = 0; j < w.length; j++) {
                 weightedPointLikelihoods[j] = w[j] + pointLikelihoods[j][i];

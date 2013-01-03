@@ -31,9 +31,5 @@ public class CommandReadPairedEndFilesIntoHDFSTest {
         CommandReadPairedEndFilesIntoHDFS command = new CommandReadPairedEndFilesIntoHDFS();
         double entropy = command.trigramEntropy(s1);
         assertEquals(2.16, entropy, 0.0001);
-
-        String s2 = "TCTACGTGGATACATATATGTGTATTGCATATACATATACGTGGATACATATATGTGTATTGCATATACATCTACGTGGATACATATATTTCTATTGCAT";
-        entropy = command.trigramEntropy(s1);
-        assertEquals(2.16, entropy, 0.0001);
     }
 }

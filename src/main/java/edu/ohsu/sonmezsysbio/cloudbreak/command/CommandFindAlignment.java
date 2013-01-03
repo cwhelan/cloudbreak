@@ -42,7 +42,6 @@ public class CommandFindAlignment extends BaseCloudbreakCommand {
 
         conf.setJobName("Find Alignment Record");
         conf.setJarByClass(Cloudbreak.class);
-        FileSystem dfs = DistributedFileSystem.get(conf);
         FileInputFormat.addInputPath(conf, new Path(hdfsAlignmentsDir));
 
         Path outputDir = new Path(ouptutHDFSDir);
