@@ -80,9 +80,6 @@ public class Cloudbreak extends Configured implements Tool
         CommandMrFastSingleEnds mrFastSingleEnds  = new CommandMrFastSingleEnds();
         jc.addCommand("mrfastSingleEnds", mrFastSingleEnds);
 
-        CommandPileupSingleEndDeletionScores pileupSingleEndDeletionScores = new CommandPileupSingleEndDeletionScores();
-        jc.addCommand("pileupSingleEndDeletionScores", pileupSingleEndDeletionScores);
-
         CommandIncrementalUpdateSingleEndDeletionScores incrementalUpdateSingleEndDeletionScores = new CommandIncrementalUpdateSingleEndDeletionScores();
         jc.addCommand("incrementalUpdateSingleEndDeletionScores", incrementalUpdateSingleEndDeletionScores);
 
