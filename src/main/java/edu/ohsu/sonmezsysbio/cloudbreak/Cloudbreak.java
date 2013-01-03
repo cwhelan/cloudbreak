@@ -110,9 +110,6 @@ public class Cloudbreak extends Configured implements Tool
         CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
         jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
 
-        CommandConvertTextAlignmentsToSnappySequence convertTextAlignmentsToSnappySequence = new CommandConvertTextAlignmentsToSnappySequence();
-        jc.addCommand("convertTextAlignmentsToSnappySequence", convertTextAlignmentsToSnappySequence);
-
         CommandExportAlignmentsFromHDFS commandExportAlignmentsFromHDFS = new CommandExportAlignmentsFromHDFS();
         jc.addCommand("exportAlignmentsFromHDFS", commandExportAlignmentsFromHDFS);
 
