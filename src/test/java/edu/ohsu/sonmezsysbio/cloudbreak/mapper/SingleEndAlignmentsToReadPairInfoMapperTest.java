@@ -54,7 +54,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
     public void testMapPairedEnd() throws Exception {
 
         String key = "@ERR000545.10000001 EAS139_44:1:93:532:453";
-        String value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t43049466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tSVP_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t43039500\tF\t.\t.\t.\t3G>A";
+        String value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t43049466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tCB_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t43039500\tF\t.\t.\t.\t3G>A";
 
         mapper.setReadGroupId((short) 3);
 
@@ -86,7 +86,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
     public void testMapPairedEndWithSegmentalDuplications() throws Exception {
 
         String key = "@ERR000545.10000001 EAS139_44:1:93:532:453";
-        String value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t43049466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tSVP_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t43039500\tF\t.\t.\t.\t3G>A";
+        String value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t43049466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tCB_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t43039500\tF\t.\t.\t.\t3G>A";
 
         mapper.setExclusionRegions(new GFFFileHelper() {
             @Override
@@ -108,7 +108,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
         assertEquals(0, collector.keys.size());
 
         key = "@ERR000545.10000001 EAS139_44:1:93:532:453";
-        value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t49466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tSVP_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t39500\tF\t.\t.\t.\t3G>A";
+        value = "@ERR000545.10000001 EAS139_44:1:93:532:453/1\tS\tCAAAAACCACTTGTACTCCAAAAGCTATTGAAGTTTAAGTTAAAATAAAAA\t<??>>?;<>=@?=?>8@<<9=98=:@>>>=:>>:6?7>9:?<46:;9;.:9\tR\t114\t0.00000\t>10\t49466\tR\t.\t.\t.\t10A>C 22C>A 46-A\tCB_READ\t@ERR000545.10000001 EAS139_44:1:93:532:453/2\tS\tTTATTGCACTTACCATGACTGTCTTCTGAAATGCATCTCAACCCTTGAATA\t;<8>>:$>=?@?>>:>=>:9=8<>1;8:<=>>9=:=7><>=;=;=>=72:>\tU\t34\t145.2313\t>10\t39500\tF\t.\t.\t.\t3G>A";
         collector = new MockOutputCollector();
         mapper.map(new Text(key), new Text(value), collector, reporter);
         assertEquals(101, collector.keys.size());
@@ -133,7 +133,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
     @Test
     public void testMap_real1() throws Exception {
         String key = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd/";
-        String val = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//1\tS\tTAAAAAGCCGCGGCGACTAAAAGCCGCTGAGAGGGGGCAAAAAGCAGCGG\t66554410000////1.0000/----,/,.,.,,++++-----+*-****\tU\t25\t139.09267\t>2\t132512583\tF\t.\t.\t.\t18A>T\tSVP_READ\t@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//2\tS\tCCCCTGCCCCGCCGCGGCTTTTTGCGGCTTTCCGCCCCGGCCGCCGCGGA\t33324110000////...000//---,,...,,,++++++++++*****,\tU\t23\t135.68983\t>2\t132512814\tR\t.\t.\t.\t1G>T";
+        String val = "@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//1\tS\tTAAAAAGCCGCGGCGACTAAAAGCCGCTGAGAGGGGGCAAAAAGCAGCGG\t66554410000////1.0000/----,/,.,.,,++++-----+*-****\tU\t25\t139.09267\t>2\t132512583\tF\t.\t.\t.\t18A>T\tCB_READ\t@2_132385096_132385222_0_1_0_0_1:0:0_1:0:0_1bfnjd//2\tS\tCCCCTGCCCCGCCGCGGCTTTTTGCGGCTTTCCGCCCCGGCCGCCGCGGA\t33324110000////...000//---,,...,,,++++++++++*****,\tU\t23\t135.68983\t>2\t132512814\tR\t.\t.\t.\t1G>T";
 
         mapper.setFaix(new FaidxFileHelper("foo") {
             @Override

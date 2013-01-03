@@ -15,7 +15,7 @@ public class Cloudbreak extends Configured implements Tool
     public static final String READ_SEPARATOR = "\tCB_READ\t";
     public static final int DEFAULT_RESOLUTION = 25;
     public static final int WINDOW_SIZE_IN_LINES = 1000;
-    public static final int DEFAULT_MAX_INSERT_SIZE = 500000;
+    public static final int DEFAULT_MAX_INSERT_SIZE = 25000;
 
     public static final String ALIGNER_NOVOALIGN = "novoalign";
     public static final String ALIGNER_MRFAST = "mrfast";
