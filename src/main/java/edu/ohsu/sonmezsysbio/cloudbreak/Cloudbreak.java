@@ -83,9 +83,6 @@ public class Cloudbreak extends Configured implements Tool
         CommandGMMFitSingleEndInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitSingleEndInsertSizes();
         jc.addCommand("GMMFitSingleEndInsertSizes", GMMFitSingleEndInsertSizes);
 
-        CommandAverageWigOverSlidingWindow averageWigOverSlidingWindow = new CommandAverageWigOverSlidingWindow();
-        jc.addCommand("averageWigOverSlidingWindow", averageWigOverSlidingWindow);
-
         CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
         jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
 
