@@ -1,4 +1,4 @@
-package edu.ohsu.sonmezsysbio.svpipeline.io;
+package edu.ohsu.sonmezsysbio.cloudbreak.io;
 
 import org.apache.hadoop.io.WritableComparable;
 

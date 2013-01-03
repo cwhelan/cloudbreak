@@ -1,6 +1,5 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.io;
 
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;

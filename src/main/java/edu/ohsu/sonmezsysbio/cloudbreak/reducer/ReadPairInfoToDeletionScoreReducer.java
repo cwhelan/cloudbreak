@@ -4,10 +4,9 @@ import edu.ohsu.sonmezsysbio.cloudbreak.ReadGroupInfo;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.ReadGroupInfoFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.mapred.*;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

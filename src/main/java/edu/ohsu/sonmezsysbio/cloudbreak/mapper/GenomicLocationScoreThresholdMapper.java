@@ -1,7 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
 import edu.ohsu.sonmezsysbio.cloudbreak.CloudbreakMapReduceBase;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.Mapper;

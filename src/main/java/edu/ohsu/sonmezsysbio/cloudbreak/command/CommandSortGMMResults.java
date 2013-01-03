@@ -4,7 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GMMScorerResults;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;

@@ -1,7 +1,5 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.io;
 
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
-
 import java.io.IOException;
 
 /**

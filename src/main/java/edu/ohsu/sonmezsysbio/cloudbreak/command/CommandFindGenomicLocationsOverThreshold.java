@@ -2,7 +2,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.GenomicLocationScoreThresholdMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;

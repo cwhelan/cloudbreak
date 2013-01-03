@@ -6,7 +6,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.DFSFacade;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.WigFileHelper;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReaderAndLine;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.SequenceReaderAndLine;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.TextReaderAndLine;

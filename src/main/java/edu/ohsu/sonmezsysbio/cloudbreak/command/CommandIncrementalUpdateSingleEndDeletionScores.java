@@ -13,7 +13,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentsToReadPairInfoMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.partitioner.GenomicLocationWithQualityPartitioner;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.ReadPairInfoToDeletionScoreReducer;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;

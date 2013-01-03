@@ -7,7 +7,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.file.GFFFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.AlignmentRecordFilter;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
-import edu.ohsu.sonmezsysbio.svpipeline.io.GenomicLocation;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.Mapper;
