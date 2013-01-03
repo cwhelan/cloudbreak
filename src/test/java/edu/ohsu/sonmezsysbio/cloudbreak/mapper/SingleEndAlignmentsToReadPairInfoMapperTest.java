@@ -38,6 +38,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
         mapper = new SingleEndAlignmentsToReadPairInfoMapper();
         mapper.setScorer(new ProbabilisticPairedAlignmentScorer());
         mapper.setAlignmentReader(new NovoalignAlignmentReader());
+        mapper.setResolution(100);
         mapper.setFaix(new FaidxFileHelper("foo") {
             @Override
             public Short getKeyForChromName(String name) throws IOException {
@@ -62,7 +63,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
         mapper.map(new Text(key), new Text(value), collector, reporter);
 
         int idx = 0;
-        for (int i = 43039500; i <= 43049500; i = i + Cloudbreak.DEFAULT_RESOLUTION) {
+        for (int i = 43039500; i <= 43049500; i = i + 100) {
             GenomicLocationWithQuality genomicLocationWithQuality = new GenomicLocationWithQuality();
             genomicLocationWithQuality.chromosome = 9;
             genomicLocationWithQuality.pos = i;
