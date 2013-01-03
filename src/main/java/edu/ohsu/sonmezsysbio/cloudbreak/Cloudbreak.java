@@ -11,8 +11,8 @@ import org.apache.hadoop.util.ToolRunner;
 public class Cloudbreak extends Configured implements Tool
 {
 
-    public static final String ALIGNMENT_SEPARATOR = "\tSVP_ALIGNMENT\t";
-    public static final String READ_SEPARATOR = "\tSVP_READ\t";
+    public static final String ALIGNMENT_SEPARATOR = "\tCB_ALIGN\t";
+    public static final String READ_SEPARATOR = "\tCB_READ\t";
     public static final int DEFAULT_RESOLUTION = 25;
     public static final int WINDOW_SIZE_IN_LINES = 1000;
     public static final int DEFAULT_MAX_INSERT_SIZE = 500000;
