@@ -65,7 +65,7 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
     String mapabilityWeightingFileName;
 
     @Parameter(names = {"--aligner"})
-    String aligner = Cloudbreak.ALIGNER_NOVOALIGN;
+    String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     @Parameter(names = {"--maxLogMapqDiff"})
     Double maxLogMapqDiff = 5.0;

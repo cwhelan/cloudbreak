@@ -66,7 +66,7 @@ public class CommandDebugReadPairInfo extends BaseCloudbreakCommand {
     String mapabilityWeightingFileName;
 
     @Parameter(names = {"--aligner"})
-    String aligner = Cloudbreak.ALIGNER_NOVOALIGN;
+    String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     @Parameter(names = {"--minScore"})
     int minScore = -1;

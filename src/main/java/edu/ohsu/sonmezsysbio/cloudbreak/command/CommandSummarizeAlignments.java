@@ -26,7 +26,7 @@ public class CommandSummarizeAlignments implements CloudbreakCommand {
     String outputHDFSDir;
 
     @Parameter(names = {"--aligner"})
-    String aligner = Cloudbreak.ALIGNER_NOVOALIGN;
+    String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     public void run(Configuration conf) throws Exception {
         runHadoopJob(conf);

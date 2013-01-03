@@ -47,7 +47,7 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
     int maxInsertSize = 500000;
 
     @Parameter(names = {"--aligner"})
-    String aligner = Cloudbreak.ALIGNER_NOVOALIGN;
+    String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     @Parameter(names = {"--minScore"})
     int minScore = -1;
