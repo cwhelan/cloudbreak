@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Created by IntelliJ IDEA.

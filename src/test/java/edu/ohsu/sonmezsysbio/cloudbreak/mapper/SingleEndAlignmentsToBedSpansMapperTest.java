@@ -1,15 +1,10 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
-import edu.ohsu.sonmezsysbio.cloudbreak.PairedAlignmentScorer;
 import edu.ohsu.sonmezsysbio.cloudbreak.ProbabilisticPairedAlignmentScorer;
-import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.NovoalignAlignmentReader;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.SAMAlignmentReader;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GMMScorerResults;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GenotypingGMMScorer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.OutputCollector;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

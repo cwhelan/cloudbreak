@@ -2,7 +2,10 @@ package edu.ohsu.sonmezsysbio.cloudbreak.reducer;
 
 import com.google.common.base.Joiner;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapred.MapReduceBase;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.Reducer;
+import org.apache.hadoop.mapred.Reporter;
 
 import java.io.IOException;
 import java.util.Iterator;

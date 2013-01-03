@@ -3,7 +3,6 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.Bowtie2SingleEndMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.RazerS3SingleEndMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;

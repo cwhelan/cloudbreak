@@ -1,6 +1,9 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
-import edu.ohsu.sonmezsysbio.cloudbreak.*;
+import edu.ohsu.sonmezsysbio.cloudbreak.AlignmentRecord;
+import edu.ohsu.sonmezsysbio.cloudbreak.PairedAlignmentScorer;
+import edu.ohsu.sonmezsysbio.cloudbreak.ProbabilisticPairedAlignmentScorer;
+import edu.ohsu.sonmezsysbio.cloudbreak.ReadPairAlignments;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.Mapper;

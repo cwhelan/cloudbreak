@@ -1,6 +1,5 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
-import edu.ohsu.sonmezsysbio.cloudbreak.AlignmentRecord;
 import edu.ohsu.sonmezsysbio.cloudbreak.SAMRecord;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.SAMAlignmentReader;
 import org.apache.hadoop.io.Text;

@@ -4,8 +4,6 @@ import edu.ohsu.sonmezsysbio.cloudbreak.AlignmentRecord;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.ReadPairAlignments;
 
-import java.util.List;
-
 /**
  * Created by IntelliJ IDEA.
  * User: cwhelan

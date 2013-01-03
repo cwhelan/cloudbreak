@@ -1,7 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 

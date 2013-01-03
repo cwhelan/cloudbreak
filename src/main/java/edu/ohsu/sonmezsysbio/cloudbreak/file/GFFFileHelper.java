@@ -1,6 +1,9 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.file;
 
-import org.biojava3.genome.parsers.gff.*;
+import org.biojava3.genome.parsers.gff.FeatureI;
+import org.biojava3.genome.parsers.gff.FeatureList;
+import org.biojava3.genome.parsers.gff.GFF3Reader;
+import org.biojava3.genome.parsers.gff.Location;
 
 import java.io.IOException;
 import java.util.HashMap;
