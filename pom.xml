@@ -145,14 +145,33 @@
 
          <plugin>
 	      <artifactId>maven-assembly-plugin</artifactId>
-	      <configuration>
-	        <descriptors>
-	          <descriptor>src/assemble/exe.xml</descriptor>
-	        </descriptors>
-	        <archive>
-	          <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-	        </archive>
-	      </configuration>
+
+             <configuration>
+                 <descriptors>
+                     <descriptor>src/assemble/exe.xml</descriptor>
+                     <descriptor>src/assemble/dist.xml</descriptor>
+                 </descriptors>
+                 <archive>
+                     <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                 </archive>
+             </configuration>
+
+             <executions>
+              <execution>
+                  <id>exe</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>single</goal>
+                  </goals>
+              </execution>
+              <execution>
+                  <id>dist</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>single</goal>
+                  </goals>
+              </execution>
+          </executions>
 	    </plugin>
 
         <plugin>
