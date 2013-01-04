@@ -25,7 +25,7 @@ public class WigFileHelper {
                                                          Double threshold, FaidxFileHelper faidx, int medianFilterWindow
                                                          ) throws IOException {
         exportRegionsOverThresholdFromWig(name, wigFileReader, bedFileWriter, threshold, faidx, medianFilterWindow, null, null,
-                new ArrayList<String>(), new HashMap<String, BufferedReader>());
+                new ArrayList<String>(), new HashMap<String, BufferedReader>(), -1, -1);
 
     }
 
@@ -34,14 +34,15 @@ public class WigFileHelper {
                                                          FaidxFileHelper faidx, int medianFilterWindow,
                                                          List<String> extraFileNames, Map<String, BufferedReader> extraWigFileReaders) throws IOException {
         exportRegionsOverThresholdFromWig(outputPrefix, wigFileReader, bedFileWriter, threshold, faidx, medianFilterWindow, null, null,
-                extraFileNames, extraWigFileReaders);
+                extraFileNames, extraWigFileReaders, -1, -1);
     }
 
     public static void exportRegionsOverThresholdFromWig(String outputPrefix, BufferedReader wigFileReader,
                                                          BufferedWriter bedFileWriter, double threshold,
                                                          FaidxFileHelper faidx, int medianFilterWindow,
                                                          String muFile, BufferedReader muFileReader,
-                                                         List<String> extraFileNames, Map<String, BufferedReader> extraWigFileReaders)
+                                                         List<String> extraFileNames, Map<String, BufferedReader> extraWigFileReaders,
+                                                         int targetIsize, int targetIsizeSD)
             throws IOException {
         String trackName = outputPrefix + " peaks over " + threshold;
         bedFileWriter.write("track name = \"" + trackName + "\"\n");
@@ -77,7 +78,7 @@ public class WigFileHelper {
                 if (values != null) {
                     double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
                     peakNum = writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution,
-                            peakNum, muFileValues, extraFileNames, extraWigFileValues);
+                            peakNum, muFileValues, extraFileNames, extraWigFileValues, targetIsize, targetIsizeSD);
                 }
                 currentChromosome = line.split(" ")[1].split("=")[1];
                 resolution = Integer.valueOf(line.split(" ")[2].split("=")[1]);
@@ -115,7 +116,7 @@ public class WigFileHelper {
         }
         double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
         writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution, peakNum, muFileValues, extraFileNames,
-                extraWigFileValues);
+                extraWigFileValues, targetIsize, targetIsizeSD);
 
     }
 
@@ -159,7 +160,8 @@ public class WigFileHelper {
                                             String currentChromosome, FaidxFileHelper faidx, int resolution,
                                             int peakNum,
                                             double[] muFileValues,
-                                            List<String> extraFileNames, Map<String, double[]> extraWigFileValues) throws IOException {
+                                            List<String> extraFileNames, Map<String, double[]> extraWigFileValues,
+                                            int targetIsize, int targetIsizeSD) throws IOException {
         boolean usingMuValues = (muFileValues != null);
 
         boolean inPositivePeak = false;
@@ -183,7 +185,7 @@ public class WigFileHelper {
 
             if (filteredVals[idx] > 0 &&
                     (! usingMuValues ||
-                    (idx < 2 || Math.abs(muFileValues[idx] - muFileValues[idx - 2]) < 60))) {
+                    (idx < 2 || Math.abs(muFileValues[idx] - muFileValues[idx - 2]) < 2 * targetIsizeSD))) {
                 if (!inPositivePeak) {
                     peakStart = pos;
                     inPositivePeak = true;
@@ -221,10 +223,14 @@ public class WigFileHelper {
             } else {
                 if (inPositivePeak) {
                     long endPosition = pos - 1;
-                    writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
-                            usingMuValues, muValSum, muValMin, muValMax,
-                            extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition);
-                    peakNum += 1;
+                    long length = endPosition - peakStart;
+                    double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
+                    if (! usingMuValues || (avgMu > targetIsize && Math.abs(length - avgMu) <= targetIsize)) {
+                        writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
+                                usingMuValues, muValMin, muValMax,
+                                extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition, avgMu);
+                        peakNum += 1;
+                    }
                     inPositivePeak = false;
                     peakMax = 0;
                 }
@@ -234,21 +240,25 @@ public class WigFileHelper {
         if (inPositivePeak) {
             long endPosition = faidx.getLengthForChromName(currentChromosome) - 1;
             if (endPosition < peakStart) return peakNum;
-            writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
-                    usingMuValues, muValSum, muValMin, muValMax,
-                    extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition);
-            peakNum += 1;
+            long length = endPosition - peakStart;
+            double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
+            if (! usingMuValues || (avgMu > targetIsize && Math.abs(length - avgMu) <= targetIsize)) {
+                writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
+                        usingMuValues, muValMin, muValMax,
+                        extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition, avgMu);
+                peakNum += 1;
+            }
         }
         return peakNum;
     }
 
     private static void writeLine(BufferedWriter bedFileWriter, String currentChromosome, int resolution, int peakNum, List<String> extraFileNames, long peakStart,
-                                  double peakMax, boolean usingMuValues, double muValSum, double muValMin, double muValMax,
-                                  Map<String, Double> extraWigValueSums, Map<String, Double> extraWigValueMins, Map<String, Double> extraWigValueMaxes, long endPosition)
+                                  double peakMax, boolean usingMuValues, double muValMin, double muValMax,
+                                  Map<String, Double> extraWigValueSums, Map<String, Double> extraWigValueMins, Map<String, Double> extraWigValueMaxes, long endPosition, double avgMu)
             throws IOException {
         bedFileWriter.write(currentChromosome + "\t" + peakStart + "\t" + endPosition + "\t" + peakNum + "\t" + peakMax);
         if (usingMuValues) {
-            bedFileWriter.write("\t" + muValSum * resolution / ((endPosition + 1) - peakStart));
+            bedFileWriter.write("\t" + avgMu);
             bedFileWriter.write("\t" + muValMin);
             bedFileWriter.write("\t" + muValMax);
         }

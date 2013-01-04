@@ -25,13 +25,15 @@ faidx_filename = sys.argv[4]
 median_filter_window = sys.argv[5]
 mu_file = sys.argv[6]
 cloudbreak_home = sys.argv[7]
+target_isize = sys.argv[8]
+target_isize_sd = sys.argv[9]
 
 #sys.stderr.write("quantile " + str(q) + "\n")
 #temp_file_name = "tmp/tmp_" + str(q) + ".bed"
 temp_file = tempfile.NamedTemporaryFile()
 temp_file_name = temp_file.name
 
-extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + 'cloudbreak-1.0-SNAPSHOT-exe.jar', 'extractPositiveRegionsFromWig', '--inputWigFile', wig_filename, '--outputBedFile', temp_file_name, '--name', "tmp_" + str(q), "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--muFile", mu_file]
+extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + 'cloudbreak-1.0-SNAPSHOT-exe.jar', 'extractPositiveRegionsFromWig', '--inputWigFile', wig_filename, '--outputBedFile', temp_file_name, '--name', "tmp_" + str(q), "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--muFile", mu_file, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd]
 subprocess.call(extract_regions_cmd)
 
 num_predictions = 0
@@ -43,9 +45,6 @@ for line in open_file(temp_file_name):
     fields = line.split()
     length = int(fields[2]) - int(fields[1])
     avg_mu = float(fields[5])
-    # todo fix this hardcoded tolerance
-    if (avg_mu < 300 or abs(avg_mu - length) > 300):
-        continue
     num_predictions += 1
     bed_line = line.strip()
     bed_lines.append(bed_line)

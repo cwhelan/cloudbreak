@@ -19,6 +19,9 @@ lower_threshold = float(sys.argv[5])
 mu_filename = sys.argv[6]
 
 cbhome = sys.argv[7]
+target_isize = sys.argv[8]
+target_isize_sd = sys.argv[9]
+
 
 def open_file(wig_filename):
     if (wig_filename.endswith("gz")):
@@ -70,7 +73,7 @@ sys.stderr.write(str(quantiles))
 sys.stderr.write("\n")
 
 def process_quantile(q):
-    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, cbhome + 'target/']
+    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, cbhome + 'target/', target_isize, target_isize_sd]
     #print eval_at_q_cmd
     result = subprocess.Popen(eval_at_q_cmd, stdout=subprocess.PIPE).communicate()[0]
     result_fields = result.split()

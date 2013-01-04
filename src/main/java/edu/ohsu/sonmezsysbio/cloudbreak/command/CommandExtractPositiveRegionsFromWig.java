@@ -46,6 +46,12 @@ public class CommandExtractPositiveRegionsFromWig implements CloudbreakCommand {
     @Parameter(names = {"--extraWigFilesToAverage"})
     List<String> extraWigFilesToAverage = new ArrayList<String>();
 
+    @Parameter(names = {"--targetIsize"})
+    int targetIsize;
+
+    @Parameter(names = {"--targetIsizeSD"})
+    int targetIsizeSD;
+
     public void run(Configuration conf) throws Exception {
         FaidxFileHelper faidx = new FaidxFileHelper(faidxFileName);
 
@@ -66,7 +72,7 @@ public class CommandExtractPositiveRegionsFromWig implements CloudbreakCommand {
 
         try {
             WigFileHelper.exportRegionsOverThresholdFromWig(name, wigFileReader, bedFileWriter, threshold, faidx, medianFilterWindow,
-                    muFile, muFileReader, extraWigFilesToAverage, extraWigFileReaders);
+                    muFile, muFileReader, extraWigFilesToAverage, extraWigFileReaders, targetIsize, targetIsizeSD);
         } finally {
             wigFileReader.close();
             bedFileWriter.close();
