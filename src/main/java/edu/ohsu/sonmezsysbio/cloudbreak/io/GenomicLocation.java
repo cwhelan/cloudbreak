@@ -11,8 +11,10 @@ import java.io.IOException;
  * User: cwhelan
  * Date: 4/6/12
  * Time: 1:05 PM
- *
- * todo: this class still in svpipeline for now to support legacy data
+ */
+
+/**
+ * Identifies a genomic window of width Cloudbreak.RESOLUTION
  */
 public class GenomicLocation implements WritableComparable<GenomicLocation> {
     public short chromosome;

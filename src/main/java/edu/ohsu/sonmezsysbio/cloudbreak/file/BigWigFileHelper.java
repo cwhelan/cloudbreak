@@ -12,6 +12,14 @@ import java.io.IOException;
  * Date: 4/25/12
  * Time: 1:55 PM
  */
+
+/**
+ * Class to read and parse a bigwig file. Calls code from the open source project bigwig:
+ *
+ * https://code.google.com/p/bigwig/
+ *
+ * Bigwig wasn't in maven, so we package it up as a local jar in our distro.
+ */
 public class BigWigFileHelper {
 
 

@@ -14,6 +14,15 @@ import java.util.Map;
  * Date: 7/9/12
  * Time: 10:03 AM
  */
+
+/**
+ * Read a readGroupInfoFile with the following tab delimited fields:
+ *
+ * NAME LIBRARY_NAME    INSERT_SIZE INSERT_SIZE_SD  IS_MATE_PAIR    HDFS_PATH
+ *
+ * IS_MATE_PAIR should be "false" in the current version of cloudbreak.
+ * HDFS_PATH should be the path in HDFS to the alignments of the reads for this readgroup.
+ */
 public class ReadGroupInfoFileHelper {
 
     public Map<String,Short> readReadGroupIdsByHDFSPath(String filename) throws IOException {

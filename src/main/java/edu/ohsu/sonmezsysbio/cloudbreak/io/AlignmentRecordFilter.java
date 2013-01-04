@@ -8,6 +8,10 @@ import edu.ohsu.sonmezsysbio.cloudbreak.AlignmentRecord;
  * Date: 12/9/12
  * Time: 9:21 PM
  */
+
+/**
+ * Interface to filter alignment records.
+ */
 public interface AlignmentRecordFilter {
 
     public boolean passes(AlignmentRecord record);

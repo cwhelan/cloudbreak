@@ -13,6 +13,10 @@ import java.util.Map;
  * Date: 5/23/11
  * Time: 10:44 AM
  */
+
+/**
+ * Holds and accesses information in a SAM alignment record.
+ */
 public class SAMRecord implements AlignmentRecord {
 
     private static org.apache.log4j.Logger log = Logger.getLogger(SAMRecord.class);

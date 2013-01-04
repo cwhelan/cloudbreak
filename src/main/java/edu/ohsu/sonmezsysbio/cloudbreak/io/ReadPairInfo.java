@@ -13,6 +13,10 @@ import java.io.IOException;
  * Date: 4/6/12
  * Time: 12:58 PM
  */
+
+/**
+ * These are the read alignment pair features that get passed to the reducer in the GMM job.
+ */
 public class ReadPairInfo implements Writable {
     public int insertSize;
     public double pMappingCorrect;

@@ -10,6 +10,10 @@ import edu.ohsu.sonmezsysbio.cloudbreak.ReadPairAlignments;
  * Date: 8/8/12
  * Time: 1:56 PM
  */
+
+/**
+ * Reads alignment files in novoalign native format.
+ */
 public class NovoalignAlignmentReader extends BaseAlignmentReader {
 
     public AlignmentRecord parseRecord(String alignmentRecord) {

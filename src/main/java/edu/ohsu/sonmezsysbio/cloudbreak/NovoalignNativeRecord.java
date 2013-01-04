@@ -6,6 +6,10 @@ package edu.ohsu.sonmezsysbio.cloudbreak;
  * Date: 6/5/11
  * Time: 2:26 PM
  */
+
+/**
+ * Record container for novoalign native format.
+ */
 public class NovoalignNativeRecord implements AlignmentRecord {
 
     String chromosomeName;

@@ -19,6 +19,11 @@ import java.util.List;
  * Date: 12/3/12
  * Time: 4:08 PM
  */
+
+/**
+ * This allows for adaptive quality cutoff thresholding at the combiner stage; in practice, this doesn't seem to
+ * combine very many records
+ */
 public class DifferentialScoreCutoffCombiner extends CloudbreakMapReduceBase
         implements Reducer<GenomicLocationWithQuality, ReadPairInfo, GenomicLocationWithQuality, ReadPairInfo> {
 

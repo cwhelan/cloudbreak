@@ -12,6 +12,10 @@ import java.util.List;
  * Date: 8/8/12
  * Time: 2:43 PM
  */
+
+/**
+ * Reads alignment files in MrFAST native format.
+ */
 public class MrfastAlignmentReader extends BaseAlignmentReader {
 
     private Double read1AlignmentNormalization;

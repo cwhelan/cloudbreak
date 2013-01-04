@@ -13,6 +13,10 @@ import java.util.*;
  * Date: 3/19/12
  * Time: 3:28 PM
  */
+
+/**
+ * Contains multiple commands for reading from and writing to Wig files.
+ */
 public class WigFileHelper {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(WigFileHelper.class);

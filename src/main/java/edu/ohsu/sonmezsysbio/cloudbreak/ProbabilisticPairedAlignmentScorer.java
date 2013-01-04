@@ -10,6 +10,11 @@ import org.apache.log4j.Logger;
  * Date: 3/12/12
  * Time: 3:11 PM
  */
+
+/**
+ * Functions to compute a simple deletion likelihood score given an insert size and pMapping correct.
+ * Not currently used in the GMM fit code, this is here for legacy reasons.
+ */
 public class ProbabilisticPairedAlignmentScorer extends PairedAlignmentScorer {
     private static org.apache.log4j.Logger logger = Logger.getLogger(ProbabilisticPairedAlignmentScorer.class);
     @Override

@@ -12,6 +12,10 @@ import java.util.Map;
  * Date: 4/9/12
  * Time: 4:02 PM
  */
+
+/**
+ * Read and parse a fai file for the current genome, of the type created with 'samtools faidx'.
+ */
 public class FaidxFileHelper {
 
     Map<Short, String> chromNamesByKey;

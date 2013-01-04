@@ -11,6 +11,11 @@ import java.io.IOException;
  * Date: 8/30/12
  * Time: 2:14 PM
  */
+
+/**
+ * Compares GenoimicLocationWithQuality, ranked by their pMappingCorrect for each location. For MapReduce
+ * secondary sorting.
+ */
 public class GenomicLocationWithQualitySortComparator implements RawComparator<GenomicLocationWithQuality> {
     private final GenomicLocationWithQuality key1;
     private final GenomicLocationWithQuality key2;

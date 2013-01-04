@@ -10,6 +10,10 @@ import edu.ohsu.sonmezsysbio.cloudbreak.ReadPairAlignments;
  * Date: 8/8/12
  * Time: 2:05 PM
  */
+
+/**
+ * Generic interface for an alignment parser depending on the alignment record format.
+ */
 public interface AlignmentReader {
     AlignmentRecord parseRecord(String alignmentRecord);
 
@@ -19,6 +23,9 @@ public interface AlignmentReader {
 
     ReadPairAlignments parsePairAlignmentLine(String line, AlignmentRecordFilter filter);
 
+    /**
+     * Factory method to grab the correct implementing class.
+     */
     public static class AlignmentReaderFactory {
         public static AlignmentReader getInstance(String aligner) {
             if (Cloudbreak.ALIGNER_NOVOALIGN.equals(aligner)) return new NovoalignAlignmentReader();

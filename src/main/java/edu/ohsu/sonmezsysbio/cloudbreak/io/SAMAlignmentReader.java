@@ -12,6 +12,10 @@ import java.util.List;
  * Date: 10/15/12
  * Time: 1:36 PM
  */
+
+/**
+ * Reads alignment records in SAM Format.
+ */
 public class SAMAlignmentReader extends BaseAlignmentReader {
 
     public AlignmentRecord parseRecord(String alignmentRecord) {

@@ -12,6 +12,11 @@ import java.io.IOException;
  * Date: 4/6/12
  * Time: 1:05 PM
  */
+
+/**
+ * A Genomic location plus the mapping quality of a read pair that spans it. This class is here to enable
+ * secondary sorting of values in MapReduce.
+ */
 public class GenomicLocationWithQuality implements WritableComparable<GenomicLocationWithQuality> {
     public short chromosome;
     public int pos;

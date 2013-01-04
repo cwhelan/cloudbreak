@@ -9,6 +9,10 @@ import org.apache.log4j.Logger;
  * Date: 2/28/12
  * Time: 2:54 PM
  */
+
+/**
+ * Contains functions to be used when reducing alignment pairs. Not currently used in the GMM-fit reduce job of cloudbreak.
+ */
 public abstract class PairedAlignmentScorer {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(PairedAlignmentScorer.class);
@@ -52,20 +56,6 @@ public abstract class PairedAlignmentScorer {
             }
         }
         return true;
-    }
-
-    public boolean isMatePairNotSmallFragment(AlignmentRecord record1, AlignmentRecord record2) {
-        boolean matePair = false;
-        if (record1.isForward() && ! record2.isForward()) {
-            if (record1.getPosition() - record2.getPosition() > 0) matePair = true;
-            if (record1.getPosition() - record2.getPosition() < 0 &&
-                    record1.getPosition() - record2.getPosition() > -500) matePair = false;
-        } else if (!record1.isForward() && record2.isForward()) {
-            if (record1.getPosition() - record2.getPosition() < 0) matePair = true;
-            if (record1.getPosition() - record2.getPosition() > 0 &&
-                    record1.getPosition() - record2.getPosition() < 500) matePair = false;
-        }
-        return matePair;
     }
 
 }

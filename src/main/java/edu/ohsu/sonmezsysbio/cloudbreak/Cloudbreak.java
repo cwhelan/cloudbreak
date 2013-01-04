@@ -8,15 +8,22 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+/**
+ * The main class for Cloudbreak. Run "hadoop jar" on the assembled jar file to get the list of commands and options.
+ */
 public class Cloudbreak extends Configured implements Tool
 {
 
+    // Separators for the textual representation of alignments
     public static final String ALIGNMENT_SEPARATOR = "\tCB_ALIGN\t";
     public static final String READ_SEPARATOR = "\tCB_READ\t";
+
+    // default values used in multiple commands
     public static final int DEFAULT_RESOLUTION = 25;
     public static final int WINDOW_SIZE_IN_LINES = 1000;
     public static final int DEFAULT_MAX_INSERT_SIZE = 25000;
 
+    // constants identifying alignement formats recognized by Cloudbreak
     public static final String ALIGNER_NOVOALIGN = "novoalign";
     public static final String ALIGNER_MRFAST = "mrfast";
     public static final String ALIGNER_GENERIC_SAM = "sam";

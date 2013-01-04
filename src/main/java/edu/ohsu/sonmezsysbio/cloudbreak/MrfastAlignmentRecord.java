@@ -6,6 +6,10 @@ package edu.ohsu.sonmezsysbio.cloudbreak;
  * Date: 8/8/12
  * Time: 2:33 PM
  */
+
+/**
+ * Record for holding data from the MrFast native alignment format.
+ */
 public class MrfastAlignmentRecord implements AlignmentRecord {
 
     String chromosomeName;

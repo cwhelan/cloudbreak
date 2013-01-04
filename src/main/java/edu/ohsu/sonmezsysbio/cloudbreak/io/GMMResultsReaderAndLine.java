@@ -11,6 +11,12 @@ import java.io.IOException;
  * Date: 10/18/12
  * Time: 2:15 PM
  */
+
+/**
+ * Used by the export command, this class holds a sequence file reader to a sequence file with keys of
+ * type GenomicLocation and values of type GMMScorerResults. Used to do an efficient merge of multiple
+ * reduce output files in HDFS.
+ */
 public class GMMResultsReaderAndLine implements Comparable<GMMResultsReaderAndLine> {
     private SequenceFile.Reader reader;
     private GenomicLocation gl;

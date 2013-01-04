@@ -13,6 +13,15 @@ import java.util.List;
  * Date: 8/8/12
  * Time: 2:42 PM
  */
+
+/**
+ * Contains common logic for parsing alignment records. Alignments are stored in the form:
+ *
+ * R1alignment1  ALIGNMENT_SEPARATOR R1alignment2  ALIGNMENT_SEPARATOR    ... READ_SEPARATOR R2alignment1    ALIGNMENT_SEPARATOR    R2alignment2    ...
+ *
+ * Where R1alignment1 is the first alignment for read 1 in the pair, etc.
+ *
+ */
 public abstract class BaseAlignmentReader implements AlignmentReader {
 
     public ReadPairAlignments parsePairAlignmentLine(String line) {

@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.google.common.base.Joiner;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMRecord;
 import net.sf.samtools.SAMRecordIterator;

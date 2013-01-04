@@ -13,6 +13,10 @@ import java.net.URISyntaxException;
  * Date: 7/27/12
  * Time: 11:26 AM
  */
+
+/**
+ * Base class for the commands that get run from the main class
+ */
 public abstract class BaseCloudbreakCommand implements CloudbreakCommand {
 
     protected String addDistributedCacheFile(JobConf conf, String hdfsPath) throws URISyntaxException {

@@ -6,6 +6,10 @@ package edu.ohsu.sonmezsysbio.cloudbreak;
  * Date: 7/9/12
  * Time: 9:59 AM
  */
+
+/**
+ * Each read group info stores information about a read group library - the target insert size and standard deviation, its name, and location in HDFS.
+ */
 public class ReadGroupInfo {
     public String readGroupName;
     public String libraryName;

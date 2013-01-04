@@ -16,24 +16,4 @@ import java.io.IOException;
 public interface CloudbreakCommand {
     public void run(Configuration conf) throws Exception;
 
-    public static class HDFSWriter {
-        public BufferedWriter textFileWriter;
-        public SequenceFile.Writer seqFileWriter;
-
-        public void write(Object key, String line) throws IOException {
-            if (textFileWriter != null) {
-                textFileWriter.write(line);
-            } else {
-                seqFileWriter.append(key, new Text(line));
-            }
-        }
-
-        public void close() throws IOException {
-            if (textFileWriter != null) {
-                textFileWriter.close();
-            } else {
-                seqFileWriter.close();
-            }
-        }
-    }
 }

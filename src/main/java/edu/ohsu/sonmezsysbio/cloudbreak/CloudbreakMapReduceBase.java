@@ -12,6 +12,10 @@ import java.util.List;
  * Date: 4/23/12
  * Time: 10:05 PM
  */
+
+/**
+ * This is a base class extended by mappers and reducers that provides access to cross-command configuration information.
+ */
 public class CloudbreakMapReduceBase extends MapReduceBase {
 
     protected int resolution = Cloudbreak.DEFAULT_RESOLUTION;

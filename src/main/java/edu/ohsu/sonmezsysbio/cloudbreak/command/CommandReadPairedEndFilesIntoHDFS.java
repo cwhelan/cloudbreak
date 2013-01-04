@@ -2,6 +2,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;

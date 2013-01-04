@@ -11,6 +11,10 @@ import java.util.Map;
  * Date: 8/8/12
  * Time: 3:18 PM
  */
+
+/**
+ * Container class for holding a list of alignments for each read in a read pair.
+ */
 public class ReadPairAlignments {
 
     Map<String, List<AlignmentRecord>> read1AlignmentsByChromosome;

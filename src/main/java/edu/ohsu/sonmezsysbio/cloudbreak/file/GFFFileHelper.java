@@ -16,6 +16,10 @@ import java.util.Map;
  * Date: 4/19/12
  * Time: 1:07 PM
  */
+
+/**
+ * Read and parse a GFF file.
+ */
 public class GFFFileHelper {
 
     Map<String, FeatureList> featuresByChrom = new HashMap<String, FeatureList>();
@@ -38,6 +42,14 @@ public class GFFFileHelper {
         }
     }
 
+    /**
+     * return true if the given region overlaps a feature in the GFF file. Should be made more efficient with an interval tree.
+     * @param chrom
+     * @param start
+     * @param end
+     * @return
+     * @throws Exception
+     */
     public boolean doesLocationOverlap(String chrom, int start, int end) throws Exception {
         Location query = new Location(start, end);
         if (! featuresByChrom.containsKey(chrom)) return false;
