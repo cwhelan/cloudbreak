@@ -2,8 +2,6 @@
     <id>dist</id>
     <formats>
         <format>tar.gz</format>
-        <format>tar.bz2</format>
-        <format>zip</format>
     </formats>
     <files>
         <file>
@@ -15,10 +13,12 @@
         <file>
             <source>${project.basedir}/README.md</source>
             <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
         </file>
         <file>
             <source>${project.basedir}/LICENSE</source>
             <outputDirectory>/</outputDirectory>
+            <filtered>true</filtered>
         </file>
     </files>
     <fileSets>
@@ -27,6 +27,7 @@
             <includes>
                 <include>*</include>
             </includes>
+            <filtered>true</filtered>
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
@@ -34,6 +35,7 @@
             <includes>
                 <include>*</include>
             </includes>
+            <filtered>true</filtered>
             <outputDirectory>/scripts</outputDirectory>
         </fileSet>
     </fileSets>

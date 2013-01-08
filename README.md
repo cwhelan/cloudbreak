@@ -34,10 +34,33 @@ hdfs -copyFromLocal /path/to/razers3/executable/razers3 executables/
 
 RUNNING CLOUDBREAK
 
+We have created a script to run through the full process of executing the cloudbreak pipeline from FASTQ files to
+deletion calls. The script is named Cloudbreak-full.sh and can be found in the scripts directory of the cloudbreak
+distribution. To customize the script for your needs, copy it to a new location and edit the variables in the
+first three sections: "EXPERIMENT DETAILS", "LOCAL FILES AND DIRECTORIES", and "HDFS FILES AND DIRECTORIES".
+
+The output from Cloudbreak will be found in a file named <READ_GROUP>_<LIBRARY>_dels_genotyped.bed, where READ_GROUP
+and LIBRARY are the names of the reads in your experiment. The format of the file is tab-delimited with the following
+columns:
+
+CHROMOSOME: The chromosome of the deletion call
+START: The start coordinate of the deletion call
+END: The end coordinate of the deletion call
+NUMBER: The cloudbreak identifier of the deletion call
+LR: The likelihood ratio of the deletion (higher indicates a call more likely to be true)
+W: The average weight of the estimated GMM mixing parameter alpha, used in genotyping
+GENOTYPE: The predicted genotype of the call
+
+CONTACT INFORMATION
+
+Please contact cwhelan@gmail.com with any questions on running cloudbreak.
+
+INDIVIDUAL COMMANDS
+
 All of Cloudbreak's functionality is contained in the executable jar file in the lib/ directory where you unpacked the
 Cloudbreak distribution. Use the 'hadoop' command to run the jar file to ensure that the necessary Hadoop dependencies
 are available to Cloudbreak. The usage of each command is detailed below; you can view this information by typing
-'hadoop jar lib/cloudbreak-1.0-exe.jar' without any additional parameters:
+'hadoop jar lib/cloudbreak-${project.version}-exe.jar' without any additional parameters:
 
 Usage: Cloudbreak [options] [command] [command options]
   Options:

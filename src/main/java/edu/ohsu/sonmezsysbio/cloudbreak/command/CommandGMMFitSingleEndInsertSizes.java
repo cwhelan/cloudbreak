@@ -64,6 +64,7 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
     @Parameter(names = {"--mapabilityWeighting"})
     String mapabilityWeightingFileName;
 
+    // todo: validate aligner choice before launching job
     @Parameter(names = {"--aligner"})
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 

@@ -6,6 +6,11 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>cloudbreak</name>
+    <scm>
+        <connection>scm:git:git://github.com/cwhelan/${project.artifactId}.git</connection>
+        <url>http://github.com/cwhelan/${project.artifactId}</url>
+        <developerConnection>scm:git:git@github.com:cwhelan/${project.artifactId}.git</developerConnection>
+    </scm>
   <url>http://maven.apache.org</url>
     <repositories>
 		<repository>
@@ -175,16 +180,16 @@
 	    </plugin>
 
         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-release-plugin</artifactId>
             <version>2.4</version>
-            <configuration>
-                <!--
-                 During release:perform, enable the "release" profile
-                -->
-                <releaseProfiles>release</releaseProfiles>
-                <goals>deploy assembly:single</goals>
-            </configuration>
         </plugin>
-	</plugins>
-</build>
+    </plugins>
+          <resources>
+              <resource>
+                  <directory>src/main/resources</directory>
+                  <filtering>true</filtering>
+              </resource>
+          </resources>
+      </build>
 </project>
