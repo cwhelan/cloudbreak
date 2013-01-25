@@ -132,8 +132,8 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
     ) {
         String[] commandArray = {
                 "bash", "-c", Joiner.on(" ").join(new String[] {"./" + gemMapperExecutable,
-                "-I", referenceBaseName, "-i", path1, "-q", "ignore", "-m", editDistance, "-e", editDistance, "-d", numReports,
-                "|", "./" + gem2SamExecutable, "-o", "map.result", "--expect-single-end-reads"})
+                "-I", referenceBaseName, "-i", path1, "-q", "ignore", "-m", editDistance, "-e", editDistance, "-d", numReports, "-s", "all", "--max-big-indel-length",
+                "0", "|", "./" + gem2SamExecutable, "-o", "map.result", "--expect-single-end-reads"})
         };
         return commandArray;
     }
