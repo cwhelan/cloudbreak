@@ -24,7 +24,7 @@ object ApplyVariantsToFasta {
     def processBaseInside(c : Char) : Iterator[Char] = Iterator()
     def processEnd() : Iterator[Char] = Iterator()
 
-    override def toString() = "2\t" + begin + "\t" + end + "\t" + "Deletion:" + begin + "-" + end + "\t" + (end - begin)
+    override def toString = "2\t" + begin + "\t" + end + "\t" + "Deletion:" + begin + "-" + end + "\t" + (end - begin)
   }
 
   class Inversion(begin : Int, end : Int) extends Variation(begin, end) {
@@ -40,13 +40,9 @@ object ApplyVariantsToFasta {
     }
 
     def processEnd() : Iterator[Char] = {
-      var printed = 0
-      // for (c <- basesSpanned) {
-      //   printed = printed + printBase(c)
-      // }
       basesSpanned.iterator
     }
-    override def toString() = "2\t" + begin + "\t" + end + "\t" + "Inversion:" + begin + "-" + end + "\t" + (end - begin)
+    override def toString = "2\t" + begin + "\t" + end + "\t" + "Inversion:" + begin + "-" + end + "\t" + (end - begin)
   }
 
   class Duplication(begin : Int, end : Int) extends Variation(begin, end) {
@@ -66,7 +62,7 @@ object ApplyVariantsToFasta {
       basesSpanned.iterator
     }
 
-    override def toString() = "2\t" + begin + "\t" + end + "\t" + "Duplication:" + begin + "-" + end + "\t" + (end - begin)
+    override def toString = "2\t" + begin + "\t" + end + "\t" + "Duplication:" + begin + "-" + end + "\t" + (end - begin)
   }
 
   class Alu(val begin : Int, val end : Int, family : String) {
@@ -108,14 +104,14 @@ object ApplyVariantsToFasta {
         }
       }
       // failed to find a right, try again
-      return genSVs(num, alus)
+      genSVs(num, alus)
     }
   }
 
   class SequenceVarier(val variations : List[Variation], val inputChars : Iterator[Char], val out : Writer) {
 
-    def processHeader(inputChars : Iterator[Char]) : Unit = {
-      val c = inputChars.next
+    def processHeader(inputChars : Iterator[Char]) {
+      val c = inputChars.next()
       out.write(c)
       if (c != '\n') {
         processHeader(inputChars)
@@ -125,7 +121,7 @@ object ApplyVariantsToFasta {
     def printBases(c : Iterator[Char], printedChars : Int) : Int = {
       var num = 0
       while (c.hasNext) {
-        out.write(c.next)
+        out.write(c.next())
         num = num + 1
         if ((printedChars + num) % 60 == 0) {
           out.write("\n")
@@ -135,7 +131,6 @@ object ApplyVariantsToFasta {
     }
 
     def processBase(c : Char, offset : Int, printedChars : Int, variations : List[Variation]) : (Int, Int) = {
-      var printed = false
       var newPrinted = printedChars
 
       val currentVariations = variations.filter(v => v.covers(offset))
@@ -155,8 +150,7 @@ object ApplyVariantsToFasta {
       (offset + 1, newPrinted)
     }
 
-    def processSequence() : Unit = {
-      val line_width = 60
+    def processSequence() {
       var offset = 0
       var printedChars = 0
       for (c <- inputChars) {
