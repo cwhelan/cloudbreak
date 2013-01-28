@@ -194,8 +194,13 @@ object ApplyVariantsToFasta {
       // gff is one-based
       val start = fields(3).toInt - 1
       val end = fields(4).toInt
-      val varType = fields
-      variations += new Deletion(start, end)
+      val varType = fields(10)
+      if ("Homozygous_Deletion".equals(varType)) {
+        variations += new Deletion(start, end)
+      } else if ("Homozygous_Insertion".equals(varType)) {
+        variations += new Insertion(start, fields(9))
+      }
+
     }
     variations.toList
   }
