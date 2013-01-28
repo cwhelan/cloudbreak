@@ -4,6 +4,9 @@ import scala.collection.mutable.ListBuffer
 
 import java.io._
 
+package edu.ohsu.sonmezsysbio.cloudbreak {
+
+
 object ApplyVariantsToFasta {
   def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {
     val p = new java.io.PrintWriter(f)
@@ -18,6 +21,12 @@ object ApplyVariantsToFasta {
 
     def processBaseInside(c : Char) : Iterator[Char]
     def processEnd() : Iterator[Char]
+  }
+
+  class Insertion(begin : Int, insertedString : String) extends Variation(begin, begin) {
+    def processBaseInside(c: Char): Iterator[Char] = Iterator()
+
+    def processEnd(): Iterator[Char] = insertedString.iterator
   }
 
   class Deletion(begin : Int, end : Int) extends Variation(begin, end) {
@@ -172,13 +181,20 @@ object ApplyVariantsToFasta {
     }
   }
 
+  /**
+   * Parses the GFF files from the Venter genome Homozygous indel files:
+   * chrom  id  "homozygous_indel"  start  end  .  +  .  .  sequence  "Homozygous_Deletion|Homozygous_Insertion"
+   * @param filename
+   * @return
+   */
   def parseGffFile(filename : String) : List[Variation] = {
     var variations = new scala.collection.mutable.ListBuffer[Variation]
     for(line <- Source.fromFile(filename).getLines()) {
       val fields = line.split("\t")
       // gff is one-based
       val start = fields(3).toInt - 1
-      val end = fields(4).toInt - 1
+      val end = fields(4).toInt
+      val varType = fields
       variations += new Deletion(start, end)
     }
     variations.toList
@@ -210,3 +226,4 @@ object ApplyVariantsToFasta {
   }
 }
 
+}
