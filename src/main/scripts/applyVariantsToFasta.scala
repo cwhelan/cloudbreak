@@ -3,10 +3,10 @@ import scala.util.Random
 import scala.collection.mutable.ListBuffer
 
 import java.io._
-
-package edu.ohsu.sonmezsysbio.cloudbreak {
-
 import collection.SortedSet
+
+
+package edu.ohsu.sonmezsysbio.cloudbreak.scripts {
 
 
 object ApplyVariantsToFasta {
@@ -202,6 +202,9 @@ object ApplyVariantsToFasta {
     for(line <- Source.fromFile(filename).getLines()) {
       val fields = line.split("\t")
       // gff is one-based
+      if (fields.length < 10) {
+        println("could not parse line: " + line)
+      }
       val start = fields(3).toInt
       val end = fields(4).toInt
       val varType = fields(10)

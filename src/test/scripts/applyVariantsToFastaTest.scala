@@ -1,13 +1,12 @@
-import edu.ohsu.sonmezsysbio.cloudbreak.ApplyVariantsToFasta.{Deletion, SequenceVarier}
 import java.io.StringWriter
 import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
-
-package edu.ohsu.sonmezsysbio.cloudbreak {
-
-import edu.ohsu.sonmezsysbio.cloudbreak.ApplyVariantsToFasta.{Variation, Insertion, SequenceVarier, Deletion}
 import collection.immutable.SortedSet
+import edu.ohsu.sonmezsysbio.cloudbreak.scripts.ApplyVariantsToFasta.{Insertion, SequenceVarier, Deletion, Variation}
+
+package edu.ohsu.sonmezsysbio.cloudbreak.scripts {
+
 
 @RunWith(classOf[JUnitRunner])
 class ApplyVariantsToFastaTest extends FunSuite {
@@ -30,6 +29,17 @@ class ApplyVariantsToFastaTest extends FunSuite {
     s.processSequence()
 
     assert("AAAAACTGCCCCGGGGTTTT\n".equals(writer.toString))
+  }
+
+
+  test("test multiple indels") {
+    val originalString = "AAAACCCCGGGGTTTTAAAACCCCGGGGTTTT"
+    var variations =  SortedSet[Variation](new Insertion(5, "ACTG"), new Deletion(9,12), new Insertion(17, "G"), new Deletion(21,24))(Ordering[Int].on[Variation](_ begin))
+    val writer: StringWriter = new StringWriter()
+    val s = new SequenceVarier(variations, originalString.iterator, writer)
+    s.processSequence()
+
+    expect("AAAAACTGCCCCTTTTGAAAAGGGGTTTT\n")(writer.toString)
   }
 
 }
