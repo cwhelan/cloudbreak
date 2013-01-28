@@ -6,14 +6,15 @@ import org.scalatest.junit.JUnitRunner
 
 package edu.ohsu.sonmezsysbio.cloudbreak {
 
-import edu.ohsu.sonmezsysbio.cloudbreak.ApplyVariantsToFasta.{Insertion, SequenceVarier, Deletion}
+import edu.ohsu.sonmezsysbio.cloudbreak.ApplyVariantsToFasta.{Variation, Insertion, SequenceVarier, Deletion}
+import collection.immutable.SortedSet
 
 @RunWith(classOf[JUnitRunner])
 class ApplyVariantsToFastaTest extends FunSuite {
 
   test("test deletion") {
-    val originalString = "AAAACCCCGGGGTTTT"
-    var variations =  List(new Deletion(4, 8))
+    val originalString = "AAAATAGCGGGGTTTT"
+    var variations =  SortedSet[Variation](new Deletion(5, 8))(Ordering[Int].on[Variation](_ begin))
     val writer: StringWriter = new StringWriter()
     val s = new SequenceVarier(variations, originalString.iterator, writer)
     s.processSequence()
@@ -23,7 +24,7 @@ class ApplyVariantsToFastaTest extends FunSuite {
 
   test("test insertion") {
     val originalString = "AAAACCCCGGGGTTTT"
-    var variations =  List(new Insertion(4, "ACTG"))
+    var variations =  SortedSet[Variation](new Insertion(5, "ACTG"))(Ordering[Int].on[Variation](_ begin))
     val writer: StringWriter = new StringWriter()
     val s = new SequenceVarier(variations, originalString.iterator, writer)
     s.processSequence()

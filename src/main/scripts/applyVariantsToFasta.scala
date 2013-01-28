@@ -6,6 +6,8 @@ import java.io._
 
 package edu.ohsu.sonmezsysbio.cloudbreak {
 
+import collection.SortedSet
+
 
 object ApplyVariantsToFasta {
   def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {
@@ -13,20 +15,23 @@ object ApplyVariantsToFasta {
     try { op(p) } finally { p.close() }
   }
 
-  abstract class Variation(begin : Int, end : Int) {
+  abstract class Variation(val begin : Int, val end : Int) extends Ordering[Variation]  {
+
     def covers(o : Int) : Boolean =
-      o >= begin && o < end
+      o >= begin && o <= end
     def endsAt(o : Int) : Boolean =
-      o == end - 1
+      o == end
 
     def processBaseInside(c : Char) : Iterator[Char]
     def processEnd() : Iterator[Char]
+
+    def compare(x: Variation, y: Variation): Int = x.begin - y.begin
   }
 
   class Insertion(begin : Int, insertedString : String) extends Variation(begin, begin) {
-    def processBaseInside(c: Char): Iterator[Char] = Iterator()
+    def processBaseInside(c: Char): Iterator[Char] = (insertedString + c).iterator
 
-    def processEnd(): Iterator[Char] = insertedString.iterator
+    def processEnd(): Iterator[Char] = Iterator()
   }
 
   class Deletion(begin : Int, end : Int) extends Variation(begin, end) {
@@ -117,7 +122,7 @@ object ApplyVariantsToFasta {
     }
   }
 
-  class SequenceVarier(val variations : List[Variation], val inputChars : Iterator[Char], val out : Writer) {
+  class SequenceVarier(val variations : SortedSet[Variation], val inputChars : Iterator[Char], val out : Writer) {
 
     def processHeader(inputChars : Iterator[Char]) {
       val c = inputChars.next()
@@ -139,36 +144,41 @@ object ApplyVariantsToFasta {
       num
     }
 
-    def processBase(c : Char, offset : Int, printedChars : Int, variations : List[Variation]) : (Int, Int) = {
+    def processBase(c : Char, offset : Int, printedChars : Int, currentOrNext : Variation) : (Int, Int) = {
       var newPrinted = printedChars
 
-      val currentVariations = variations.filter(v => v.covers(offset))
-      assert(currentVariations.length == 0 || currentVariations.length == 1)
-
-      if (currentVariations.length == 1) {
-        newPrinted = newPrinted + printBases(currentVariations(0).processBaseInside(c), printedChars)
+      if (currentOrNext != null && currentOrNext.covers(offset)) {
+        newPrinted = newPrinted + printBases(currentOrNext.processBaseInside(c), printedChars)
       } else {
         newPrinted = newPrinted + printBases(Iterator(c), printedChars)
       }
 
-      val endingVariations = variations.filter(v => v.endsAt(offset))
-      assert(endingVariations.length == 0 || endingVariations.length == 1)
-      if (endingVariations.length == 1) {
-        newPrinted = newPrinted + printBases(endingVariations(0).processEnd(), newPrinted)
+      if (currentOrNext != null && currentOrNext.endsAt(offset)) {
+        newPrinted = newPrinted + printBases(currentOrNext.processEnd(), newPrinted)
       }
       (offset + 1, newPrinted)
     }
 
     def processSequence() {
-      var offset = 0
+      val variationIterator = variations.iterator
+      var offset = 1
       var printedChars = 0
+      var currentOrNextVariation = variationIterator.next()
       for (c <- inputChars) {
         if (c == '>') {
           out.write(c)
           processHeader(inputChars)
         } else {
           if (c != '\n' && c != '\r') {
-            val result = processBase(c, offset, printedChars, variations)
+            val result = processBase(c, offset, printedChars, currentOrNextVariation)
+            if (currentOrNextVariation != null && currentOrNextVariation.endsAt(offset)) {
+              if (variationIterator.hasNext) {
+                currentOrNextVariation = variationIterator.next()
+              } else {
+                currentOrNextVariation = null
+              }
+            }
+
             offset = result._1
             printedChars = result._2
           }
@@ -184,7 +194,7 @@ object ApplyVariantsToFasta {
   /**
    * Parses the GFF files from the Venter genome Homozygous indel files:
    * chrom  id  "homozygous_indel"  start  end  .  +  .  .  sequence  "Homozygous_Deletion|Homozygous_Insertion"
-   * @param filename
+   * @param filename GFF annotation file
    * @return
    */
   def parseGffFile(filename : String) : List[Variation] = {
@@ -192,7 +202,7 @@ object ApplyVariantsToFasta {
     for(line <- Source.fromFile(filename).getLines()) {
       val fields = line.split("\t")
       // gff is one-based
-      val start = fields(3).toInt - 1
+      val start = fields(3).toInt
       val end = fields(4).toInt
       val varType = fields(10)
       if ("Homozygous_Deletion".equals(varType)) {
@@ -212,9 +222,9 @@ object ApplyVariantsToFasta {
       val gffFileName = args(0)
       val chrFastaFile = args(1)
 
-      val variations = parseGffFile(gffFileName)
+      val variations = SortedSet(parseGffFile(gffFileName) : _*)(Ordering[Int].on[Variation](_ begin))
 
-      val out = new FileWriter(args(2))
+      val out = new BufferedWriter(new FileWriter(args(2)))
 
       val inputChars = Source.fromFile(chrFastaFile)
 
