@@ -91,7 +91,7 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar -Dmap
 # write a read group info file and copy into HDFS
 echo "creating readgroup file"
 echo "$READ_GROUP_NAME	$LIBRARY_NAME	$INSERT_SIZE	$INSERT_SIZE_SD	false	$HDFS_EXPERIMENT_DIR/alignments" >> readGroupInfo.txt
-hdfs -copyFromLocal readGroupInfo.txt $HDFS_EXPERIMENT_DIR/readGroupInfo.txt
+hadoop dfs -copyFromLocal readGroupInfo.txt $HDFS_EXPERIMENT_DIR/readGroupInfo.txt
 
 # run Cloudbreak GMM algorithm
 echo "runing cloudbreak GMM algorithm"
@@ -108,7 +108,7 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar -Dmap
 # export GMM results out of HDFS
 echo "exporting gmm results from HDFS"
 time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar exportGMMResults \
-    --inputHDFSDir $HDFS_EXPERIMENET_DIR/gmm \
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm \
     --faidx $LOCAL_GENOME_INDEX_FAI \
     --resolution $RESOLUTION \
     --outputPrefix $NAME
