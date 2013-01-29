@@ -14,7 +14,7 @@ as Apache Whirr configurations to allow automatic deployment on a cloud provider
 
 DEPENDENCIES
 
-Cloudbreak requires a cluster Hadoop 0.0.20 or Cloudera CDH3 to run (the older mapreduce API). If you wish to run alignments
+Cloudbreak requires a cluster Hadoop 0.20.2 or Cloudera CDH3 to run (the older mapreduce API). If you wish to run alignments
 using Cloudbreak, you will need one of the following aligners:
 
 RazerS 3 (Recommended): http://www.seqan.de/projects/razers/

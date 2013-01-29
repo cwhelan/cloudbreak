@@ -8,7 +8,7 @@
             <source>
                 target/${project.artifactId}-${project.version}-exe.jar
             </source>
-            <outputDirectory>/bin</outputDirectory>
+            <outputDirectory>/lib</outputDirectory>
         </file>
         <file>
             <source>${project.basedir}/README.md</source>
