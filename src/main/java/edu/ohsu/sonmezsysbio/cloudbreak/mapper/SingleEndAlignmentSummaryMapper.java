@@ -19,6 +19,13 @@ public class SingleEndAlignmentSummaryMapper extends CloudbreakMapReduceBase imp
 
     Text outKey = new Text("k");
 
+    /**
+     * Output of this mapper, one line per read (not read pair):
+     * 1 (the number of reads to aligned)
+     * the number of alignments for the read
+     * the number of mismatches in the best alignment
+     * @throws IOException
+     */
     public void map(Text key, Text value, OutputCollector output, Reporter reporter) throws IOException {
         String line = value.toString();
         ReadPairAlignments readPairAlignments = alignmentReader.parsePairAlignmentLine(line);
@@ -28,12 +35,12 @@ public class SingleEndAlignmentSummaryMapper extends CloudbreakMapReduceBase imp
 
     }
 
-    private void summarizeAlignments(OutputCollector output, List<AlignmentRecord> aligments) throws IOException {
-        String vals = "1\t" + (aligments.size());
-        if (aligments.size() > 0) {
+    private void summarizeAlignments(OutputCollector output, List<AlignmentRecord> alignments) throws IOException {
+        String vals = "1\t" + (alignments.size());
+        if (alignments.size() > 0) {
             int bestMismatches = Integer.MAX_VALUE;
             if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(getAlignerName())) {
-                for (AlignmentRecord alignmentRecord : aligments) {
+                for (AlignmentRecord alignmentRecord : alignments) {
                     SAMRecord samRecord = (SAMRecord) alignmentRecord;
                     if (samRecord.getMismatches() < bestMismatches) {
                         bestMismatches = samRecord.getMismatches();
