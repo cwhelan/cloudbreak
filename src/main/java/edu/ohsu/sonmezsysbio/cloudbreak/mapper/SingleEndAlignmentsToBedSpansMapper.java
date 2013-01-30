@@ -180,7 +180,7 @@ public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapp
                 record2 : record1;
 
         if (! (record1.getChromosomeName().equals(chromosome) &&
-               leftRead.getPosition() < regionEnd && rightRead.getPosition() > regionStart))
+               leftRead.getPosition() + leftRead.getSequenceLength() < regionEnd && rightRead.getPosition() > regionStart))
             return;
 
         insertSize = rightRead.getPosition() + rightRead.getSequenceLength() - leftRead.getPosition();
