@@ -191,7 +191,8 @@ public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapp
 
         output.collect(new Text(leftRead.getReadId()),
                 new Text(leftRead.getChromosomeName() + "\t" + leftRead.getPosition() + "\t" + (rightRead.getPosition() + rightRead.getSequenceLength())
-                        + "\t" + leftRead.getReadId() + "\t" + insertSize + "\t" + pMappingCorrect));
+                        + "\t" + leftRead.getReadId() + "\t" + insertSize + "\t" + pMappingCorrect
+                        + "\t" + (leftRead.getPosition() + leftRead.getSequenceLength()) + "\t" + rightRead.getPosition()));
 
     }
 }
