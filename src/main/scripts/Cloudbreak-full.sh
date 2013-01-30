@@ -128,5 +128,5 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extra
     --extraWigFilesToAverage ${NAME}_w0.wig.gz
 
 # genotype the calls based on avg w0
-cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$9,($9 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed
+cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed
 
