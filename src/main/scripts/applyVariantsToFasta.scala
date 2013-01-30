@@ -199,12 +199,21 @@ object ApplyVariantsToFasta {
    */
   def parseGffFile(filename : String) : List[Variation] = {
     var variations = new scala.collection.mutable.ListBuffer[Variation]
+    var chrom : String = null
     for(line <- Source.fromFile(filename).getLines()) {
       val fields = line.split("\t")
       // gff is one-based
       if (fields.length < 10) {
         println("could not parse line: " + line)
       }
+      if (chrom == null) {
+        chrom = fields(0)
+      } else {
+        if (chrom != fields(0)) {
+          throw new IllegalArgumentException("Found a new chromosome value: " + fields(0) + " when we had been processing " + chrom + ". This script currently only processes single chromsosome GFFs")
+        }
+      }
+
       val start = fields(3).toInt
       val end = fields(4).toInt
       val varType = fields(10)
