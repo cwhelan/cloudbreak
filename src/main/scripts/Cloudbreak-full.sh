@@ -64,8 +64,10 @@ RESOLUTION=25
 ALIGNER=sam
 MAX_MAPQ_DIFF=6
 MIN_CLEAN_COVERAGE=3
-LR_THRESHOLD=1.68
-MEDIAN_FILTER_WINDOW=5
+DELETION_LR_THRESHOLD=1.68
+DELETION_MEDIAN_FILTER_WINDOW=5
+INSERTION_LR_THRESHOLD=1
+INSERTION_MEDIAN_FILTER_WINDOW=1
 
 # experiment name
 NAME=cloudbreak_${LIBRARY_NAME}_${READ_GROUP_NAME}
@@ -115,18 +117,33 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar expor
 
 # extract deletion calls
 echo "extracting deletion calls"
-time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractPositiveRegionsFromWig \
+time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractDeletionCalls \
     --inputWigFile ${NAME}_lrHeterozygous.wig.gz \
     --outputBedFile ${NAME}_dels.bed \
     --name ${NAME}_dels \
     --faidx $LOCAL_GENOME_INDEX_FAI \
-    --threshold $LR_THRESHOLD \
-    --medianFilterWindow $MEDIAN_FILTER_WINDOW \
+    --threshold $DELETION_LR_THRESHOLD \
+    --medianFilterWindow $DELETION_MEDIAN_FILTER_WINDOW \
     --muFile ${NAME}_mu2.wig.gz \
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
-    --extraWigFilesToAverage ${NAME}_w0.wig.gz
+    --w0File ${NAME}_w0.wig.gz
 
 # genotype the calls based on avg w0
 cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed
 
+echo "extracting insertion calls"
+time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractInsertionCalls \
+    --inputWigFile ${NAME}_lrHeterozygous.wig.gz \
+    --outputBedFile ${NAME}_insertions.bed \
+    --name ${NAME}_insertions \
+    --faidx $LOCAL_GENOME_INDEX_FAI \
+    --threshold $INSERTION_LR_THRESHOLD \
+    --medianFilterWindow $INSERTION_MEDIAN_FILTER_WINDOW \
+    --muFile ${NAME}_mu2.wig.gz \
+    --targetIsize $INSERT_SIZE \
+    --targetIsizeSD $INSERT_SIZE_SD \
+    --w0File ${NAME}_w0.wig.gz
+
+# genotype the calls based on avg w0
+cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed

@@ -3,6 +3,9 @@
 import sys
 import subprocess
 
+def eval_bed_deletions(truth_filename, calls, printhits=False):
+    eval_bed(truth_filename, calls, printhits)
+
 def eval_bed(truth_filename, calls, printhits=False):
     size_threshold = 40
     max_short_hit_length = 75
@@ -87,6 +90,6 @@ if __name__ == "__main__":
         calls.append(line)
 
     if printHits:
-        eval_bed(sys.argv[1], calls, printHits)
+        eval_bed_deletions(sys.argv[1], calls, printHits)
     else:
-        print eval_bed(sys.argv[1], calls, printHits)
+        print eval_bed_deletions(sys.argv[1], calls, printHits)

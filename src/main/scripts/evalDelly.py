@@ -47,7 +47,7 @@ for v in unique_score_values:
             calls_gte_threshold.append(bed_line)
 
 
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed(truth_filename, calls_gte_threshold)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
     tpr = float(matches) / (qualified_calls)
     print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
 

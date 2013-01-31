@@ -44,7 +44,7 @@ for v in unique_support_values:
         bed_line = "\t".join([fields[0], fields[2], fields[4]])
         bed_lines.append(bed_line)
 
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed(truth_filename, calls_gte_threshold)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
     tpr = float(matches) / (qualified_calls)
     print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
     

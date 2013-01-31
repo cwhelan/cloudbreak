@@ -43,7 +43,7 @@ for v in unique_score_values:
             bed_line = "\t".join([chrom, ostart, oend])
             #print bed_line.strip()
             calls_gte_threshold.append(bed_line)
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed(truth_filename, calls_gte_threshold)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
     if (qualified_calls > 0):
         tpr = float(matches) / (qualified_calls)
     else:
