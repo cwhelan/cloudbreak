@@ -11,7 +11,7 @@ import evalBedFile
 
 breakdancer_filename = sys.argv[1]
 truth_filename = sys.argv[2]
-#bed_file = sys.argv[3]
+sv_type = sys.argv[3]
 
 score_values = []
 
@@ -31,7 +31,7 @@ print "\t".join(["Thresh", "Calls", "TP", "WrongType", "Short", "TPR"])
 for v in unique_score_values:
     calls_gte_threshold = []
     breakdancer_file = open(breakdancer_filename, "r")
-    non_del_calls = 0
+    other_type_calls = 0
     # sometimes Breakdancer makes nonsensical calls; deletions with ends on different chromosomes, we have to
     # track those separately here
     bad_calls = 0
@@ -43,8 +43,8 @@ for v in unique_score_values:
             continue
         if float(fields[9]) >= v:
 #            print "gte v"
-            if not (fields[6] == "DEL"):
-                non_del_calls += 1
+            if not (fields[6] == sv_type):
+                other_type_calls += 1
                 continue
             if (fields[0] != fields[3]):
                 bad_calls += 1
@@ -60,9 +60,12 @@ for v in unique_score_values:
         bed_line = "\t".join([fields[0], fields[1], fields[4]])
         bed_lines.append(bed_line)
 
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines)
+    if (sv_type == "DEL"):
+        (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines)
+    else:
+        (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_insertions(truth_filename, bed_lines)
     qualified_calls += bad_calls
     tpr = float(matches) / (qualified_calls)
-    print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
+    print "\t".join(map(str, [v, qualified_calls, matches, other_type_calls, short_calls, tpr]))
     
     
