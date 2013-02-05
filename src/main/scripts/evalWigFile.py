@@ -56,7 +56,7 @@ sys.stderr.write("values above threshold: " + str(len(values_above_threshold)) +
 values_above_threshold = list(set(values_above_threshold))
 values_above_threshold.sort()
 
-num_quantiles = 50
+num_quantiles = 200
 quantiles = [0] * (num_quantiles + 1)
 q_num = 0
 
@@ -89,7 +89,7 @@ def process_quantile(q):
     else:
         return (q, num_predictions, num_matches, 0, num_short_calls,tpr)
     
-p=Pool(50)
+p=Pool(100)
 results = p.map(process_quantile, quantiles)
 
 print "\t".join(["Thresh", "Calls", "TP", "Wrong Type", "Short", "TPR"])

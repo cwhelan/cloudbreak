@@ -4,10 +4,15 @@ import sys
 import subprocess
 import evalBedFile
 
-# expects bed input - chr, start, stop, and the S1 score from Pindel
+# for deletions:
+#   expects bed input - chr, start, stop, and the S1 score from Pindel
+#   created by grepping the pindel_D file for the header lines
+# for insertions:
+#
 
 pindel_filename = sys.argv[1]
 truth_filename = sys.argv[2]
+sv_type = sys.argv[3]
 
 score_values = []
 

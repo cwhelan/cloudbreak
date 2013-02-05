@@ -91,9 +91,8 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
         call = "\t".join(fields[0:3])
         if (current_call == ""):
             current_call = call
-            # current_call_length = int(fields[2]) - int(fields[1])
         if (call != current_call):
-            # process the call we just finsished reading lines for
+            # process the call we just finished reading lines for
             if hit_for_current_call:
                 matches = matches + 1
                 calls += 1
@@ -109,14 +108,12 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
             hit_for_current_call = False
             short_hit_for_current_call = False
             current_call = call
-            # current_call_length = int(fields[2]) - int(fields[1])
 
-        if (fields[len(fields) - 4] != "."):
-            found_feature = "\t".join(fields[(len(fields) - 4):len(fields)])
+        if (fields[len(fields) - 3] != "."):
+            found_feature = "\t".join(fields[(len(fields) - 3):len(fields)])
             if not found_feature in found_features:
                 found_feature_length = int(fields[(len(fields) - 1)])
-                if abs(current_call_length - found_feature_length) < 300:
-                    found_features.add(found_feature)
+                found_features.add(found_feature)
                 if found_feature_length <= size_threshold:
                     short_hit_for_current_call = True
                 else:
