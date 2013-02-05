@@ -46,7 +46,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
     String outFileName = "reads.txt";
 
     @Parameter(names = {"--compress"})
-    String compress = "none";
+    String compress = "snappy";
 
 
     public void run(Configuration conf) throws Exception {
