@@ -32,4 +32,16 @@ public class CommandReadPairedEndFilesIntoHDFSTest {
         double entropy = command.trigramEntropy(s1);
         assertEquals(2.16, entropy, 0.0001);
     }
+
+    @Test
+    public void testCasava18QCFilter() throws Exception {
+        String read1 = "@HWI-ST632:98:D07DPACXX:1:1101:14035:1998 1:N:0:";
+        String read2 = "@HWI-ST632:98:D07DPACXX:1:1101:14035:1998 2:N:0:";
+        CommandReadPairedEndFilesIntoHDFS command = new CommandReadPairedEndFilesIntoHDFS();
+        assertEquals(true, command.passCasava18QCFilter(read1, read2));
+
+        read1 = "@HWI-ST632:98:D07DPACXX:1:1101:14131:1998 1:Y:0:";
+        read2 = "@HWI-ST632:98:D07DPACXX:1:1101:14131:1998 2:N:0:";
+        assert(!command.passCasava18QCFilter(read1, read2));
+    }
 }
