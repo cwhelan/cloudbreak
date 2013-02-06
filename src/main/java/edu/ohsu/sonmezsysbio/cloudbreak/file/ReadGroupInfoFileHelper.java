@@ -61,11 +61,19 @@ public class ReadGroupInfoFileHelper {
         short rgIdx = 0;
         while ((line = reader.readLine()) != null) {
             String[] fields = line.split("\\t");
+            if (fields.length != 6) {
+                throw new IllegalArgumentException("Could not parse read group info, line = " + line);
+            }
             ReadGroupInfo readGroupInfo = new ReadGroupInfo();
             readGroupInfo.readGroupName = fields[0];
             readGroupInfo.libraryName = fields[1];
-            readGroupInfo.isize = Integer.parseInt(fields[2]);
-            readGroupInfo.isizeSD = Integer.parseInt(fields[3]);
+            try {
+                readGroupInfo.isize = Integer.parseInt(fields[2]);
+                readGroupInfo.isizeSD = Integer.parseInt(fields[3]);
+            } catch (NumberFormatException ne) {
+                throw new IllegalArgumentException("Could not parse read group info, line = " + line, ne);
+            }
+
             readGroupInfo.matePair = Boolean.parseBoolean(fields[4]);
             readGroupInfo.hdfsPath = fields[5];
             rgsById.put(rgIdx, readGroupInfo);
