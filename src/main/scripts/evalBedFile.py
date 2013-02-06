@@ -72,16 +72,13 @@ def eval_bed_deletions(truth_filename, calls, printhits=False):
 
 def eval_bed_insertions(truth_filename, calls, printhits=False):
     size_threshold = 40
-    max_short_hit_length = 75
     bedtools_process = subprocess.Popen(["intersectBed", "-a", "stdin", "-b", truth_filename, "-loj"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     pstdout = bedtools_process.communicate("\n".join(calls) + "\n")[0]
     matches = 0
     short_hits = 0
     found_features = set()
     calls = 0
-    valid_short_hit_calls = 0
     current_call = ""
-    current_call_length = -1
     hit_for_current_call = False
     short_hit_for_current_call = False
     for line in pstdout.split("\n"):
@@ -125,10 +122,7 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
         matches = matches + 1
         calls += 1
     elif short_hit_for_current_call:
-        if (current_call_length <= max_short_hit_length):
-            short_hits += 1
-        else:
-            calls += 1
+        short_hits += 1
     else:
         calls += 1
 

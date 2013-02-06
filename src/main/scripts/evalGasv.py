@@ -4,6 +4,7 @@ import sys
 import subprocess
 import evalBedFile
 
+## GASV does not call insertions so not reported
 gasv_filename = sys.argv[1]
 truth_filename = sys.argv[2]
 
