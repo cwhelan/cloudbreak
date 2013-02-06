@@ -51,8 +51,12 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     @Parameter(names = {"--trigramEntropyFilter"})
     Double trigramEntropyFilter = -1.0;
 
+    @Parameter(names = {"--filterBasedOnCasava18Flags"})
+    boolean casava18filter = false;
+
     private long numRecords;
-    private long numFilteredRecords;
+    private long numEntropyFilteredRecords;
+    private long numCasava18FilteredRecords;
 
     public void copyReadFilesToHdfs() throws IOException {
         Configuration config = new Configuration();
@@ -132,6 +136,12 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
             String sep2 = inputReader2.readLine();
             String qual2 = inputReader2.readLine();
 
+            if (casava18filter && !passCasava18QCFilter(read1, read2)) {
+                log.debug("Skipping read pair " + read1 + " + " + read2 + " due to Casava 1.8 quality filter");
+                numCasava18FilteredRecords++;
+                continue;
+            }
+
             if (clipReadIdsAtWhitespace) {
                 read1 = read1.split("\\s+")[0];
                 read2 = read2.split("\\s+")[0];
@@ -141,7 +151,7 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
 
             if (! (passesEntropyFilter(seq1, trigramEntropyFilter) && passesEntropyFilter(seq2, trigramEntropyFilter))) {
                 log.debug("Skipping read pair " + readPrefix + " because seqs " + seq1 + ", " + seq2 + " don't pass entropy filter.");
-                numFilteredRecords++;
+                numEntropyFilteredRecords++;
                 continue;
             }
 
@@ -160,6 +170,10 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
         }
 
         return lineBuffer.toString();
+    }
+
+    protected boolean passCasava18QCFilter(String read1, String read2) {
+        return (read1.matches("^@.* [^:]*:N:[^:]*:") && read2.matches("^@.* [^:]*:N:[^:]*:"));
     }
 
     private boolean passesEntropyFilter(String seq, Double trigramEntropyFilter) {
@@ -201,7 +215,8 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     public void run(Configuration conf) throws Exception {
         copyReadFilesToHdfs();
         log.info("Loaded " + numRecords + " records.");
-        log.info("Filtered " + numFilteredRecords + " records due to trigram entropy filter.");
+        log.info("Filtered " + numCasava18FilteredRecords + "records due to Casava 1.8 QC filter");
+        log.info("Filtered " + numEntropyFilteredRecords + " records due to trigram entropy filter.");
     }
 
 }
