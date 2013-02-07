@@ -71,9 +71,24 @@ def eval_bed_deletions(truth_filename, calls, printhits=False):
     return (calls, matches, short_hits)
 
 def eval_bed_insertions(truth_filename, calls, printhits=False):
+    truth_filename_v = open(truth_filename,"r")
+    test_line = truth_filename_v.readline()
+    truth_filename_v.close()
+    if len(test_line.split("\t")) != 4:
+        print "bad line in truth file: " + test_line
+        print "truth file for insertions should be <chrom> <start> <end> <length>"
+        return None
+
     size_threshold = 40
+
+    slop = 0
+    slopped_calls = []
+    for call in calls:
+        (chrom, start, end) = call.rstrip().split("\t")[0:3]
+        slopped_calls.append("\t".join([chrom, str(int(start) - slop), str(int(end) + slop)]))
+
     bedtools_process = subprocess.Popen(["intersectBed", "-a", "stdin", "-b", truth_filename, "-loj"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    pstdout = bedtools_process.communicate("\n".join(calls) + "\n")[0]
+    pstdout = bedtools_process.communicate("\n".join(slopped_calls) + "\n")[0]
     matches = 0
     short_hits = 0
     found_features = set()
@@ -106,8 +121,8 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
             short_hit_for_current_call = False
             current_call = call
 
-        if (fields[len(fields) - 3] != "."):
-            found_feature = "\t".join(fields[(len(fields) - 3):len(fields)])
+        if (fields[len(fields) - 4] != "."):
+            found_feature = "\t".join(fields[(len(fields) - 4):len(fields)])
             if not found_feature in found_features:
                 found_feature_length = int(fields[(len(fields) - 1)])
                 found_features.add(found_feature)
