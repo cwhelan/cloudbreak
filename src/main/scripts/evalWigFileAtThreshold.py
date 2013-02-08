@@ -49,7 +49,11 @@ for line in open_file(temp_file_name):
     fields = line.split()
     length = int(fields[2]) - int(fields[1])
     num_predictions += 1
-    bed_line = line.strip()
+    if sv_type == "DEL":
+        bed_line = line.strip()
+    else:
+        ins_length = int(int(target_isize) - float(fields[6]))
+        bed_line = "\t".join([fields[0], fields[1], fields[2], str(ins_length)])
     bed_lines.append(bed_line)
 
 if sv_type == "DEL":

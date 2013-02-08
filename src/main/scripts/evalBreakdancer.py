@@ -49,15 +49,15 @@ for v in unique_score_values:
             if (fields[0] != fields[3]):
                 bad_calls += 1
                 continue
-            sv_len = int(fields[7])
-            # sys.stderr.write("len: " + str(sv_len) + "\n")
             calls_gte_threshold.append(line)
-            #    sys.stderr.write(str(calls_gte_threshold))
 
     bed_lines = []
     for line in calls_gte_threshold:
         fields = line.split("\t")
-        bed_line = "\t".join([fields[0], fields[1], fields[4]])
+        if (sv_type == "DEL"):
+            bed_line = "\t".join([fields[0], fields[1], fields[4]])
+        else:
+            bed_line = "\t".join([fields[0], fields[1], fields[4], str(abs(int(fields[7])))])
         bed_lines.append(bed_line)
 
     if (sv_type == "DEL"):

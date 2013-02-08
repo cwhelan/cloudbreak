@@ -7,6 +7,8 @@ import evalBedFile
 # for deletions:
 #   expects bed input - chr, start, stop, and the S1 score from Pindel
 #   created by grepping the pindel_D file for the header lines
+#   eg
+#   cat human_b36_male_chr2_venterindels_c15_i100_s30_rl100_sort_D | awk '$2 == "D" && $14 - $13 > 10 {OFS="\t"; print $8,$13,$14,$25}' > human_b36_male_chr2_venterindels_c15_i100_s30_rl100_sort_D.bed
 # for insertions:
 #
 

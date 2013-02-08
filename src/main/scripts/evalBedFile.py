@@ -70,6 +70,7 @@ def eval_bed_deletions(truth_filename, calls, printhits=False):
 
     return (calls, matches, short_hits)
 
+# insertions need to come in as: chr, start, end, length
 def eval_bed_insertions(truth_filename, calls, printhits=False):
     truth_filename_v = open(truth_filename,"r")
     test_line = truth_filename_v.readline()
@@ -84,8 +85,8 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
     slop = 0
     slopped_calls = []
     for call in calls:
-        (chrom, start, end) = call.rstrip().split("\t")[0:3]
-        slopped_calls.append("\t".join([chrom, str(int(start) - slop), str(int(end) + slop)]))
+        (chrom, start, end,length) = call.rstrip().split("\t")[0:4]
+        slopped_calls.append("\t".join([chrom, str(int(start) - slop), str(max(int(start) + int(length), int(end)) + slop)]))
 
     bedtools_process = subprocess.Popen(["intersectBed", "-a", "stdin", "-b", truth_filename, "-loj"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     pstdout = bedtools_process.communicate("\n".join(slopped_calls) + "\n")[0]
