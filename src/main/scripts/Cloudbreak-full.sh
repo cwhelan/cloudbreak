@@ -119,7 +119,7 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar expor
 echo "extracting deletion calls"
 time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractDeletionCalls \
     --inputWigFile ${NAME}_lrHeterozygous.wig.gz \
-    --outputBedFile ${NAME}_dels.bed \
+    --outputBedFile ${NAME}_deletions.bed \
     --name ${NAME}_dels \
     --faidx $LOCAL_GENOME_INDEX_FAI \
     --threshold $DELETION_LR_THRESHOLD \
@@ -130,7 +130,7 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extra
     --w0File ${NAME}_w0.wig.gz
 
 # genotype the calls based on avg w0
-cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed
+cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_deletions_genotyped.bed
 
 echo "extracting insertion calls"
 time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractInsertionCalls \
@@ -146,4 +146,4 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extra
     --w0File ${NAME}_w0.wig.gz
 
 # genotype the calls based on avg w0
-cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_dels_genotyped.bed
+cat ${NAME}_insertions.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_insertions_genotyped.bed
