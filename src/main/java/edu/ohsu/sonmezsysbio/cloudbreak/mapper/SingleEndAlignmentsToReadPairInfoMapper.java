@@ -290,8 +290,8 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
                     double leftReadMapability = mapabilityWeighting.getMinValueForRegion(chrom, leftReadStart, leftReadEnd);
                     logger.debug("left read mapability from " + leftRead.getPosition() + " to " + leftReadEnd + " = " + leftReadMapability);
 
-                    int rightReadStart = rightRead.getPosition() - rightRead.getSequenceLength();
-                    int rightReadEnd = rightRead.getPosition();
+                    int rightReadStart = rightRead.getPosition();
+                    int rightReadEnd = rightRead.getPosition() + rightRead.getSequenceLength();
                     double rightReadMapability = mapabilityWeighting.getMinValueForRegion(chrom, rightReadStart, rightReadEnd);
                     logger.debug("right read mapability from " + (rightRead.getPosition() - rightRead.getSequenceLength()) + " to " + rightRead.getPosition() + " = " + rightReadMapability);
 
