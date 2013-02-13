@@ -21,7 +21,6 @@ score_values = []
 pindel_file = open(pindel_filename, "r")
 for line in pindel_file:
     fields = line.split("\t")
-
     score = float(fields[3])
     score_values.append(score)
 
@@ -41,11 +40,16 @@ for v in unique_score_values:
             chrom = fields[0]
             ostart = fields[1]
             oend = fields[2]
-            sv_len = int(oend) - int(ostart)
-            bed_line = "\t".join([chrom, ostart, oend])
+            if (sv_type == "DEL"):
+                bed_line = "\t".join([chrom, ostart, oend])
+            else:
+                bed_line = "\t".join([chrom, ostart, oend, fields[4]])
             #print bed_line.strip()
             calls_gte_threshold.append(bed_line)
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
+    if sv_type == "DEL":
+        (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
+    else:
+        (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_insertions(truth_filename, calls_gte_threshold)
     if (qualified_calls > 0):
         tpr = float(matches) / (qualified_calls)
     else:
