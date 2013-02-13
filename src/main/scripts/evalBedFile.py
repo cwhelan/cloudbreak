@@ -151,7 +151,9 @@ if __name__ == "__main__":
     printHits = False
     truth_file = sys.argv[1]
     calls_file = sys.argv[2]
-    if (len(sys.argv) > 3) and sys.argv[3] == "--printHits":
+    sv_type = sys.argv[3]
+
+    if (len(sys.argv) > 4) and sys.argv[4] == "--printHits":
         printHits = True
 
     # slurp all the bed lines into memory
@@ -161,6 +163,12 @@ if __name__ == "__main__":
         calls.append(line)
 
     if printHits:
-        eval_bed_deletions(sys.argv[1], calls, printHits)
+        if sv_type == "DEL":
+            eval_bed_deletions(sys.argv[1], calls, printHits)
+        else:
+            eval_bed_insertions(sys.argv[1], calls, printHits)
     else:
-        print eval_bed_deletions(sys.argv[1], calls, printHits)
+        if (sv_type) == "DEL":
+            print eval_bed_deletions(sys.argv[1], calls, printHits)
+        else:
+            print eval_bed_insertions(sys.argv[1], calls, printHits)
