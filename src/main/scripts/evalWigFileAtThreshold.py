@@ -29,6 +29,9 @@ cloudbreak_home = sys.argv[8]
 target_isize = sys.argv[9]
 target_isize_sd = sys.argv[10]
 sv_type = sys.argv[11]
+print_hits = False
+if len(sys.argv) == 13 and sys.argv[12] == "--printHits":
+    print_hits = True
 
 temp_file = tempfile.NamedTemporaryFile()
 temp_file_name = temp_file.name
@@ -57,9 +60,10 @@ for line in open_file(temp_file_name):
     bed_lines.append(bed_line)
 
 if sv_type == "DEL":
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines, print_hits)
 else:
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_insertions(truth_filename, bed_lines)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_insertions(truth_filename, bed_lines, print_hits)
 
 tpr = float(matches) / (qualified_calls)
-print "\t".join(map(str, [q, qualified_calls, matches, 0, 0, short_calls, tpr]))
+if not print_hits:
+    print "\t".join(map(str, [q, qualified_calls, matches, 0, 0, short_calls, tpr]))

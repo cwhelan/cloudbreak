@@ -9,18 +9,25 @@ truth_filename = sys.argv[2]
 
 support_values = []
 
-hydra_file = open(hydra_filename, "r")
-for line in hydra_file:
-    fields = line.split("\t")
-    final_weighted_support = float(fields[18])
-    support_values.append(final_weighted_support)
-hydra_file.close()
+print_hits = False
+if len(sys.argv) == 5 and sys.argv[3] == "--printHits":
+    threshold = float(sys.argv[4])
+    score_values.append(threshold)
+    print_hits = True
+else:
+    hydra_file = open(hydra_filename, "r")
+    for line in hydra_file:
+        fields = line.split("\t")
+        final_weighted_support = float(fields[18])
+        support_values.append(final_weighted_support)
+    hydra_file.close()
 
 unique_support_values = list(set(support_values))
 unique_support_values.sort()
 #print unique_support_values
 
-print "\t".join(["Thresh", "Calls", "TP", "TPR", "WrongType"])
+if not print_hits:
+    print "\t".join(["Thresh", "Calls", "TP", "TPR", "WrongType"])
 for v in unique_support_values:
     calls_gte_threshold = []
     hydra_file = open(hydra_filename, "r")
@@ -44,8 +51,9 @@ for v in unique_support_values:
         bed_line = "\t".join([fields[0], fields[2], fields[4]])
         bed_lines.append(bed_line)
 
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold, print_hits)
     tpr = float(matches) / (qualified_calls)
-    print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
+    if not print_hits:
+        print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
     
     

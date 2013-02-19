@@ -14,22 +14,30 @@ truth_filename = sys.argv[2]
 
 score_values = []
 
-delly_file = open(delly_filename, "r")
-for line in delly_file:
-    if line.startswith("#"):
-        continue
-    fields = line.split("\t")
+print_hits = False
+if len(sys.argv) == 5 and sys.argv[3] == "--printHits":
+    threshold = float(sys.argv[4])
+    score_values.append(threshold)
+    print_hits = True
+else:
+    delly_file = open(delly_filename, "r")
+    for line in delly_file:
+        if line.startswith("#"):
+            continue
+        fields = line.split("\t")
 
-    # use num pairs as score for now
-    score = float(fields[4])
-    score_values.append(score)
+        # use num pairs as score for now
+        score = float(fields[4])
+        score_values.append(score)
 
-delly_file.close()
+    delly_file.close()
+
 
 unique_score_values = list(set(score_values))
 unique_score_values.sort()
 
-print "\t".join(["Thresh", "Calls", "TP", "WrongType", "Short", "TPR"])
+if not print_hits:
+    print "\t".join(["Thresh", "Calls", "TP", "WrongType", "Short", "TPR"])
 for v in unique_score_values:
     calls_gte_threshold = []
     delly_file = open(delly_filename, "r")
@@ -47,8 +55,9 @@ for v in unique_score_values:
             calls_gte_threshold.append(bed_line)
 
 
-    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold)
+    (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold, print_hits)
     tpr = float(matches) / (qualified_calls)
-    print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
+    if not print_hits:
+        print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
 
     

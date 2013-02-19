@@ -12,7 +12,6 @@ def eval_bed_deletions(truth_filename, calls, printhits=False):
     short_hits = 0
     found_features = set()
     calls = 0
-    valid_short_hit_calls = 0
     current_call = ""
     current_call_length = -1
     hit_for_current_call = False
@@ -131,8 +130,8 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
                     short_hit_for_current_call = True
                 else:
                     hit_for_current_call = True
-                if printhits:
-                    print current_call + "\t" + found_feature
+                    if printhits:
+                        print current_call + "\t" + found_feature
 
     if hit_for_current_call:
         matches = matches + 1
