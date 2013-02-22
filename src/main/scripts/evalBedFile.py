@@ -85,7 +85,7 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
     slopped_calls = []
     for call in calls:
         (chrom, start, end,length) = call.rstrip().split("\t")[0:4]
-        slopped_calls.append("\t".join([chrom, str(int(start) - slop), str(max(int(start) + int(length), int(end)) + slop)]))
+        slopped_calls.append("\t".join([chrom, str(int(start) - slop), str(max(int(start) + int(length) + slop, int(end)) + slop)]))
 
     bedtools_process = subprocess.Popen(["intersectBed", "-a", "stdin", "-b", truth_filename, "-loj"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     pstdout = bedtools_process.communicate("\n".join(slopped_calls) + "\n")[0]
