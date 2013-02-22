@@ -186,9 +186,9 @@ public class WigFileHelper {
 
             // If we are filtering regions based on the estimated mean of the second component,
             // if the mean changes more by more than twice the SD of the library we break up the
-            // prediction
+            // prediction for deletions
             if (filteredVals[idx] > 0 &&
-                    (! usingMuValues ||
+                    (! usingMuValues || ! Cloudbreak.VARIANT_TYPE_DELETION.equals(desiredVariantType) ||
                     (idx < 2 || Math.abs(muFileValues[idx] - muFileValues[idx - 2]) < 2 * targetIsizeSD))) {
                 if (!inPositivePeak) {
                     peakStart = pos;
