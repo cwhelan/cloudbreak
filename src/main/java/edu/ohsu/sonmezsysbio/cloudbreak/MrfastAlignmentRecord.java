@@ -105,4 +105,8 @@ public class MrfastAlignmentRecord implements AlignmentRecord {
         this.sequenceLength = sequenceLength;
     }
 
+    @Override
+    public double mismatchScore() {
+        return 0;
+    }
 }

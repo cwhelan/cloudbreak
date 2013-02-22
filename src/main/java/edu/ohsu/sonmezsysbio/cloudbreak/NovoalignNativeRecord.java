@@ -140,4 +140,9 @@ public class NovoalignNativeRecord implements AlignmentRecord {
                 ", sequence='" + sequence + '\'' +
                 '}';
     }
+
+    @Override
+    public double mismatchScore() {
+        return 0;
+    }
 }

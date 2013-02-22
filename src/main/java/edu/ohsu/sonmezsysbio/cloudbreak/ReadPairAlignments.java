@@ -22,6 +22,8 @@ public class ReadPairAlignments {
 
     List<AlignmentRecord> read1Alignments;
     List<AlignmentRecord> read2Alignments;
+    private Double sumMismatchScores1;
+    private Double sumMismatchScores2;
 
     public ReadPairAlignments(List<AlignmentRecord> read1Alignments, List<AlignmentRecord> read2Alignments) {
         this.read1Alignments = read1Alignments;
@@ -63,4 +65,25 @@ public class ReadPairAlignments {
         return read2AlignmentsByChromosome;
     }
 
+    public Double sumMismatchScores1() {
+        if (sumMismatchScores1 == null)
+            sumMismatchScores1 = sumMismatchScores(read1Alignments);
+        return sumMismatchScores1;
+    }
+
+    public Double sumMismatchScores2() {
+        if (sumMismatchScores2 == null)
+            sumMismatchScores2 = sumMismatchScores(read2Alignments);
+        return sumMismatchScores2;
+    }
+
+    private double sumMismatchScores(List<AlignmentRecord> alignments) {
+        double sumAlignmentScores = 0;
+        for (AlignmentRecord record : alignments) {
+            sumAlignmentScores += record.mismatchScore();
+        }
+        return sumAlignmentScores;
+    }
+
 }
+

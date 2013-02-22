@@ -174,4 +174,8 @@ public class SAMRecord implements AlignmentRecord {
         return nm;
     }
 
+    public double mismatchScore() {
+        int mismatches = getMismatches();
+        return Math.exp( -1 * mismatches / 2);
+    }
 }

@@ -155,9 +155,16 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
         }
 
         try {
-            Map<GenomicLocation, ReadPairInfo> bestScoresForGL = emitReadPairInfoForAllPairs(readPairAlignments, output, recordsInExcludedAreas);
-            for (GenomicLocation genomicLocation : bestScoresForGL.keySet()) {
-                ReadPairInfo bestRpi = bestScoresForGL.get(genomicLocation);
+            ConcAndDiscBestScoresForGL bestScoresForGL = emitReadPairInfoForAllPairs(readPairAlignments, output, recordsInExcludedAreas);
+            Map<GenomicLocation, ReadPairInfo> scores;
+
+            if (! bestScoresForGL.bestConcScoresForGL.keySet().isEmpty()) {
+                scores = bestScoresForGL.bestConcScoresForGL;
+            } else {
+                scores = bestScoresForGL.bestDiscScoresForGL;
+            }
+            for (GenomicLocation genomicLocation : scores.keySet()) {
+                ReadPairInfo bestRpi = scores.get(genomicLocation);
                 GenomicLocationWithQuality genomicLocationWithQuality =
                         new GenomicLocationWithQuality(genomicLocation.chromosome, genomicLocation.pos, bestRpi.pMappingCorrect);
                 output.collect(genomicLocationWithQuality, bestRpi);
@@ -168,73 +175,45 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
         }
     }
 
-    private Map<GenomicLocation, ReadPairInfo> emitReadPairInfoForAllPairs(ReadPairAlignments readPairAlignments,
+    static class ConcAndDiscBestScoresForGL {
+        Map<GenomicLocation, ReadPairInfo> bestConcScoresForGL = new HashMap<GenomicLocation, ReadPairInfo>();
+        Map<GenomicLocation, ReadPairInfo> bestDiscScoresForGL = new HashMap<GenomicLocation, ReadPairInfo>();
+    }
+
+    private ConcAndDiscBestScoresForGL emitReadPairInfoForAllPairs(ReadPairAlignments readPairAlignments,
                                              OutputCollector<GenomicLocationWithQuality, ReadPairInfo> output,
                                              Set<AlignmentRecord> recordsInExcludedAreas) throws Exception {
-        Map<GenomicLocation, ReadPairInfo> bestScoresForGL = new HashMap<GenomicLocation, ReadPairInfo>();
-        if (!emitConcordantAlignmentIfFound(readPairAlignments, output, bestScoresForGL)) {
+        ConcAndDiscBestScoresForGL bestScoresForGL = new ConcAndDiscBestScoresForGL();
+        for (String chrom : readPairAlignments.getRead1AlignmentsByChromosome().keySet()) {
+            if (! readPairAlignments.getRead2AlignmentsByChromosome().containsKey(chrom))
+                continue;
 
-            for (String chrom : readPairAlignments.getRead1AlignmentsByChromosome().keySet()) {
-                if (! readPairAlignments.getRead2AlignmentsByChromosome().containsKey(chrom))
-                    continue;
+            if (getChromosomeFilter() != null && ! chrom.equals(getChromosomeFilter()))
+                continue;
 
-                if (getChromosomeFilter() != null && ! chrom.equals(getChromosomeFilter()))
-                    continue;
-
-                for (AlignmentRecord record1 : readPairAlignments.getRead1AlignmentsByChromosome().get(chrom)) {
+            for (AlignmentRecord record1 : readPairAlignments.getRead1AlignmentsByChromosome().get(chrom)) {
+                if (getMinScore() != -1) {
+                    if (record1.getAlignmentScore() < getMinScore()) {
+                        continue;
+                    }
+                }
+                for (AlignmentRecord record2 : readPairAlignments.getRead2AlignmentsByChromosome().get(chrom)) {
                     if (getMinScore() != -1) {
-                        if (record1.getAlignmentScore() < getMinScore()) {
+                        if (record2.getAlignmentScore() < getMinScore()) {
                             continue;
                         }
                     }
-                    for (AlignmentRecord record2 : readPairAlignments.getRead2AlignmentsByChromosome().get(chrom)) {
-                        if (getMinScore() != -1) {
-                            if (record2.getAlignmentScore() < getMinScore()) {
-                                continue;
-                            }
-                        }
-                        if (recordsInExcludedAreas.contains(record1) || recordsInExcludedAreas.contains(record2)) continue;
-                        emitReadPairInfoForPair(record1, record2, readPairAlignments, output, bestScoresForGL);
-                    }
+                    if (exclusionRegions != null && (recordsInExcludedAreas.contains(record1) || recordsInExcludedAreas.contains(record2))) continue;
+                    emitReadPairInfoForPair(record1, record2, readPairAlignments, output, bestScoresForGL);
                 }
             }
         }
         return bestScoresForGL;
     }
 
-    private boolean emitConcordantAlignmentIfFound(ReadPairAlignments readPairAlignments,
-                                                   OutputCollector<GenomicLocationWithQuality, ReadPairInfo> output,
-                                                   Map<GenomicLocation, ReadPairInfo> bestScoresForGL) throws IOException {
-        boolean foundConcordant = false;
-        for (String chrom : readPairAlignments.getRead1AlignmentsByChromosome().keySet()) {
-            if (getChromosomeFilter() != null && ! chrom.equals(getChromosomeFilter()))
-                continue;
-
-            if (! readPairAlignments.getRead2AlignmentsByChromosome().containsKey(chrom))
-                continue;
-
-            for (AlignmentRecord record1 : readPairAlignments.getRead1AlignmentsByChromosome().get(chrom)) {
-                for (AlignmentRecord record2 : readPairAlignments.getRead2AlignmentsByChromosome().get(chrom)) {
-                    if (!scorer.validateMappingOrientations(record1, record2, isMatePairs())) continue;
-                    AlignmentRecord leftRead = record1.getPosition() < record2.getPosition() ?
-                            record1 : record2;
-                    AlignmentRecord rightRead = record1.getPosition() < record2.getPosition() ?
-                            record2 : record1;
-
-                    int insertSize = rightRead.getPosition() + rightRead.getSequenceLength() - leftRead.getPosition();
-                    if (Math.abs(insertSize - getTargetIsize()) < 3 * getTargetIsizeSD()) {
-                        emitReadPairInfoForPair(record1, record2, readPairAlignments, output, bestScoresForGL);
-                        foundConcordant = true;
-                    }
-                }
-            }
-        }
-        return foundConcordant;
-    }
-
     private void emitReadPairInfoForPair(AlignmentRecord record1, AlignmentRecord record2, ReadPairAlignments readPairAlignments,
                                          OutputCollector<GenomicLocationWithQuality, ReadPairInfo> output,
-                                         Map<GenomicLocation, ReadPairInfo> bestScoresForGL) throws IOException {
+                                         ConcAndDiscBestScoresForGL bestScoresForGL) throws IOException {
 
         try {
             // todo: not handling translocations for now
@@ -321,10 +300,19 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
                 logger.debug("Emitting insert size " + insertSize);
                 GenomicLocationWithQuality genomicLocationWithQuality = new GenomicLocationWithQuality(chromosome, pos, readPairInfo.pMappingCorrect);
                 GenomicLocation genomicLocation = new GenomicLocation(genomicLocationWithQuality.chromosome, genomicLocationWithQuality.pos);
-                if (bestScoresForGL.containsKey(genomicLocation) && bestScoresForGL.get(genomicLocation).pMappingCorrect >= readPairInfo.pMappingCorrect) {
+
+
+                Map<GenomicLocation, ReadPairInfo> scores;
+                if (Math.abs(insertSize - getTargetIsize()) < 3 * getTargetIsizeSD()) {
+                    scores = bestScoresForGL.bestConcScoresForGL;
+                } else {
+                    scores = bestScoresForGL.bestDiscScoresForGL;
+                }
+
+                if (scores.containsKey(genomicLocation) && scores.get(genomicLocation).pMappingCorrect >= readPairInfo.pMappingCorrect) {
                     continue;
                 } else {
-                    bestScoresForGL.put(genomicLocation, readPairInfo);
+                    scores.put(genomicLocation, readPairInfo);
                 }
             }
         } catch (BadAlignmentRecordException e) {
