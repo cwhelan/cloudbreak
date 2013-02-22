@@ -107,9 +107,6 @@ public class GenotypingGMMScorerTest {
         rgis.put((short) 0, readGroupInfo);
         GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis);
 
-        assertTrue(results.twoComponentLikelihood < 0);
-        assertTrue(results.nodelOneComponentLikelihood < 0);
-
         assertEquals(0, results.w0, 0.0001);
     }
 
@@ -177,8 +174,6 @@ public class GenotypingGMMScorerTest {
         Map<Short, ReadGroupInfo>  rgis = new HashMap<Short, ReadGroupInfo>();
         rgis.put((short) 0, readGroupInfo);
         GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis);
-        assertTrue(results.twoComponentLikelihood < 0);
-        assertTrue(results.nodelOneComponentLikelihood < 0);
 
         assertEquals(0, results.w0, 0.0001);
     }

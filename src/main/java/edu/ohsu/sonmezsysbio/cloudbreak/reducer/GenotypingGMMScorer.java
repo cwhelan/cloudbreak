@@ -221,7 +221,6 @@ public class GenotypingGMMScorer {
         }
         List<Integer> ysWithCloseNeighbors = cleanYIndices(y, sigma, 2, 5);
         double[] yclean = nnclean(y, ysWithCloseNeighbors);
-        results.cleanCoverage = yclean.length;
         if (log.isDebugEnabled()) {
             log.debug("ycleans:");
             for (int i = 0; i < yclean.length; i++) {
@@ -238,7 +237,7 @@ public class GenotypingGMMScorer {
         for (int i = 0; i < ysWithCloseNeighbors.size(); i++) {
             cleanMappingScores[i] = mappingScoreArray[ysWithCloseNeighbors.get(i)];
         }
-        results.nodelOneComponentLikelihood = likelihood(yclean, new double[]{Math.log(1)}, new double[]{initialMu1}, sigma);
+        double nodelOneComponentLikelihood = likelihood(yclean, new double[]{Math.log(1)}, new double[]{initialMu1}, sigma);
 
         log.debug("estimating with two components, one fixed");
         double[] initialMu = new double[]{initialMu1,mean(yclean)};
@@ -264,14 +263,9 @@ public class GenotypingGMMScorer {
             }
             l = lprime;
         }
-        results.twoComponentLikelihood = l;
-        results.lrHeterozygous = l - results.nodelOneComponentLikelihood;
+        results.lrHeterozygous = l - nodelOneComponentLikelihood;
         results.mu2 = mu[1];
         results.w0 = Math.exp(w[0]);
-        results.c1membership = Math.exp(updates.n[0]);
-        results.c2membership = Math.exp(updates.n[1]);
-        results.weightedC1membership = Math.exp(weightByMappingScore(updates.gamma, cleanMappingScores, 0));
-        results.weightedC2membership = Math.exp(weightByMappingScore(updates.gamma, cleanMappingScores, 1));
 
         return results;
     }
