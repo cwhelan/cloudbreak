@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 import static org.apache.commons.math3.stat.StatUtils.mean;
+import static org.apache.commons.math3.stat.StatUtils.sum;
 
 /**
  * Created by IntelliJ IDEA.
@@ -210,6 +211,36 @@ public class GenotypingGMMScorer {
         return ysWithCloseNeighbors;
     }
 
+    private double dist(double x, double y) {
+        return Math.abs(x - y);
+    }
+
+    public List<Integer> cleanYIndices2(double[] y, double sigma, int m, int clusterCutoffInSDs) {
+        List<Integer> ysWithCloseNeighbors = new ArrayList<Integer>();
+        if (m < y.length) {
+            Arrays.sort(y);
+            for (int i = 0; i < y.length; i++) {
+                int offsetright = 0;
+                int offsetleft = 0;
+                double dist = 0;
+                while (offsetleft + offsetright < m) {
+                    if ((i + (offsetright + 1) >= y.length) ||
+                            (i - (offsetleft + 1) >= 0 && dist(y[i], y[i - (offsetleft + 1)]) < dist(y[i], y[i + (offsetright + 1)]))) {
+                        offsetleft += 1;
+                        dist = dist(y[i], y[i - (offsetleft)]);
+                    } else {
+                        offsetright += 1;
+                        dist = dist(y[i], y[i + (offsetright)]);
+                    }
+                }
+                if (dist < clusterCutoffInSDs * sigma) {
+                    ysWithCloseNeighbors.add(i);
+                }
+            }
+        }
+        return ysWithCloseNeighbors;
+    }
+
     public GMMScorerResults estimate(double[] y, double[] initialW, double initialMu1, double sigma, double[] mappingScoreArray) {
         GMMScorerResults results = new GMMScorerResults();
         int maxIterations = 10;
@@ -219,7 +250,7 @@ public class GenotypingGMMScorer {
                 log.debug(y[i]);
             }
         }
-        List<Integer> ysWithCloseNeighbors = cleanYIndices(y, sigma, 2, 5);
+        List<Integer> ysWithCloseNeighbors = cleanYIndices2(y, sigma, 2, 5);
         double[] yclean = nnclean(y, ysWithCloseNeighbors);
         if (log.isDebugEnabled()) {
             log.debug("ycleans:");
