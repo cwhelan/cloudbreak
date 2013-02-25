@@ -24,16 +24,26 @@ import java.util.List;
  */
 public abstract class BaseAlignmentReader implements AlignmentReader {
 
+    boolean legacyAlignments;
+
+    public boolean isLegacyAlignments() {
+        return legacyAlignments;
+    }
+
+    public void setLegacyAlignments(boolean legacyAlignments) {
+        this.legacyAlignments = legacyAlignments;
+    }
+
     public ReadPairAlignments parsePairAlignmentLine(String line) {
         return parsePairAlignmentLine(line, null);
     }
 
     public ReadPairAlignments parsePairAlignmentLine(String line, AlignmentRecordFilter filter) {
-        String[] reads = line.split(Cloudbreak.READ_SEPARATOR);
+        String[] reads = line.split(getReadSeparator());
         String read1AlignmentsString = reads[0];
         List<AlignmentRecord> read1AlignmentRecords;
         if (! "".equals(read1AlignmentsString)) {
-            String[] read1Alignments = read1AlignmentsString.split(Cloudbreak.ALIGNMENT_SEPARATOR);
+            String[] read1Alignments = read1AlignmentsString.split(getAlignmentSeparator());
             read1AlignmentRecords = parseAlignmentsIntoRecords(read1Alignments, filter);
         } else {
             read1AlignmentRecords = new ArrayList<AlignmentRecord>();
@@ -42,12 +52,28 @@ public abstract class BaseAlignmentReader implements AlignmentReader {
         List<AlignmentRecord> read2AlignmentRecords;
         if (reads.length > 1) {
             String read2AlignmentsString = reads[1];
-            String[] read2Alignments = read2AlignmentsString.split(Cloudbreak.ALIGNMENT_SEPARATOR);
+            String[] read2Alignments = read2AlignmentsString.split(getAlignmentSeparator());
             read2AlignmentRecords = parseAlignmentsIntoRecords(read2Alignments, filter);
         } else {
             read2AlignmentRecords = new ArrayList<AlignmentRecord>();
         }
         return new ReadPairAlignments(read1AlignmentRecords, read2AlignmentRecords);
+    }
+
+    private String getAlignmentSeparator() {
+        if (isLegacyAlignments()) {
+            return Cloudbreak.LEGACY_ALIGNMENT_SEPARATOR;
+        } else {
+            return Cloudbreak.ALIGNMENT_SEPARATOR;
+        }
+    }
+
+    private String getReadSeparator() {
+        if (isLegacyAlignments()) {
+            return Cloudbreak.LEGACY_READ_SEPARATOR;
+        } else {
+            return Cloudbreak.READ_SEPARATOR;
+        }
     }
 
     public List<AlignmentRecord> parseAlignmentsIntoRecords(String[] alignments, AlignmentRecordFilter filter) {

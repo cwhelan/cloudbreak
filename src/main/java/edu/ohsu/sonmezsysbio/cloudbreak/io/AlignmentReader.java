@@ -23,6 +23,10 @@ public interface AlignmentReader {
 
     ReadPairAlignments parsePairAlignmentLine(String line, AlignmentRecordFilter filter);
 
+    void setLegacyAlignments(boolean legacyAlignments);
+
+    boolean isLegacyAlignments();
+
     /**
      * Factory method to grab the correct implementing class.
      */

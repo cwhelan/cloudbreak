@@ -18,6 +18,9 @@ public class Cloudbreak extends Configured implements Tool
     public static final String ALIGNMENT_SEPARATOR = "\tCB_ALIGN\t";
     public static final String READ_SEPARATOR = "\tCB_READ\t";
 
+    public static final String LEGACY_ALIGNMENT_SEPARATOR = "\tSVP_ALIGNMENT\t";
+    public static final String LEGACY_READ_SEPARATOR = "\tSVP_READ\t";
+
     // default values used in multiple commands
     public static final int DEFAULT_RESOLUTION = 25;
     public static final int WINDOW_SIZE_IN_LINES = 1000;

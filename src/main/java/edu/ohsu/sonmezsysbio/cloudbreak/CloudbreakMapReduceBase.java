@@ -46,6 +46,7 @@ public class CloudbreakMapReduceBase extends MapReduceBase {
         }
         alignerName = job.get("cloudbreak.aligner");
         alignmentReader = AlignmentReader.AlignmentReaderFactory.getInstance(alignerName);
+        alignmentReader.setLegacyAlignments(Boolean.parseBoolean(job.get("legacy.alignments")));
     }
 
     public AlignmentReader getAlignmentReader() {

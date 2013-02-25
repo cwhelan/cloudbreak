@@ -80,6 +80,9 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
     @Parameter(names = {"--minCleanCoverage"})
     int minCleanCoverage = 3;
 
+    @Parameter(names = {"--legacyAlignments"})
+    boolean legacyAlignments = false;
+
     public void run(Configuration conf) throws IOException, URISyntaxException {
         runHadoopJob(conf);
     }
@@ -133,6 +136,8 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
         conf.set("pileupDeletionScore.maxMismatches", String.valueOf(maxMismatches));
 
         conf.set("min.clean.coverage", String.valueOf(minCleanCoverage));
+
+        conf.set("legacy.alignments", String.valueOf(legacyAlignments));
 
         if (chrFilter != null) {
             conf.set("alignments.filterchr", chrFilter);
