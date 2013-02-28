@@ -12,47 +12,122 @@ import evalBedFile
 # for insertions:
 #
 
-pindel_filename = sys.argv[1]
+sv_type = sys.argv[1]
+if not (sv_type == "INS" or sv_type == "DEL"):
+    print "SV_TYPE needs to be INS or DEL, got " + sv_type
+    sys.exit(0)
+
 truth_filename = sys.argv[2]
-sv_type = sys.argv[3]
+pindel_deletions_filename = "NA"
+pindel_short_insertions_filename = "NA"
+pindel_long_insertions_filename = "NA"
+if sv_type == "DEL":
+    pindel_deletions_filename = sys.argv[3]
+    options_pos = 4
+else:
+    pindel_short_insertions_file = sys.argv[3]
+    pindel_long_insertions_file = sys.argv[4]
+    options_pos = 5
+
 
 score_values = []
 
 print_hits = False
-if len(sys.argv) == 6 and sys.argv[4] == "--printHits":
-    threshold = float(sys.argv[5])
+short_threshold = 40
+
+if len(sys.argv) > options_pos and sys.argv[options_pos] == "--printHits":
+    threshold = float(sys.argv[options_pos + 1])
     score_values.append(threshold)
     print_hits = True
 else:
-    pindel_file = open(pindel_filename, "r")
-    for line in pindel_file:
-        fields = line.split("\t")
-        score = float(fields[3])
-        score_values.append(score)
+    if sv_type == "DEL":
+        pindel_file = open(pindel_deletions_filename, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "D":
+                continue
+            if int(fields[13]) < short_threshold:
+                continue
+            score = float(fields[24])
+            score_values.append(score)
+        pindel_file.close()
+    else:
+        pindel_file = open(pindel_short_insertions_file, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "I":
+                continue
+            if int(fields[2]) <= short_threshold:
+                continue
+            score = float(fields[24])
+            score_values.append(score)
+        pindel_file.close()
+        pindel_file = open(pindel_long_insertions_file, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "LI":
+                continue
+            score = float(fields[6]) * float(fields(9))
+            score_values.append(score)
+        pindel_file.close()
 
-    pindel_file.close()
 
 unique_score_values = list(set(score_values))
 unique_score_values.sort()
+print unique_score_values
 
 if not print_hits:
     print "\t".join(["Thresh", "Calls", "TP", "WrongType", "Short", "TPR"])
 for v in unique_score_values:
     calls_gte_threshold = []
-    pindel_file = open(pindel_filename, "r")
-    non_del_calls = 0
-    for line in pindel_file:
-        fields = line.split("\t")
-        if float(fields[3]) >= v:
-            chrom = fields[0]
-            ostart = fields[1]
-            oend = fields[2]
-            if (sv_type == "DEL"):
+    if (sv_type == "DEL"):
+        pindel_file = open(pindel_deletions_filename, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "D":
+                continue
+            if int(fields[2]) < short_threshold:
+                continue
+            if float(fields[24]) >= v:
+                chrom = fields[7]
+                ostart = fields[12]
+                oend = fields[13]
                 bed_line = "\t".join([chrom, ostart, oend])
-            else:
-                bed_line = "\t".join([chrom, ostart, oend, fields[4]])
-            #print bed_line.strip()
-            calls_gte_threshold.append(bed_line)
+                #print bed_line.strip()
+                calls_gte_threshold.append(bed_line)
+        pindel_file.close()
+    else:
+        pindel_file = open(pindel_short_insertions_filename, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "I":
+                continue
+            if int(fields[2]) < short_threshold:
+                continue
+            if float(fields[24]) >= v:
+                chrom = fields[7]
+                ostart = fields[12]
+                oend = fields[13]
+                length = fields[4]
+                bed_line = "\t".join([chrom, ostart, oend, length])
+                    #print bed_line.strip()
+                calls_gte_threshold.append(bed_line)
+        pindel_file.close()
+        pindel_file = open(pindel_long_insertions_filename, "r")
+        for line in pindel_file:
+            fields = line.split()
+            if len(fields) < 2 or fields[1] != "LI":
+                continue
+            if float(fields[6]) * float(fields[9]) >= v:
+                chrom = fields[3]
+                ostart = fields[4]
+                oend = fields[7]
+                length = 100
+                bed_line = "\t".join([chrom, ostart, oend, length])
+                #print bed_line.strip()
+                calls_gte_threshold.append(bed_line)
+        pindel_file.close()
+
     if sv_type == "DEL":
         (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, calls_gte_threshold, print_hits)
     else:
@@ -62,6 +137,6 @@ for v in unique_score_values:
     else:
         tpr = "NA"
     if not print_hits:
-        print "\t".join(map(str, [v, qualified_calls, matches, non_del_calls, short_calls, tpr]))
+        print "\t".join(map(str, [v, qualified_calls, matches, 0, short_calls, tpr]))
     
     
