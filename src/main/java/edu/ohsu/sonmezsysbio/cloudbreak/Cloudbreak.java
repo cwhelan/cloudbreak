@@ -31,6 +31,11 @@ public class Cloudbreak extends Configured implements Tool
     public static final String ALIGNER_MRFAST = "mrfast";
     public static final String ALIGNER_GENERIC_SAM = "sam";
 
+    // types of variants identified by cloudbreak
+    public static final String VARIANT_TYPE_INSERTION = "INS";
+    public static final String VARIANT_TYPE_DELETION = "DEL";
+    public static final String VARIANT_TYPE_UNKNOWN = "NA";
+
     public static void main(String[] args) throws Exception {
         int res = ToolRunner.run(new Configuration(), new Cloudbreak(), args);
         System.exit(res);
@@ -95,6 +100,12 @@ public class Cloudbreak extends Configured implements Tool
 
         CommandExportGMMResults exportGMMResults = new CommandExportGMMResults();
         jc.addCommand("exportGMMResults", exportGMMResults);
+
+        CommandExtractDeletionCalls commandExtractDeletionCalls = new CommandExtractDeletionCalls();
+        jc.addCommand("extractDeletionCalls", commandExtractDeletionCalls);
+
+        CommandExtractInsertionCalls commandExtractInsertionCalls = new CommandExtractInsertionCalls();
+        jc.addCommand("extractInsertionCalls", commandExtractInsertionCalls);
 
         CommandDumpReadsWithScores dumpReadsWithScores = new CommandDumpReadsWithScores();
         jc.addCommand("dumpReadsWithScores", dumpReadsWithScores);

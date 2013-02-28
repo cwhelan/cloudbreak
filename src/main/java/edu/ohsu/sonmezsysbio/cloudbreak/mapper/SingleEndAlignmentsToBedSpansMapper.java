@@ -180,7 +180,7 @@ public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapp
                 record2 : record1;
 
         if (! (record1.getChromosomeName().equals(chromosome) &&
-               leftRead.getPosition() < regionEnd && rightRead.getPosition() > regionStart))
+               leftRead.getPosition() + leftRead.getSequenceLength() < regionEnd && rightRead.getPosition() > regionStart))
             return;
 
         insertSize = rightRead.getPosition() + rightRead.getSequenceLength() - leftRead.getPosition();
@@ -190,7 +190,9 @@ public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapp
         double pMappingCorrect = alignmentReader.probabilityMappingIsCorrect(record1, record2, readPairAlignments);
 
         output.collect(new Text(leftRead.getReadId()),
-                new Text(leftRead.getChromosomeName() + "\t" + leftRead.getPosition() + "\t" + rightRead.getPosition() + "\t" + leftRead.getReadId() + "\t" + insertSize + "\t" + pMappingCorrect));
+                new Text(leftRead.getChromosomeName() + "\t" + leftRead.getPosition() + "\t" + (rightRead.getPosition() + rightRead.getSequenceLength())
+                        + "\t" + leftRead.getReadId() + "\t" + insertSize + "\t" + pMappingCorrect
+                        + "\t" + (leftRead.getPosition() + leftRead.getSequenceLength()) + "\t" + rightRead.getPosition()));
 
     }
 }

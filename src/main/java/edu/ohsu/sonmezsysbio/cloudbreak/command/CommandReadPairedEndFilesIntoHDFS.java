@@ -215,7 +215,7 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     public void run(Configuration conf) throws Exception {
         copyReadFilesToHdfs();
         log.info("Loaded " + numRecords + " records.");
-        log.info("Filtered " + numCasava18FilteredRecords + "records due to Casava 1.8 QC filter");
+        log.info("Filtered " + numCasava18FilteredRecords + " records due to Casava 1.8 QC filter");
         log.info("Filtered " + numEntropyFilteredRecords + " records due to trigram entropy filter.");
     }
 

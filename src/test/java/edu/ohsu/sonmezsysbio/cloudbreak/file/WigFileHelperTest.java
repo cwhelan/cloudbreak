@@ -50,8 +50,8 @@ public class WigFileHelperTest {
 
         String expectedOutput =
                 "track name = \"test peaks over " + threshold + "\"\n" +
-                "chr1\t3000\t3999\t1\t5.0\n" +
-                "chr2\t1000\t2999\t2\t7.0\n";
+                "chr1\t3000\t3999\t1\t5.0\tNA\n" +
+                "chr2\t1000\t2999\t2\t7.0\tNA\n";
         assertEquals(expectedOutput, stringWriter.getBuffer().toString());
     }
 
@@ -117,8 +117,8 @@ public class WigFileHelperTest {
 
         String expectedOutput =
                 "track name = \"test peaks over " + threshold + "\"\n" +
-                        "chr1\t3000\t3999\t1\t5.0\t1.0\t1.0\t1.0\t3.0\t3.0\t3.0\n" +
-                        "chr2\t1000\t2999\t2\t7.0\t2.0\t2.0\t2.0\t4.0\t3.0\t5.0\n";
+                        "chr1\t3000\t3999\t1\t5.0\tNA\t1.0\t1.0\t1.0\t3.0\t3.0\t3.0\n" +
+                        "chr2\t1000\t2999\t2\t7.0\tNA\t2.0\t2.0\t2.0\t4.0\t3.0\t5.0\n";
         assertEquals(expectedOutput, stringWriter.getBuffer().toString());
     }
 
@@ -150,7 +150,7 @@ public class WigFileHelperTest {
 
         String expectedOutput =
                 "track name = \"test peaks over " + threshold + "\"\n" +
-                        "chr1\t2000\t4999\t1\t5.0\n";
+                        "chr1\t2000\t4999\t1\t5.0\tNA\n";
         assertEquals(expectedOutput, stringWriter.getBuffer().toString());
 
     }

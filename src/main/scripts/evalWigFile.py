@@ -17,16 +17,18 @@ faidx_filename = sys.argv[3]
 medianFilterWindow = sys.argv[4]
 lower_threshold = float(sys.argv[5])
 mu_filename = sys.argv[6]
+w0_filename = sys.argv[7]
 
-cbhome = sys.argv[7]
-target_isize = sys.argv[8]
-target_isize_sd = sys.argv[9]
+cbhome = sys.argv[8]
+target_isize = sys.argv[9]
+target_isize_sd = sys.argv[10]
+sv_type = sys.argv[11]
 
 
 def open_file(wig_filename):
     if (wig_filename.endswith("gz")):
         sys.stderr.write("opening with subprocess\n")
-        p = subprocess.Popen(["gzcat",wig_filename],
+        p = subprocess.Popen(["zcat",wig_filename],
                              stdout = subprocess.PIPE)
         wig_file = p.stdout
     else:
@@ -54,7 +56,7 @@ sys.stderr.write("values above threshold: " + str(len(values_above_threshold)) +
 values_above_threshold = list(set(values_above_threshold))
 values_above_threshold.sort()
 
-num_quantiles = 50
+num_quantiles = 200
 quantiles = [0] * (num_quantiles + 1)
 q_num = 0
 
@@ -73,7 +75,7 @@ sys.stderr.write(str(quantiles))
 sys.stderr.write("\n")
 
 def process_quantile(q):
-    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, cbhome + 'target/', target_isize, target_isize_sd]
+    eval_at_q_cmd = ['condor_run',  'python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, w0_filename, cbhome, target_isize, target_isize_sd, sv_type]
     #print eval_at_q_cmd
     result = subprocess.Popen(eval_at_q_cmd, stdout=subprocess.PIPE).communicate()[0]
     result_fields = result.split()
@@ -87,7 +89,7 @@ def process_quantile(q):
     else:
         return (q, num_predictions, num_matches, 0, num_short_calls,tpr)
     
-p=Pool(3)
+p=Pool(100)
 results = p.map(process_quantile, quantiles)
 
 print "\t".join(["Thresh", "Calls", "TP", "Wrong Type", "Short", "TPR"])

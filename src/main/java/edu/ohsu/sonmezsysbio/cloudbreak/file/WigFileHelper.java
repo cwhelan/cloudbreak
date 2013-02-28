@@ -1,5 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.file;
 
+import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ public class WigFileHelper {
                                                          Double threshold, FaidxFileHelper faidx, int medianFilterWindow
                                                          ) throws IOException {
         exportRegionsOverThresholdFromWig(name, wigFileReader, bedFileWriter, threshold, faidx, medianFilterWindow, null, null,
-                new ArrayList<String>(), new HashMap<String, BufferedReader>(), -1, -1);
+                new ArrayList<String>(), new HashMap<String, BufferedReader>(), -1, -1, null);
 
     }
 
@@ -34,7 +35,7 @@ public class WigFileHelper {
                                                          FaidxFileHelper faidx, int medianFilterWindow,
                                                          List<String> extraFileNames, Map<String, BufferedReader> extraWigFileReaders) throws IOException {
         exportRegionsOverThresholdFromWig(outputPrefix, wigFileReader, bedFileWriter, threshold, faidx, medianFilterWindow, null, null,
-                extraFileNames, extraWigFileReaders, -1, -1);
+                extraFileNames, extraWigFileReaders, -1, -1, null);
     }
 
     public static void exportRegionsOverThresholdFromWig(String outputPrefix, BufferedReader wigFileReader,
@@ -42,7 +43,7 @@ public class WigFileHelper {
                                                          FaidxFileHelper faidx, int medianFilterWindow,
                                                          String muFile, BufferedReader muFileReader,
                                                          List<String> extraFileNames, Map<String, BufferedReader> extraWigFileReaders,
-                                                         int targetIsize, int targetIsizeSD)
+                                                         int targetIsize, int targetIsizeSD, String variantType)
             throws IOException {
         String trackName = outputPrefix + " peaks over " + threshold;
         bedFileWriter.write("track name = \"" + trackName + "\"\n");
@@ -78,7 +79,7 @@ public class WigFileHelper {
                 if (values != null) {
                     double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
                     peakNum = writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution,
-                            peakNum, muFileValues, extraFileNames, extraWigFileValues, targetIsize, targetIsizeSD);
+                            peakNum, muFileValues, extraFileNames, extraWigFileValues, targetIsize, targetIsizeSD, variantType);
                 }
                 currentChromosome = line.split(" ")[1].split("=")[1];
                 resolution = Integer.valueOf(line.split(" ")[2].split("=")[1]);
@@ -116,7 +117,7 @@ public class WigFileHelper {
         }
         double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
         writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution, peakNum, muFileValues, extraFileNames,
-                extraWigFileValues, targetIsize, targetIsizeSD);
+                extraWigFileValues, targetIsize, targetIsizeSD, variantType);
 
     }
 
@@ -161,7 +162,7 @@ public class WigFileHelper {
                                             int peakNum,
                                             double[] muFileValues,
                                             List<String> extraFileNames, Map<String, double[]> extraWigFileValues,
-                                            int targetIsize, int targetIsizeSD) throws IOException {
+                                            int targetIsize, int targetIsizeSD, String desiredVariantType) throws IOException {
         boolean usingMuValues = (muFileValues != null);
 
         boolean inPositivePeak = false;
@@ -183,8 +184,11 @@ public class WigFileHelper {
         while (idx < filteredVals.length) {
             long pos = idx * resolution;
 
+            // If we are filtering regions based on the estimated mean of the second component,
+            // if the mean changes more by more than twice the SD of the library we break up the
+            // prediction for deletions
             if (filteredVals[idx] > 0 &&
-                    (! usingMuValues ||
+                    (! usingMuValues || ! Cloudbreak.VARIANT_TYPE_DELETION.equals(desiredVariantType) ||
                     (idx < 2 || Math.abs(muFileValues[idx] - muFileValues[idx - 2]) < 2 * targetIsizeSD))) {
                 if (!inPositivePeak) {
                     peakStart = pos;
@@ -225,12 +229,9 @@ public class WigFileHelper {
                     long endPosition = pos - 1;
                     long length = endPosition - peakStart;
                     double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
-                    if (! usingMuValues || (avgMu > targetIsize && Math.abs(length - avgMu) <= targetIsize)) {
-                        writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
-                                usingMuValues, muValMin, muValMax,
-                                extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition, avgMu);
-                        peakNum += 1;
-                    }
+                    peakNum = determineVariantTypeAndWriteLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames,
+                            targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, extraWigValueSums, extraWigValueMins,
+                            extraWigValueMaxes, endPosition, length, avgMu, desiredVariantType);
                     inPositivePeak = false;
                     peakMax = 0;
                 }
@@ -242,21 +243,61 @@ public class WigFileHelper {
             if (endPosition < peakStart) return peakNum;
             long length = endPosition - peakStart;
             double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
-            if (! usingMuValues || (avgMu > targetIsize && Math.abs(length - avgMu) <= targetIsize)) {
-                writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
-                        usingMuValues, muValMin, muValMax,
-                        extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition, avgMu);
-                peakNum += 1;
-            }
+            peakNum = determineVariantTypeAndWriteLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames,
+                    targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, extraWigValueSums, extraWigValueMins,
+                    extraWigValueMaxes, endPosition, length, avgMu, desiredVariantType);
         }
         return peakNum;
     }
 
+    private static int determineVariantTypeAndWriteLine(BufferedWriter bedFileWriter, String currentChromosome, int resolution, int peakNum,
+                                                        List<String> extraFileNames, int targetIsize, boolean usingMuValues, long peakStart,
+                                                        double peakMax, double muValMin, double muValMax, Map<String, Double> extraWigValueSums,
+                                                        Map<String, Double> extraWigValueMins, Map<String, Double> extraWigValueMaxes,
+                                                        long endPosition, long length, double avgMu, String desiredVariantType) throws IOException {
+        String variantType = null;
+        if (! usingMuValues) {
+            variantType = Cloudbreak.VARIANT_TYPE_UNKNOWN;
+        } else if (validDeletionPrediction(targetIsize, length, avgMu)) {
+            variantType = Cloudbreak.VARIANT_TYPE_DELETION;
+        } else if (validInsertionPrediction(targetIsize, avgMu)) {
+            variantType = Cloudbreak.VARIANT_TYPE_INSERTION;
+        }
+        if (desiredVariantType == null || desiredVariantType.equals(variantType)) {
+            writeLine(bedFileWriter, currentChromosome, resolution, peakNum, extraFileNames, peakStart, peakMax,
+                    usingMuValues, muValMin, muValMax,
+                    extraWigValueSums, extraWigValueMins, extraWigValueMaxes, endPosition, avgMu, variantType);
+            peakNum += 1;
+        }
+        return peakNum;
+    }
+
+    /**
+     * deletions are only valid if:
+     * the estimated mean of the second component is larger than the target insert size and
+     * the length of the region is not different from the estimated mean by more than the target insert size
+     */
+    private static boolean validDeletionPrediction(int targetIsize, long predictedRegionLength, double avgMu) {
+        return (avgMu > targetIsize && Math.abs(predictedRegionLength - avgMu) <= targetIsize);
+    }
+
+    /**
+     * insertions are only valid if:
+     * the estimated mean of the second component is smaller than the target insert size and
+     */
+    private static boolean validInsertionPrediction(int targetIsize, double avgMu) {
+        return (avgMu < targetIsize);
+    }
+
     private static void writeLine(BufferedWriter bedFileWriter, String currentChromosome, int resolution, int peakNum, List<String> extraFileNames, long peakStart,
                                   double peakMax, boolean usingMuValues, double muValMin, double muValMax,
-                                  Map<String, Double> extraWigValueSums, Map<String, Double> extraWigValueMins, Map<String, Double> extraWigValueMaxes, long endPosition, double avgMu)
+                                  Map<String, Double> extraWigValueSums, Map<String, Double> extraWigValueMins, Map<String, Double> extraWigValueMaxes, long endPosition, double avgMu,
+                                  String variantType)
             throws IOException {
         bedFileWriter.write(currentChromosome + "\t" + peakStart + "\t" + endPosition + "\t" + peakNum + "\t" + peakMax);
+        if (variantType != null) {
+            bedFileWriter.write("\t" + variantType);
+        }
         if (usingMuValues) {
             bedFileWriter.write("\t" + avgMu);
             bedFileWriter.write("\t" + muValMin);
