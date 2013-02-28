@@ -49,7 +49,7 @@ def eval_bed_deletions(truth_filename, calls, printhits=False):
                 found_feature_length = int(fields[(len(fields) - 1)]) - int(fields[(len(fields) - 2)])
                 if abs(current_call_length - found_feature_length) < 300:
                     found_features.add(found_feature)
-                    if found_feature_length <= size_threshold:
+                    if found_feature_length < size_threshold:
                         short_hit_for_current_call = True
                     else:
                         hit_for_current_call = True
@@ -126,7 +126,7 @@ def eval_bed_insertions(truth_filename, calls, printhits=False):
             if not found_feature in found_features:
                 found_feature_length = int(fields[(len(fields) - 1)])
                 found_features.add(found_feature)
-                if found_feature_length <= size_threshold:
+                if found_feature_length < size_threshold:
                     short_hit_for_current_call = True
                 else:
                     hit_for_current_call = True
