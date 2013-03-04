@@ -16,10 +16,17 @@ sv_type = sys.argv[3]
 score_values = []
 
 print_hits = False
+print_bed = False
+
 if len(sys.argv) == 6 and sys.argv[4] == "--printHits":
     threshold = float(sys.argv[5])
     score_values.append(threshold)
     print_hits = True
+elif len(sys.argv) == 6 and sys.argv[4] == "--printBed":
+    threshold = float(sys.argv[5])
+    score_values.append(threshold)
+    print_bed = True
+
 else:
     breakdancer_file = open(breakdancer_filename, "r")
     for line in breakdancer_file:
@@ -33,7 +40,7 @@ else:
 unique_score_values = list(set(score_values))
 unique_score_values.sort()
 
-if not print_hits:
+if not print_hits and not print_bed:
     print "\t".join(["Thresh", "Calls", "TP", "WrongType", "Short", "TPR"])
 for v in unique_score_values:
     calls_gte_threshold = []
@@ -67,6 +74,10 @@ for v in unique_score_values:
             bed_line = "\t".join([fields[0], fields[1], fields[4], str(abs(int(fields[7])))])
         bed_lines.append(bed_line)
 
+    if print_bed:
+        print "\n".join(bed_lines)
+        continue
+
     if (sv_type == "DEL"):
         (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines, print_hits)
     else:
@@ -75,5 +86,5 @@ for v in unique_score_values:
     tpr = float(matches) / (qualified_calls)
     if not print_hits:
         print "\t".join(map(str, [v, qualified_calls, matches, other_type_calls, short_calls, tpr]))
-    
-    
+
+
