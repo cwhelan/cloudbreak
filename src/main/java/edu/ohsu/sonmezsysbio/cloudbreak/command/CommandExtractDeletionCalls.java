@@ -7,6 +7,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.mapper.GMMResultsToChromosomeMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GMMResultsToDeletionCallsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
@@ -14,7 +15,9 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 
 /**
@@ -60,6 +63,10 @@ public class CommandExtractDeletionCalls extends VariantExtractionCommand implem
         FileSystem.get(conf).delete(outputDir);
         FileOutputFormat.setOutputPath(conf, outputDir);
 
+        // get the number of chromosomes and set the number of reducers to it
+        int chromosomes = getNumChromosomes(dfs, faidxFileName);
+
+        conf.set("mapred.reduce.tasks", String.valueOf(chromosomes + 1));
         addDistributedCacheFile(conf, faidxFileName, "alignment.faidx");
 
         conf.set("legacy.alignments", String.valueOf(legacyAlignments));
@@ -87,6 +94,17 @@ public class CommandExtractDeletionCalls extends VariantExtractionCommand implem
 
         JobClient.runJob(conf);
 
+    }
+
+    private int getNumChromosomes(FileSystem dfs, String faidxFileName1) throws IOException {
+        Path faidxPath = new Path(faidxFileName1);
+        FSDataInputStream is = dfs.open(faidxPath);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        int chromosomes = 0;
+        while (reader.readLine() != null) {
+            chromosomes++;
+        }
+        return chromosomes;
     }
 
 }
