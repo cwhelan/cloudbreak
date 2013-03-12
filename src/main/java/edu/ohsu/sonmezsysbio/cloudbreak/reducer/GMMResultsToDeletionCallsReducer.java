@@ -14,9 +14,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -57,7 +55,6 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
         int numTiles = (int) Math.ceil(((double) lengthForChromName) / resolution);
         double[] values = new double[numTiles];;
         log.debug("computing results for chr " + chromosome + ", num tiles = " + numTiles);
-        Map<String, double[]> extraWigFileValues = new HashMap<String, double[]>();
 
         int peakNum = 1;
 
@@ -81,15 +78,23 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
 
         log.debug("applying median filter with window size " + medianFilterWindow);
         double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, lrThreshold);
+        if (log.isDebugEnabled()) {
+            if ("19".equals(faix.getNameForChromKey(chromosome))) {
+                for (int i = 1119844; i < 1119968; i++) {
+                    log.debug("pos " + i * resolution + ": " + values[i] + "\t" + filteredVals[i] + "\t" + muFileValues[i]);
+                }
+            }
+        }
+
         writePositiveRegions(filteredVals, textTextOutputCollector, faix.getNameForChromKey(chromosome), faix,
                 resolution, peakNum, muFileValues, w0Values,
-                targetIsize, targetIsizeSD, variantType);
+                targetIsize, targetIsizeSD, variantType, lrThreshold);
     }
 
     private static int writePositiveRegions(double[] filteredVals, OutputCollector<Text, Text> textTextOutputCollector,
                                             String currentChromosome, FaidxFileHelper faidx, int resolution,
                                             int peakNum, double[] muFileValues, double[] w0FileValues,
-                                            int targetIsize, int targetIsizeSD, String desiredVariantType) throws IOException {
+                                            int targetIsize, int targetIsizeSD, String desiredVariantType, double lrThreshold) throws IOException {
         log.debug("writing positive regions");
         boolean usingMuValues = true;
 
@@ -113,7 +118,8 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
             // if the mean changes more by more than twice the SD of the library we break up the
             // prediction for deletions
             if (filteredVals[idx] > 0) {
-                if (!Cloudbreak.VARIANT_TYPE_DELETION.equals(desiredVariantType) || (idx < 2 || Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) < 2 * targetIsizeSD)) {
+                if (!Cloudbreak.VARIANT_TYPE_DELETION.equals(desiredVariantType) ||
+                        ! muHasChangedTooMuch(muFileValues, targetIsizeSD, idx)) {
                     if (!inPositivePeak) {
                         log.debug("beginning peak at " + pos);
                         peakStart = pos;
@@ -135,13 +141,13 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
 
                 } else {
                     if (inPositivePeak) {
-                        log.debug("ending peak because of mu shift");
+                        log.debug("ending peak because of mu shift at idx " + idx + "; muFileValues[idx] = " + muFileValues[idx] + "; muFileValues[idx - 2] = " + muFileValues[(idx - 2)]);
                         long endPosition = pos - 1;
                         long length = endPosition - peakStart;
                         double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
                         peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                                 targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                                w0ValMax, endPosition, length, avgMu, desiredVariantType);
+                                w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
                         inPositivePeak = false;
                         peakMax = 0;
                     }
@@ -154,7 +160,7 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
                     double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
                     peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                             targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                            w0ValMax, endPosition, length, avgMu, desiredVariantType);
+                            w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
                     inPositivePeak = false;
                     peakMax = 0;
                 }
@@ -169,21 +175,38 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
             double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
             peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                     targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                    w0ValMax, endPosition, length, avgMu, desiredVariantType);
+                    w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
         }
         return peakNum;
     }
 
-    private static int determineVariantTypeAndWriteLine(OutputCollector<Text,Text> outputCollector, String currentChromosome, int resolution, int peakNum,
+    public static boolean muHasChangedTooMuch(double[] muFileValues, int targetIsizeSD, int idx) {
+        if (idx < 3) return false;
+        // x is far from x - 3
+        // x is far from x - 2
+        // x - 1 is far from x - 2
+        // x - 1 is far from x - 3
+        // x and x - 1 are close
+        // x - 2 and x - 3 are close
+        int changeThreshold = 3 * targetIsizeSD;
+        return ((Math.abs(muFileValues[idx] - muFileValues[(idx - 3)]) > changeThreshold)
+                && (Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) > changeThreshold)
+                && (Math.abs(muFileValues[idx - 1] - muFileValues[(idx - 3)]) > changeThreshold)
+                && (Math.abs(muFileValues[idx - 1] - muFileValues[(idx - 2)]) > changeThreshold)
+                && (Math.abs(muFileValues[idx] - muFileValues[(idx - 1)]) < changeThreshold)
+                && (Math.abs(muFileValues[idx - 2] - muFileValues[(idx - 3)]) < changeThreshold));
+    }
+
+    private static int determineVariantTypeAndWriteLine(OutputCollector<Text, Text> outputCollector, String currentChromosome, int resolution, int peakNum,
                                                         int targetIsize, boolean usingMuValues, long peakStart,
                                                         double peakMax, double muValMin, double muValMax, double w0ValSum,
                                                         double w0ValMin, double w0ValMax,
-                                                        long endPosition, long length, double avgMu, String desiredVariantType) throws IOException {
+                                                        long endPosition, long length, double avgMu, String desiredVariantType, double lrThreshold) throws IOException {
         log.debug("validating peak num " + peakNum + ", start = " + peakStart + ", end = " + endPosition);
         String variantType = null;
         if (! usingMuValues) {
             variantType = Cloudbreak.VARIANT_TYPE_UNKNOWN;
-        } else if (validDeletionPrediction(targetIsize, length, avgMu)) {
+        } else if (validDeletionPrediction(targetIsize, length, avgMu, peakMax, lrThreshold)) {
             variantType = Cloudbreak.VARIANT_TYPE_DELETION;
         } else if (validInsertionPrediction(targetIsize, avgMu)) {
             variantType = Cloudbreak.VARIANT_TYPE_INSERTION;
@@ -203,9 +226,9 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
      * the estimated mean of the second component is larger than the target insert size and
      * the length of the region is not different from the estimated mean by more than the target insert size
      */
-    private static boolean validDeletionPrediction(int targetIsize, long predictedRegionLength, double avgMu) {
+    private static boolean validDeletionPrediction(int targetIsize, long predictedRegionLength, double avgMu, double peakMax, double lrThreshold) {
         log.debug("trying to validate avgMu: " + avgMu + " targetIsize " + targetIsize + " predicted length " + predictedRegionLength);
-        return (avgMu > targetIsize && Math.abs(predictedRegionLength - avgMu) <= targetIsize);
+        return (peakMax >= lrThreshold && avgMu > targetIsize && Math.abs(predictedRegionLength - avgMu) <= targetIsize);
     }
 
     /**
