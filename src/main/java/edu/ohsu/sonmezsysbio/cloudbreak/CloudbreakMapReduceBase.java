@@ -44,9 +44,11 @@ public class CloudbreakMapReduceBase extends MapReduceBase {
         if (job.get("cloudbreak.resolution") != null) {
             resolution = Integer.parseInt(job.get("cloudbreak.resolution"));
         }
-        alignerName = job.get("cloudbreak.aligner");
-        alignmentReader = AlignmentReader.AlignmentReaderFactory.getInstance(alignerName);
-        alignmentReader.setLegacyAlignments(Boolean.parseBoolean(job.get("legacy.alignments")));
+        if (job.get("cloudbreak.aligner") != null) {
+            alignerName = job.get("cloudbreak.aligner");
+            alignmentReader = AlignmentReader.AlignmentReaderFactory.getInstance(alignerName);
+            alignmentReader.setLegacyAlignments(Boolean.parseBoolean(job.get("legacy.alignments")));
+        }
     }
 
     public AlignmentReader getAlignmentReader() {

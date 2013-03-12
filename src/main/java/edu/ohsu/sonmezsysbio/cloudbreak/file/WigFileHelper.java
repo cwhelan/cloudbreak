@@ -1,6 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.file;
 
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
+import edu.ohsu.sonmezsysbio.cloudbreak.util.MedianFilter;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -77,7 +78,7 @@ public class WigFileHelper {
             if (line.startsWith("variableStep")) {
 
                 if (values != null) {
-                    double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
+                    double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, threshold);
                     peakNum = writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution,
                             peakNum, muFileValues, extraFileNames, extraWigFileValues, targetIsize, targetIsizeSD, variantType);
                 }
@@ -115,7 +116,7 @@ public class WigFileHelper {
                 }
             }
         }
-        double[] filteredVals = medianFilterValues(values, medianFilterWindow, threshold);
+        double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, threshold);
         writePositiveRegions(filteredVals, bedFileWriter, currentChromosome, faidx, resolution, peakNum, muFileValues, extraFileNames,
                 extraWigFileValues, targetIsize, targetIsizeSD, variantType);
 
@@ -127,34 +128,6 @@ public class WigFileHelper {
             throw new RuntimeException("Failed to parse line in " + fileName + ": " + mainLine);
         }
         return Double.valueOf(extraFields[1]);
-    }
-
-    private static double[] medianFilterValues(double[] values, int medianFilterWindow, double threshold) {
-        double[] filteredValues = new double[values.length];
-        int idx = 0;
-        while (idx <= medianFilterWindow / 2) {
-            filteredValues[idx] = values[idx] > threshold ? values[idx] : 0.0;
-            idx++;
-        }
-
-        while (idx < filteredValues.length - medianFilterWindow / 2) {
-            double[] filterWindow = Arrays.copyOfRange(values, idx - medianFilterWindow / 2,
-                    idx + medianFilterWindow / 2 + 1);
-            Arrays.sort(filterWindow);
-            double medianValue = filterWindow[medianFilterWindow / 2];
-            if (medianValue > threshold) {
-                filteredValues[idx] = values[idx];
-            } else {
-                filteredValues[idx] = 0;
-            }
-            idx++;
-        }
-
-        while (idx < filteredValues.length) {
-            filteredValues[idx] = values[idx] > threshold ? values[idx] : 0.0;
-            idx++;
-        }
-        return filteredValues;
     }
 
     private static int writePositiveRegions(double[] filteredVals, BufferedWriter bedFileWriter,
