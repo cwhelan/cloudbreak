@@ -34,6 +34,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
     int targetIsizeSD;
     double lrThreshold;
     int medianFilterWindow;
+    private String variantType;
 
     @Override
     public void reduce(IntWritable chromosome,
@@ -41,7 +42,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                        OutputCollector<Text, Text> textTextOutputCollector,
                        Reporter reporter) throws IOException {
         exportRegionsOverThresholdFromWig(gmmScorerResultsIterator, textTextOutputCollector, lrThreshold,
-                medianFilterWindow, targetIsize, targetIsizeSD, Cloudbreak.VARIANT_TYPE_DELETION, (short) chromosome.get());
+                medianFilterWindow, targetIsize, targetIsizeSD, variantType, (short) chromosome.get());
 
     }
 
@@ -263,5 +264,6 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         targetIsizeSD = Integer.parseInt(job.get("target.isizesd"));
         lrThreshold = Double.parseDouble(job.get("variant.lr.threshold"));
         medianFilterWindow = Integer.parseInt(job.get("variant.mfw"));
+        variantType = job.get("variant.type");
     }
 }
