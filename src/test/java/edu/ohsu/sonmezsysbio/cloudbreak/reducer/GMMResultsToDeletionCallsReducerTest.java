@@ -19,6 +19,6 @@ public class GMMResultsToDeletionCallsReducerTest {
         muVals[2] = 8760.692;
         muVals[3] = 8772.477;
 
-        assertTrue(GMMResultsToDeletionCallsReducer.muHasChangedTooMuch(muVals, 15, 3));
+        assertTrue(GMMResultsToDeletionCallsReducer.muHasChangedTooMuch(muVals, 15, 2));
     }
 }

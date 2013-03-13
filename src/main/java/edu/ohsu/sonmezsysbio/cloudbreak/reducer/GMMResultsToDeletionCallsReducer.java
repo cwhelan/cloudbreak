@@ -79,8 +79,8 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
         log.debug("applying median filter with window size " + medianFilterWindow);
         double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, lrThreshold);
         if (log.isDebugEnabled()) {
-            if ("19".equals(faix.getNameForChromKey(chromosome))) {
-                for (int i = 1119844; i < 1119968; i++) {
+            if ("2".equals(faix.getNameForChromKey(chromosome))) {
+                for (int i = 64865; i < 64885; i++) {
                     log.debug("pos " + i * resolution + ": " + values[i] + "\t" + filteredVals[i] + "\t" + muFileValues[i]);
                 }
             }
@@ -181,20 +181,14 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
     }
 
     public static boolean muHasChangedTooMuch(double[] muFileValues, int targetIsizeSD, int idx) {
-        if (idx < 3) return false;
+        if (idx < 2) return false;
         // x is far from x - 3
         // x is far from x - 2
         // x - 1 is far from x - 2
         // x - 1 is far from x - 3
         // x and x - 1 are close
         // x - 2 and x - 3 are close
-        int changeThreshold = 3 * targetIsizeSD;
-        return ((Math.abs(muFileValues[idx] - muFileValues[(idx - 3)]) > changeThreshold)
-                && (Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) > changeThreshold)
-                && (Math.abs(muFileValues[idx - 1] - muFileValues[(idx - 3)]) > changeThreshold)
-                && (Math.abs(muFileValues[idx - 1] - muFileValues[(idx - 2)]) > changeThreshold)
-                && (Math.abs(muFileValues[idx] - muFileValues[(idx - 1)]) < changeThreshold)
-                && (Math.abs(muFileValues[idx - 2] - muFileValues[(idx - 3)]) < changeThreshold));
+        return (idx >= 2 && Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) > 2 * targetIsizeSD);
     }
 
     private static int determineVariantTypeAndWriteLine(OutputCollector<Text, Text> outputCollector, String currentChromosome, int resolution, int peakNum,
