@@ -22,13 +22,12 @@ import java.util.Iterator;
  * Date: 3/11/13
  * Time: 4:29 PM
  */
-public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase implements Reducer<IntWritable, Text, Text, Text> {
+public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase implements Reducer<IntWritable, Text, Text, Text> {
 
-    private static Logger log = Logger.getLogger(GMMResultsToDeletionCallsReducer.class);
+    private static Logger log = Logger.getLogger(GMMResultsToVariantCallsReducer.class);
 
     { log.setLevel(Level.DEBUG); }
 
-    private String faidxFileName;
     FaidxFileHelper faix;
 
     int targetIsize;
@@ -258,7 +257,7 @@ public class GMMResultsToDeletionCallsReducer extends CloudbreakMapReduceBase im
     @Override
     public void configure(JobConf job) {
         super.configure(job);
-        faidxFileName = job.get("alignment.faidx");
+        String faidxFileName = job.get("alignment.faidx");
         faix = new FaidxFileHelper(faidxFileName);
         targetIsize = Integer.parseInt(job.get("target.isize"));
         targetIsizeSD = Integer.parseInt(job.get("target.isizesd"));

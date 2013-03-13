@@ -45,8 +45,10 @@ if sv_type == "DEL":
     subprocess.call("hadoop dfs -cat /user/whelanch/tmp/" + temp_file_name + "/part* | sort -k1,1 -k2,2n > " + temp_file_name, shell=True)
 else:
     cb_subcommand = "extractInsertionCalls"
-    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + '/lib/cloudbreak-${project.version}-exe.jar', cb_subcommand, '--inputWigFile', wig_filename, '--outputBedFile', temp_file_name, '--name', "tmp_" + str(q), "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--muFile", mu_file, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd, "--w0File", w0_file]
+    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + '/lib/cloudbreak-${project.version}-exe.jar', cb_subcommand, '--name', "tmp_" + str(q), "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--targetIsize", target
+                       _isize, "--targetIsizeSD", target_isize_sd, "--inputHDFSDir", input_hdfs_dir, "--outputHDFSDir", "/user/whelanch/tmp/" + temp_file_name]
     subprocess.call(extract_regions_cmd)
+    subprocess.call("hadoop dfs -cat /user/whelanch/tmp/" + temp_file_name + "/part* | sort -k1,1 -k2,2n > " + temp_file_name, shell=True)
 
 num_predictions = 0
 

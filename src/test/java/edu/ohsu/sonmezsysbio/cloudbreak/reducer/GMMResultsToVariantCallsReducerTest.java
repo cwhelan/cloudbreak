@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 3/12/13
  * Time: 3:41 PM
  */
-public class GMMResultsToDeletionCallsReducerTest {
+public class GMMResultsToVariantCallsReducerTest {
     @Test
     public void testMuHasChangedTooMuch() throws Exception {
         double[] muVals = new double[4];
@@ -19,6 +19,6 @@ public class GMMResultsToDeletionCallsReducerTest {
         muVals[2] = 8760.692;
         muVals[3] = 8772.477;
 
-        assertTrue(GMMResultsToDeletionCallsReducer.muHasChangedTooMuch(muVals, 15, 2));
+        assertTrue(GMMResultsToVariantCallsReducer.muHasChangedTooMuch(muVals, 15, 2));
     }
 }
