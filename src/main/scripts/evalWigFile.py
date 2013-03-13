@@ -23,6 +23,7 @@ cbhome = sys.argv[8]
 target_isize = sys.argv[9]
 target_isize_sd = sys.argv[10]
 sv_type = sys.argv[11]
+input_hdfs_dir = sys.argv[12]
 
 
 def open_file(wig_filename):
@@ -75,7 +76,7 @@ sys.stderr.write(str(quantiles))
 sys.stderr.write("\n")
 
 def process_quantile(q):
-    eval_at_q_cmd = ['condor_run',  'python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, w0_filename, cbhome, target_isize, target_isize_sd, sv_type]
+    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, w0_filename, cbhome, target_isize, target_isize_sd, sv_type, input_hdfs_dir]
     #print eval_at_q_cmd
     result = subprocess.Popen(eval_at_q_cmd, stdout=subprocess.PIPE).communicate()[0]
     result_fields = result.split()
@@ -89,7 +90,7 @@ def process_quantile(q):
     else:
         return (q, num_predictions, num_matches, 0, num_short_calls,tpr)
     
-p=Pool(100)
+p=Pool(10)
 results = p.map(process_quantile, quantiles)
 
 print "\t".join(["Thresh", "Calls", "TP", "Wrong Type", "Short", "TPR"])
