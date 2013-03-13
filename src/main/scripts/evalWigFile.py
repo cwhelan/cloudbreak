@@ -16,14 +16,12 @@ truth_filename = sys.argv[2]
 faidx_filename = sys.argv[3]
 medianFilterWindow = sys.argv[4]
 lower_threshold = float(sys.argv[5])
-mu_filename = sys.argv[6]
-w0_filename = sys.argv[7]
 
-cbhome = sys.argv[8]
-target_isize = sys.argv[9]
-target_isize_sd = sys.argv[10]
-sv_type = sys.argv[11]
-input_hdfs_dir = sys.argv[12]
+cbhome = sys.argv[6]
+target_isize = sys.argv[7]
+target_isize_sd = sys.argv[8]
+sv_type = sys.argv[9]
+input_hdfs_dir = sys.argv[10]
 
 
 def open_file(wig_filename):
@@ -76,7 +74,7 @@ sys.stderr.write(str(quantiles))
 sys.stderr.write("\n")
 
 def process_quantile(q):
-    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), wig_filename, truth_filename, faidx_filename, medianFilterWindow, mu_filename, w0_filename, cbhome, target_isize, target_isize_sd, sv_type, input_hdfs_dir]
+    eval_at_q_cmd = ['python', cbhome + 'src/main/scripts/evalWigFileAtThreshold.py', str(q), truth_filename, faidx_filename, medianFilterWindow, cbhome, target_isize, target_isize_sd, sv_type, input_hdfs_dir]
     #print eval_at_q_cmd
     result = subprocess.Popen(eval_at_q_cmd, stdout=subprocess.PIPE).communicate()[0]
     result_fields = result.split()

@@ -28,8 +28,6 @@ import java.util.zip.GZIPInputStream;
  * Time: 10:01 AM
  */
 public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
-    @Parameter(names = {"--name"}, required = true)
-    String name;
     @Parameter(names = {"--targetIsize"}, required = true)
     int targetIsize;
     @Parameter(names = {"--targetIsizeSD"}, required = true)
