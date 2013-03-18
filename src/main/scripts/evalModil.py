@@ -19,7 +19,7 @@ sv_type = sys.argv[3]
 
 score_values = []
 very_small_value = 2.09215640182e-318
-too_short_call_length = 30
+too_short_call_length = 40
 
 print_hits = False
 print_bed = False
@@ -67,6 +67,9 @@ for v in unique_score_values:
         fields = line.split("\t")
         # need to strip off the "chr"
         chrom = fields[1][3:len(fields[1])]
+        if (int(fields[2]) > int(fields[3])):
+            sys.stderr.write("warning, start is greater than end: " + "\t".join([chrom, fields[2], fields[3]]) + "\n")
+            continue
         if (sv_type == "DEL"):
             bed_line = "\t".join([chrom, fields[2], fields[3]])
         else:
