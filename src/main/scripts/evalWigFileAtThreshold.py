@@ -63,7 +63,6 @@ for line in open_file(temp_file_name):
     bed_lines.append(bed_line)
 
 if sv_type == "DEL":
-    print "calling eval Bed with lines: " + bed_line
     (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_deletions(truth_filename, bed_lines, print_hits)
 else:
     (qualified_calls, matches, short_calls) = evalBedFile.eval_bed_insertions(truth_filename, bed_lines, print_hits)
