@@ -45,10 +45,6 @@ public class ReadPairInfo implements Writable {
 
     @Override
     public String toString() {
-        return "ReadPairInfo{" +
-                "insertSize=" + insertSize +
-                ", pMappingCorrect=" + pMappingCorrect +
-                ", readGroupId=" + readGroupId +
-                '}';
+        return insertSize + "\t" + pMappingCorrect;
     }
 }

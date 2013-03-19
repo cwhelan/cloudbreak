@@ -117,6 +117,9 @@ public class Cloudbreak extends Configured implements Tool
         CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
         jc.addCommand("sortGMMResults", commandSortGMMResults);
 
+        CommandInsHistogram computeInsHistogram = new CommandInsHistogram();
+        jc.addCommand("computeInsHistogram", computeInsHistogram);
+
         jc.setProgramName("Cloudbreak");
         return jc;
     }
