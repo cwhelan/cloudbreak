@@ -32,6 +32,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
 
     private String numReports;
     private String editDistance;
+    private String strata;
 
     @Override
     protected boolean getCompressTempReadFile() {
@@ -48,6 +49,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         reference = job.get("gem.reference");
         numReports = job.get("gem.num.reports");
         editDistance = job.get("gem.edit.distance");
+        strata = job.get("gem.strata");
         gemMapperExecutable = job.get("gem.mapper.executable");
         gem2SamExecutable = job.get("gem.tosam.executable");
     }
@@ -65,7 +67,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         }
 
         String referenceBaseName = new File(reference).getName();
-        String[] commandLine = buildCommandLine(gemMapperExecutable, gem2SamExecutable, referenceBaseName, s1File.getPath(), numReports, editDistance);
+        String[] commandLine = buildCommandLine(gemMapperExecutable, gem2SamExecutable, referenceBaseName, s1File.getPath(), numReports, editDistance, strata);
         logger.debug("Executing command: " + Arrays.toString(commandLine));
         ReportableProcess p = new ReportableProcess(Runtime.getRuntime().exec(commandLine), reporter);
         logger.debug("Exec'd");
@@ -128,11 +130,11 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
     }
 
     protected static String[] buildCommandLine(String gemMapperExecutable, String gem2SamExecutable, String referenceBaseName,
-                                               String path1, String numReports, String editDistance
+                                               String path1, String numReports, String editDistance, String strata
     ) {
         String[] commandArray = {
                 "bash", "-c", Joiner.on(" ").join(new String[] {"./" + gemMapperExecutable,
-                "-I", referenceBaseName, "-i", path1, "-q", "ignore", "-m", editDistance, "-e", editDistance, "-d", numReports, "-s", "all", "--max-big-indel-length",
+                "-I", referenceBaseName, "-i", path1, "-q", "ignore", "-m", editDistance, "-e", editDistance, "-d", numReports, "-s", strata, "--max-big-indel-length",
                 "0", "|", "./" + gem2SamExecutable, "-o", "map.result", "--expect-single-end-reads"})
         };
         return commandArray;
