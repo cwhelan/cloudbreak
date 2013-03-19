@@ -46,9 +46,13 @@ public class ReadPairInfoToGMMResultsReducer extends MapReduceBase implements Re
     }
 
     public void reduce(GenomicLocationWithQuality key, Iterator<ReadPairInfo> values, OutputCollector<GenomicLocation, GMMScorerResults> output, Reporter reporter) throws IOException {
-        log.debug("reducing for key: " + key);
+        if (log.isDebugEnabled() && key.chromosome == 0 && key.pos == 15000) {
+            log.debug("reducing for key: " + key);
+        }
         GMMScorerResults results = readPairInfoScorer.reduceReadPairInfos(values, readGroupInfos, key);
-        log.debug("got results: " + results);
+        if (log.isDebugEnabled() && key.chromosome == 0 && key.pos == 15000) {
+            log.debug("got results : " + results);
+        }
         output.collect(new GenomicLocation(key.chromosome, key.pos), results);
     }
 

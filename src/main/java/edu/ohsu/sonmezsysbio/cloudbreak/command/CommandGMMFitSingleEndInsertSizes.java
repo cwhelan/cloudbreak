@@ -153,7 +153,6 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
         conf.setOutputKeyComparatorClass(GenomicLocationWithQualitySortComparator.class);
         conf.setOutputValueGroupingComparator(GenomicLocationWithQualityGroupingComparator.class);
         conf.setPartitionerClass(GenomicLocationWithQualityPartitioner.class);
-        conf.setCombinerClass(DifferentialScoreCutoffCombiner.class);
 
         conf.setReducerClass(ReadPairInfoToGMMResultsReducer.class);
 
