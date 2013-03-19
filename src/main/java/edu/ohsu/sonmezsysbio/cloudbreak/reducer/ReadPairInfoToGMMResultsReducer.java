@@ -6,6 +6,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
 import org.apache.hadoop.mapred.*;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class ReadPairInfoToGMMResultsReducer extends MapReduceBase implements Re
 
     private static Logger log = Logger.getLogger(ReadPairInfoToGMMResultsReducer.class);
 
-    //{ log.setLevel(Level.DEBUG); }
+    { log.setLevel(Level.DEBUG); }
 
     GenotypingGMMScorer readPairInfoScorer = new GenotypingGMMScorer();
 
@@ -46,7 +47,7 @@ public class ReadPairInfoToGMMResultsReducer extends MapReduceBase implements Re
 
     public void reduce(GenomicLocationWithQuality key, Iterator<ReadPairInfo> values, OutputCollector<GenomicLocation, GMMScorerResults> output, Reporter reporter) throws IOException {
         log.debug("reducing for key: " + key);
-        GMMScorerResults results = readPairInfoScorer.reduceReadPairInfos(values, readGroupInfos);
+        GMMScorerResults results = readPairInfoScorer.reduceReadPairInfos(values, readGroupInfos, key);
         log.debug("got results: " + results);
         output.collect(new GenomicLocation(key.chromosome, key.pos), results);
     }

@@ -1,6 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.reducer;
 
 import edu.ohsu.sonmezsysbio.cloudbreak.ReadGroupInfo;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -105,7 +106,7 @@ public class GenotypingGMMScorerTest {
 
         Map<Short, ReadGroupInfo>  rgis = new HashMap<Short, ReadGroupInfo>();
         rgis.put((short) 0, readGroupInfo);
-        GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis);
+        GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis, new GenomicLocationWithQuality());
 
         assertEquals(0, results.w0, 0.0001);
     }
@@ -173,7 +174,7 @@ public class GenotypingGMMScorerTest {
 
         Map<Short, ReadGroupInfo>  rgis = new HashMap<Short, ReadGroupInfo>();
         rgis.put((short) 0, readGroupInfo);
-        GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis);
+        GMMScorerResults results = scorer.reduceReadPairInfos(rpis.iterator(), rgis, new GenomicLocationWithQuality());
 
         assertEquals(0, results.w0, 0.0001);
     }

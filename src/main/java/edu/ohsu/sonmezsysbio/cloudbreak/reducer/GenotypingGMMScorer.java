@@ -2,6 +2,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.reducer;
 
 import com.google.common.primitives.Doubles;
 import edu.ohsu.sonmezsysbio.cloudbreak.ReadGroupInfo;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -20,6 +21,8 @@ import static org.apache.commons.math3.stat.StatUtils.sum;
 public class GenotypingGMMScorer {
 
     private static org.apache.log4j.Logger log = Logger.getLogger(GenotypingGMMScorer.class);
+
+    { log.setLevel(Level.DEBUG);}
 
     public static final int MAX_COVERAGE = 200;
 
@@ -41,8 +44,6 @@ public class GenotypingGMMScorer {
     public void setMinCoverage(int minCoverage) {
         this.minCoverage = minCoverage;
     }
-
-    { log.setLevel(Level.INFO); }
 
     private double[] pointLikelihoods(double[] y, double mu, double sigma) {
         double[] pointLikelihoods = new double[y.length];
@@ -89,10 +90,8 @@ public class GenotypingGMMScorer {
         for (int i = 0; i < y.length; i++) {
             for (int j = 0; j < w.length; j++) {
                 likelihoods[i][j] = w[j] + lognormal(y[i], mu[j], sigma);
-                log.debug("likelihoods[" + i +"][" + j + "] " + likelihoods[i][j]);
             }
             double total = logsumexp(likelihoods[i]);
-            log.debug("total likelihood[" + i + "]: "+ total);
             for (int j = 0; j < w.length; j++) {
                 gamma[i][j] = likelihoods[i][j] - total;
             }
@@ -127,7 +126,6 @@ public class GenotypingGMMScorer {
             lse[i] = gamma[i][component] + Math.log(y[i]);
         }
         numerator = logsumexp(lse);
-        log.debug("update mu[" + component + "] n " +  numerator);
         return Math.exp(numerator - n[component]);
     }
 
@@ -149,17 +147,7 @@ public class GenotypingGMMScorer {
 
     private EMUpdates emStep(double[] y, double[] w, double[] mu, double sigma, int[] freeMus) {
         double[][] gamma = gamma(y, w, mu, sigma);
-        if (log.isDebugEnabled()) {
-            for (int i = 0; i < gamma.length; i++) {
-                for (int j = 0; j < gamma[i].length; j++) {
-                    log.debug("gamma[" + i + "][" + j + "] = "  + gamma[i][j]);
-                }
-            }
-        }
         double[] n = cacluateN(gamma);
-        for (int j = 0; j < w.length; j++) {
-            log.debug("n[" + j + "] " + n[j]);
-        }
 
         EMUpdates updates = new EMUpdates();
         updates.gamma = gamma;
@@ -167,14 +155,10 @@ public class GenotypingGMMScorer {
 
         double[] wprime = updateW(n, y);
         updates.w = wprime;
-        for (int j = 0; j < wprime.length; j++) {
-            log.debug("wprime[" + j + "] " + wprime[j]);
-        }
 
         for (int k = 0; k < freeMus.length; k++) {
             int j = freeMus[k];
             double mujprime = updateMuForComponent(gamma, y, n, j);
-            log.debug("mu[" + j + "] prime: " + mujprime);
             updates.mu[j] = mujprime;
         }
         updates.n = n;
@@ -244,23 +228,10 @@ public class GenotypingGMMScorer {
     public GMMScorerResults estimate(double[] y, double[] initialW, double initialMu1, double sigma, double[] mappingScoreArray) {
         GMMScorerResults results = new GMMScorerResults();
         int maxIterations = 10;
-        if (log.isDebugEnabled()) {
-            log.debug("ys:");
-            for (int i = 0; i < y.length; i++) {
-                log.debug(y[i]);
-            }
-        }
         List<Integer> ysWithCloseNeighbors = cleanYIndices2(y, sigma, 2, 5);
         double[] yclean = nnclean(y, ysWithCloseNeighbors);
-        if (log.isDebugEnabled()) {
-            log.debug("ycleans:");
-            for (int i = 0; i < yclean.length; i++) {
-                log.debug(yclean[i]);
-            }
-        }
 
         if (yclean.length <= minCoverage) {
-            log.debug("not enough ycleans, returning 1");
             results.w0 = -1;
             return results;
         }
@@ -270,24 +241,18 @@ public class GenotypingGMMScorer {
         }
         double nodelOneComponentLikelihood = likelihood(yclean, new double[]{Math.log(1)}, new double[]{initialMu1}, sigma);
 
-        log.debug("estimating with two components, one fixed");
         double[] initialMu = new double[]{initialMu1,mean(yclean)};
         int i = 1;
         double[] w = initialW;
         double[] mu = initialMu;
         double l = likelihood(yclean, w, mu, sigma);
-        log.debug("initial likelihood: " + l);
         EMUpdates updates;
         while(true) {
             updates = emStep(yclean, w, mu, sigma, new int[] {1});
 
-            if (log.isDebugEnabled()) {
-                log.debug("updates: " + updates.toString());
-            }
             w = updates.w;
             mu = updates.mu;
             double lprime = likelihood(yclean, w, mu, sigma);
-            log.debug("new likelihood: " + l);
             i += 1;
             if (Math.abs(l - lprime) < 0.0001 || i > maxIterations) {
                 break;
@@ -310,7 +275,7 @@ public class GenotypingGMMScorer {
         return logsumexp(weightedMemberships);
     }
 
-    public GMMScorerResults reduceReadPairInfos(Iterator<ReadPairInfo> values, Map<Short, ReadGroupInfo> readGroupInfos) {
+    public GMMScorerResults reduceReadPairInfos(Iterator<ReadPairInfo> values, Map<Short, ReadGroupInfo> readGroupInfos, GenomicLocationWithQuality key) {
         List<Double> insertSizes = new ArrayList<Double>();
         List<Double> mappingScores = new ArrayList<Double>();
         double maxSD = 0;
@@ -328,6 +293,9 @@ public class GenotypingGMMScorer {
         double bestMappingQuality = 0;
         while (values.hasNext()) {
             ReadPairInfo rpi = values.next();
+            if (log.isDebugEnabled() && key.chromosome == 0 && key.pos == 15000) {
+                log.debug(rpi);
+            }
             if (! first & (bestMappingQuality - rpi.pMappingCorrect > getMaxLogMapqDiff())) {
                 break;
             }
