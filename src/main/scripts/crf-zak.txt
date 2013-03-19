@@ -1,0 +1,77 @@
+a) Generate the insert sizes for each position in the alignment using
+   the script ./getInsObs.sh. 
+
+   Note, the output can be viewed using the following command
+   hadoop fs -libjars \
+   /l2/users/zak/svariants/cloudbreak/target/cloudbreak-0.2-SNAPSHOT-exe.jar \
+   -text /user/zak/sandbox/insHist/part-00000
+
+   0	1630000	0.0	338	-0.12692801104297252
+   0	1630000	0.0	313	-0.12692801104297252
+   0	1630000	0.0	286	-0.2395447662218845
+   0	1630000	0.0	290	-0.35067924571273856
+
+   The columns of the output correspond to chromosome number, position
+   in the chromosome, don't know, insert size, and a measure of
+   confidence. Of these, we will only use second and fourth for the
+   moment.
+
+b) We convert the format of the file, so that we accumulate all the
+   insert size observations for each position in the alignment.
+
+   for ((i=0;i<100;i++)); do \
+        tag=`printf "%05d\n" $i`; 
+	echo $tag;  
+	( hadoop fs -libjars /l2/users/zak/svariants/cloudbreak/target/cloudbreak-0.2-SNAPSHOT-exe.jar -text /user/zak/sandbox/insHist/part-$tag | ./dumpInsObs.py 6 | gzip -c 1> insObs/$i.dat.gz 2> insObs/$i.err ) & 
+   done
+
+   Note, the script ./dumpInsObs.py discards alignments below the
+   specified log ratio threshold, 6 in this instance. That is, if log
+   P(A*) - log P(A) < 6 where P(A*) is the alignment with the best
+   score.
+
+   The output of the ./dumpInsObs.py looks like this
+
+   gunzip -c insObs/0.dat.gz | head
+   2500 329 300 340 297 304 310 279 318 296 311 331 330 278 289 328 298 289 
+   5000 278 275 329 358 286 334 282 333 326 336 295 275 317 347 230 332 292 
+   7500 297 328 297 318 344 327 305 357 276 338 306 313 308 289 314 277 
+   10000 280 268 294 312 268 277 313 326 268 279 252 351 279 325 320 
+
+c) The positions in the alignment unfortunately are not sorted in the
+   output of the previous map-reduce step. A direct sort of all
+   alginments will be expensive, with over 250M positions and more in
+   real data! So, we break up the alignments into blocks of 2500000
+   positions, spread into nFiles = ceil(maxidx/blocksize) files. Here
+   maxidx is 242751050.
+
+   ./binInsObs.py 242751050 2500000
+
+   We then sort each file according to the alignment position.
+   nFile=98
+   for ((i=0;i<nFile;i++)); do \
+      gunzip -c insObs/$i.block.gz | sort -k1,1n \
+      | gzip -c > insObs/$i.blck.srt.gz 
+   done
+
+d) Now, we are ready to detect the segmental change point for each
+   input file. 
+
+   ./changePointDetection.py 100 2499975 insObs/0.blck.srt.gz 100 7
+
+   Note, for this quick and dirty prototyping, we are treating each
+   file separately and ignoring the continuity across files.
+
+e) Finally, the input can be aligned with the processed output to
+   visualize and understand the results.
+
+   For example:
+
+   ./plotIns.py 100 1253950 insObs/0.blck.srt.gz results/0.cdlh.w100.dat
+
+   This will create two plots. The top plot displays the raw
+   observation of insert sizes from the start position of 100 to the
+   stop position of 1253950 in the file insObs/0.blck.srt.gz. The
+   bottom plot shows the likelihood ratio test for a breakpoint to
+   occur at each of the positions as computed in step (d) and saved in
+   results/0.cdlh.w100.dat.
