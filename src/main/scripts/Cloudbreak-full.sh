@@ -29,10 +29,6 @@ LIBRARY_NAME=venterchr2100bpdip
 # directory created when you uncompressed the cloudbreak binary distribution
 CLOUDBREAK_HOME=/g/whelanch/cloudbreak-${project.version}
 
-# The chromsome length index of your genome reference, on your local filesystem,
-# created by running 'samtools faidx reference.fasta'
-LOCAL_GENOME_INDEX_FAI=/g/whelanch/indices/human_b36_male_chr2.fasta.fai
-
 ###############################################################################
 # HDFS FILES AND DIRECTORIES
 ###############################################################################
@@ -45,6 +41,9 @@ HDFS_RAZERS3_EXECUTABLE=/user/whelanch/executables/razers3
 
 # Paths to the FASTA and FAI files for the reference
 HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.fasta
+
+# The chromsome length index of your genome reference
+# created by running 'samtools faidx reference.fasta'
 HDFS_GENOME_INDEX_FAI=/user/whelanch/indices/human_b36_male_chr2.fasta.fai
 
 ###############################################################################
@@ -107,43 +106,33 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar -Dmap
    --maxLogMapqDiff $MAX_MAPQ_DIFF \
    --minCleanCoverage $MIN_CLEAN_COVERAGE \
 
-# export GMM results out of HDFS
-echo "exporting gmm results from HDFS"
-time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar exportGMMResults \
-    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm \
-    --faidx $LOCAL_GENOME_INDEX_FAI \
-    --resolution $RESOLUTION \
-    --outputPrefix $NAME
-
 # extract deletion calls
 echo "extracting deletion calls"
 time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractDeletionCalls \
-    --inputWigFile ${NAME}_lrHeterozygous.wig.gz \
-    --outputBedFile ${NAME}_deletions.bed \
-    --name ${NAME}_dels \
-    --faidx $LOCAL_GENOME_INDEX_FAI \
+    --faidx $HDFS_GENOME_INDEX_FAI \
     --threshold $DELETION_LR_THRESHOLD \
     --medianFilterWindow $DELETION_MEDIAN_FILTER_WINDOW \
-    --muFile ${NAME}_mu2.wig.gz \
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
-    --w0File ${NAME}_w0.wig.gz
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/del_calls/
+
+hadoop dfs -cat $HDFS_EXPERIMENT_DIR/del_calls/part* | sort -k1,1 -k2,2n > ${NAME}_dels.bed
 
 # genotype the calls based on avg w0
 cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_deletions_genotyped.bed
 
 echo "extracting insertion calls"
 time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar extractInsertionCalls \
-    --inputWigFile ${NAME}_lrHeterozygous.wig.gz \
-    --outputBedFile ${NAME}_insertions.bed \
-    --name ${NAME}_insertions \
-    --faidx $LOCAL_GENOME_INDEX_FAI \
+    --faidx $HDFS_GENOME_INDEX_FAI \
     --threshold $INSERTION_LR_THRESHOLD \
     --medianFilterWindow $INSERTION_MEDIAN_FILTER_WINDOW \
-    --muFile ${NAME}_mu2.wig.gz \
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
-    --w0File ${NAME}_w0.wig.gz
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/
+
+hadoop dfs -cat $HDFS_EXPERIMENT_DIR/ins_calls/part* | sort -k1,1 -k2,2n > ${NAME}_insertions.bed
 
 # genotype the calls based on avg w0
 cat ${NAME}_insertions.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_insertions_genotyped.bed
