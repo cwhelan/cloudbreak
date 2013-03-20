@@ -32,6 +32,9 @@ public class SAMRecord implements AlignmentRecord {
     String cigar;
 
     public static SAMRecord parseSamRecord(String[] fields) {
+        if (fields.length < 10) {
+            throw new IllegalArgumentException("Bad sam record; not enough fields: " + fields.length);
+        }
         SAMRecord samRecord = new SAMRecord();
         samRecord.readPairId = fields[0];
         samRecord.flag = Integer.parseInt(fields[1]);
@@ -75,6 +78,9 @@ public class SAMRecord implements AlignmentRecord {
 
     public void addTag(String tag) {
         String[] tagFields = tag.split(":");
+        if (tagFields.length < 3) {
+            throw new IllegalArgumentException("got bad tag: " + tag);
+        }
         tags.put(tagFields[0], tagFields[2]);
     }
 
