@@ -34,6 +34,9 @@
         <module name="cloudbreak" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cloudbreak" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="">
     <module2copyright />
