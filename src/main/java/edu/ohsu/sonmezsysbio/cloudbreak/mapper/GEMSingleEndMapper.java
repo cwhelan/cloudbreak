@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
     private static Logger logger = Logger.getLogger(GEMSingleEndMapper.class);
 
-    { logger.setLevel(Level.DEBUG); }
+    { logger.setLevel(Level.INFO); }
 
     private OutputCollector<Text, Text> output;
     private String localDir;
@@ -33,6 +33,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
     private String numReports;
     private String editDistance;
     private String strata;
+    private int maxGemProcessesOnNode;
 
     @Override
     protected boolean getCompressTempReadFile() {
@@ -52,6 +53,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         strata = job.get("gem.strata");
         gemMapperExecutable = job.get("gem.mapper.executable");
         gem2SamExecutable = job.get("gem.tosam.executable");
+        maxGemProcessesOnNode = Integer.parseInt(job.get("gem.max.processes.on.node"));
     }
 
     @Override
@@ -68,9 +70,17 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
 
         String referenceBaseName = new File(reference).getName();
         String[] commandLine = buildCommandLine(gemMapperExecutable, gem2SamExecutable, referenceBaseName, s1File.getPath(), numReports, editDistance, strata);
-        logger.debug("Executing command: " + Arrays.toString(commandLine));
+        logger.info("Executing command: " + Arrays.toString(commandLine));
+
+        try {
+            waitForOpenSlot(maxGemProcessesOnNode, reporter);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
         ReportableProcess p = new ReportableProcess(Runtime.getRuntime().exec(commandLine), reporter);
-        logger.debug("Exec'd");
+        logger.info("Exec'd");
 
         try {
             p.waitForWhileReporting();
@@ -78,7 +88,7 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        logger.debug("done");
+        logger.info("done");
 
         File resultFile = new File("map.result");
         if (resultFile.exists()) {
@@ -87,6 +97,38 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         } else {
             printErrorStream(p.process.getErrorStream());
         }
+    }
+
+    private void waitForOpenSlot(int maxGemProcessesOnNode, Reporter reporter) throws IOException, InterruptedException {
+        while (true) {
+            // sleep for a random length of time between 0 and 60 seconds
+            long sleepTime = (long) (Math.random() * 1000 * 60);
+            logger.info("sleeping for " + sleepTime);
+            Thread.sleep(sleepTime);
+            int numRunningMappers = getNumRunningMappers();
+            logger.info("num running mappers: " + numRunningMappers);
+            if (numRunningMappers < maxGemProcessesOnNode) return;
+            reporter.progress();
+        }
+    }
+
+    private int getNumRunningMappers() throws IOException {
+        int numRunningMappers = 0;
+        Runtime runtime = Runtime.getRuntime();
+        String cmds[] = {"ps", "-C", getCommandName(), "--no-headers"};
+        Process proc = runtime.exec(cmds);
+        InputStream inputstream = proc.getInputStream();
+        InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+        BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+        while (bufferedreader.readLine() != null) {
+            numRunningMappers++;
+        }
+
+        return numRunningMappers;
+    }
+
+    private String getCommandName() {
+        return "gem-mapper";
     }
 
     private String printErrorStream(InputStream errorStream) throws IOException {
