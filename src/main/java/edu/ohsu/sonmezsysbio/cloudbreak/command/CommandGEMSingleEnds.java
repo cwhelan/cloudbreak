@@ -46,6 +46,12 @@ public class CommandGEMSingleEnds extends BaseCloudbreakCommand {
     @Parameter(names = {"--editDistance"}, required = true)
     int editDistance;
 
+    @Parameter(names = {"--strata"})
+    String strata = "all";
+
+    @Parameter(names = {"--maxProcessesOnNode"}, required = true)
+    int maxProcessesOnNode = 6;
+
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
         JobConf conf = new JobConf(configuration);
 
@@ -64,6 +70,8 @@ public class CommandGEMSingleEnds extends BaseCloudbreakCommand {
         conf.set("mapred.task.timeout", "3600000");
         conf.set("gem.num.reports", numReports);
         conf.set("gem.edit.distance", String.valueOf(editDistance));
+        conf.set("gem.strata", strata);
+        conf.set("gem.max.processes.on.node", String.valueOf(maxProcessesOnNode));
 
         conf.setInputFormat(SequenceFileInputFormat.class);
 

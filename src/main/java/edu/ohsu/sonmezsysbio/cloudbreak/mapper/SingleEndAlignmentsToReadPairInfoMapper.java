@@ -48,6 +48,7 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
 
     private int minScore = -1;
     private int maxMismatches = -1;
+    private boolean stripChromosomeNamesAtWhitespace;
 
     public int getMaxMismatches() {
         return maxMismatches;
@@ -283,7 +284,11 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
             ReadPairInfo readPairInfo = new ReadPairInfo(insertSize, pMappingCorrect, getReadGroupId());
 
             for (int i = 0; i <= genomicWindow; i += resolution) {
-                Short chromosome = faix.getKeyForChromName(record1.getChromosomeName());
+                String chromosomeName = record1.getChromosomeName();
+                if (stripChromosomeNamesAtWhitespace) {
+                    chromosomeName = chromosomeName.substring(0,chromosomeName.indexOf(" "));
+                }
+                Short chromosome = faix.getKeyForChromName(chromosomeName);
                 if (chromosome == null) {
                     throw new RuntimeException("Bad chromosome in record: " + record1.getChromosomeName());
                 }
@@ -331,6 +336,7 @@ public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignments
 
         faidxFileName = job.get("alignment.faidx");
         faix = new FaidxFileHelper(faidxFileName);
+        stripChromosomeNamesAtWhitespace = Boolean.parseBoolean("alignments.strip.chromosome.name.at.whitespace");
 
         if (job.get("alignments.filterchr") != null) {
             setChromosomeFilter(job.get("alignments.filterchr"));
