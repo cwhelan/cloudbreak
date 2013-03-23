@@ -80,6 +80,9 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
     @Parameter(names = {"--minCleanCoverage"})
     int minCleanCoverage = 3;
 
+    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"})
+    boolean stripChromosomeNamesAtWhitespace;
+
     public void run(Configuration conf) throws IOException, URISyntaxException {
         runHadoopJob(conf);
     }
@@ -139,6 +142,7 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
             conf.set("alignments.filterstart", startFilter.toString());
             conf.set("alignments.filterend", endFilter.toString());
         }
+        conf.set("alignments.strip.chromosome.name.at.whitespace", String.valueOf(stripChromosomeNamesAtWhitespace));
 
         conf.setInputFormat(SequenceFileInputFormat.class);
 
