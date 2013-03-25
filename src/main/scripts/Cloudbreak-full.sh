@@ -36,8 +36,9 @@ CLOUDBREAK_HOME=/g/whelanch/cloudbreak-${project.version}
 # Directory in HDFS to do the work in
 HDFS_EXPERIMENT_DIR=/user/whelanch/cloudbreak/venter_chr2_100bp_dip
 
-# Path to the razerS 3 executable in HDFS
-HDFS_RAZERS3_EXECUTABLE=/user/whelanch/executables/razers3
+# Path to the GEM executables in HDFS
+HDFS_GEM_MAPPER_EXECUTABLE=/user/whelanch/executables/gem-mapper
+HDFS_GEM2SAM_EXECUTABLE=/user/whelanch/executables/gem-2-sam
 
 # Paths to the FASTA and FAI files for the reference
 HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.fasta
@@ -47,11 +48,12 @@ HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.fasta
 HDFS_GENOME_INDEX_FAI=/user/whelanch/indices/human_b36_male_chr2.fasta.fai
 
 ###############################################################################
-# Razers3 ALIGNMENT PARAMETERS
+# GEM ALIGNMENT PARAMETERS
 ###############################################################################
+GEM_MAPPER_EDIT_DISTANCE=6
+GEM_MAPPER_STRATA=2
 NUM_REPORTS=1000
-PCT_IDENTITY=94
-SENSITIVITY=99
+GEM_MAPPER_MAX_PROCESSES_ON_NODE=6
 
 ###############################################################################
 # CLOUDBREAK PARAMETERS
@@ -63,10 +65,10 @@ RESOLUTION=25
 ALIGNER=sam
 MAX_MAPQ_DIFF=6
 MIN_CLEAN_COVERAGE=3
-DELETION_LR_THRESHOLD=1.68
+DELETION_LR_THRESHOLD=2.29
 DELETION_MEDIAN_FILTER_WINDOW=5
-INSERTION_LR_THRESHOLD=1
-INSERTION_MEDIAN_FILTER_WINDOW=1
+INSERTION_LR_THRESHOLD=0.26
+INSERTION_MEDIAN_FILTER_WINDOW=5
 
 # experiment name
 NAME=cloudbreak_${LIBRARY_NAME}_${READ_GROUP_NAME}
@@ -78,16 +80,19 @@ time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar readP
     --fastqFile1  $FASTQ_FILE_1 \
     --fastqFile2  $FASTQ_FILE_2
 
-# run Razers 3 alignments
-echo "Running Razers 3 Alignments in Hadoop" 
-time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS razerS3SingleEnds \
+# run GEM alignments
+echo "Running GEM in Hadoop"
+time hadoop jar $CLOUDBREAK_HOME/lib/cloudbreak-${project.version}-exe.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS gemSingleEnds \
     --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
     --HDFSAlignmentsDir $HDFS_EXPERIMENT_DIR/alignments/ \
     --reference $HDFS_GENOME_INDEX \
-    --HDFSPathToRazerS3 $HDFS_RAZERS3_EXECUTABLE \
+    --HDFSPathToGEMMapper $HDFS_GEM_MAPPER_EXECUTABLE \
+    --HDFSPathToGEM2SAM $HDFS_GEM2SAM_EXECUTABLE \
+    --editDistance $GEM_MAPPER_EDIT_DISTANCE \
+    --strata $GEM_MAPPER_STRATA \
     --numReports $NUM_REPORTS \
-    --pctIdentity $PCT_IDENTITY \
-    --sensitivity $SENSITIVITY
+    --maxProcessesOnNode $GEM_MAPPER_MAX_PROCESSES_ON_NODE
+
 
 # write a read group info file and copy into HDFS
 echo "creating readgroup file"
