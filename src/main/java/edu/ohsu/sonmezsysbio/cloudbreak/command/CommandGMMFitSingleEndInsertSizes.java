@@ -84,7 +84,7 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
     boolean legacyAlignments = false;
 
     @Parameter(names = {"--stripChromosomeNamesAtWhitespace"})
-    boolean stripChromosomeNamesAtWhitespace;
+    boolean stripChromosomeNamesAtWhitespace = false;
 
     public void run(Configuration conf) throws IOException, URISyntaxException {
         runHadoopJob(conf);

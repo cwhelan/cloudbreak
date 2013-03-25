@@ -1,6 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
 import edu.ohsu.sonmezsysbio.cloudbreak.ProbabilisticPairedAlignmentScorer;
+import edu.ohsu.sonmezsysbio.cloudbreak.SAMRecord;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.GFFFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
@@ -260,4 +261,12 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
 
     }
 
+    @Test
+    public void testGetChromosomeName() {
+        SAMRecord record = (SAMRecord) new SAMAlignmentReader().parseRecord("ERR024163.10000199/1\t322\t9 dna\t46892287\t255\t100M\t*\t0\t0\tCCATCTTTGCAACTCTATGTAAATCTAAAATTATTCCAGAGAATGACTTCACAAGGTGGCAGAATAGAATTTCTCCAGCTCCACACCCCCACACGGAAAT\tFFEDFD?EEGE@DBDEFEBFEEEB?BDECAEAFDFAAGFGGGEGGGGDGGFGGGGGGAGGFGGGGFFGEGGGEGGEGGGGEEAE?EFEFFGEGGGGGGGE\tRG:Z:0\tNM:i:0\tXT:A:R\tmd:Z:100");
+        mapper.setStripChromosomeNamesAtWhitespace(true);
+        assertEquals("9", mapper.getChromosomeName(record));
+        mapper.setStripChromosomeNamesAtWhitespace(false);
+        assertEquals("9 dna", mapper.getChromosomeName(record));
+    }
 }
