@@ -83,7 +83,8 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         logger.info("Exec'd");
 
         try {
-            p.waitForWhileReporting();
+            int exitVal = p.waitForWhileReporting();
+            logger.info("process returned with exit code: " + exitVal);
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

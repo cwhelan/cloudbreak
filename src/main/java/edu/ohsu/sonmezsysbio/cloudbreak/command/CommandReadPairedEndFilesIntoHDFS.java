@@ -54,6 +54,9 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     @Parameter(names = {"--filterBasedOnCasava18Flags"})
     boolean casava18filter = false;
 
+    @Parameter(names = {"--filesInHDFS"})
+    boolean filesInHDFS = false;
+
     private long numRecords;
     private long numEntropyFilteredRecords;
     private long numCasava18FilteredRecords;
@@ -61,14 +64,14 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     public void copyReadFilesToHdfs() throws IOException {
         Configuration config = new Configuration();
 
-        FileSystem hdfs = FileSystem.get(config);
+        FileSystem fileSystem = FileSystem.get(config);
         Path p = new Path(hdfsDataDir + "/" + outFileName);
 
         HDFSWriter writer = new HDFSWriter();
         if ("snappy".equals(compress)) {
-            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, LongWritable.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
+            writer.seqFileWriter = SequenceFile.createWriter(fileSystem, config, p, LongWritable.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
         } else {
-            FSDataOutputStream outputStream = hdfs.create(p);
+            FSDataOutputStream outputStream = fileSystem.create(p);
             BufferedWriter bufferedWriter = null;
             if ("gzip".equals(compress)) {
                 bufferedWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(outputStream)));
@@ -78,19 +81,19 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
             writer.textFileWriter = bufferedWriter;
         }
         try {
-            readFile(writer, readFile1, readFile2);
+            readFile(fileSystem, writer, readFile1, readFile2);
         } finally {
             writer.close();
         }
 
     }
 
-    private void readFile(HDFSWriter writer, String pathname1, String pathname2) throws IOException {
+    private void readFile(FileSystem fileSystem, HDFSWriter writer, String pathname1, String pathname2) throws IOException {
         BufferedReader inputReader1;
         BufferedReader inputReader2 = null;
 
-        inputReader1 = openFile(pathname1);
-        inputReader2 = openFile(pathname2);
+        inputReader1 = openFile(fileSystem, pathname1);
+        inputReader2 = openFile(fileSystem, pathname2);
 
         numRecords = 0;
         try {
@@ -105,14 +108,20 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
         }
     }
 
-    private BufferedReader openFile(String pathname) throws IOException {
-        BufferedReader inputReader1;
-        if (pathname.endsWith("gz")) {
-            inputReader1 = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(pathname))));
+    private BufferedReader openFile(FileSystem fileSystem, String pathname) throws IOException {
+        BufferedReader inputReader;
+        InputStream inputStream;
+        if (filesInHDFS) {
+            inputStream = fileSystem.open(new Path(pathname));
         } else {
-            inputReader1 = new BufferedReader(new FileReader(new File(pathname)));
+            inputStream = new FileInputStream(pathname);
         }
-        return inputReader1;
+        if (pathname.endsWith("gz")) {
+            inputReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(inputStream)));
+        } else {
+            inputReader = new BufferedReader(new InputStreamReader(inputStream));
+        }
+        return inputReader;
     }
 
     private String readFastqEntries(BufferedReader inputReader1, BufferedReader inputReader2, Double trigramEntropyFilter) throws IOException {

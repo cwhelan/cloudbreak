@@ -6,9 +6,8 @@
     <files>
         <file>
             <source>
-                target/${project.artifactId}-${project.version}-exe.jar
+                target/${project.artifactId}-${project.version}.jar
             </source>
-            <outputDirectory>/lib</outputDirectory>
         </file>
         <file>
             <source>${project.basedir}/README.md</source>
@@ -25,7 +24,7 @@
         <fileSet>
             <directory>${project.basedir}/src/main/resources</directory>
             <includes>
-                <include>*</include>
+                <include>**/*properties</include>
             </includes>
             <filtered>true</filtered>
             <outputDirectory>/</outputDirectory>

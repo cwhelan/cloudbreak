@@ -50,12 +50,40 @@
           <groupId>org.apache.hadoop</groupId>
           <artifactId>hadoop-core</artifactId>
           <version>0.20.2-cdh3u5</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.eclipse.jdt</groupId>
+                  <artifactId>core</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>tomcat</groupId>
+                  <artifactId>jasper-compiler</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.servlet</groupId>
+                  <artifactId>servlet-api</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.servlet.jsp</groupId>
+                  <artifactId>jsp-api</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.cloudera.cdh</groupId>
+                  <artifactId>hadoop-ant</artifactId>
+              </exclusion>
+          </exclusions>
       </dependency>
 
       <dependency>
           <groupId>org.biojava</groupId>
           <artifactId>biojava3-core</artifactId>
           <version>3.0.2</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.biojava</groupId>
+                  <artifactId>biojava3-alignment</artifactId>
+              </exclusion>
+          </exclusions>
       </dependency>
 
       <dependency>
@@ -132,7 +160,34 @@
           <version>13.0.1</version>
       </dependency>
 
-          <dependency>
+      <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-java-sdk</artifactId>
+          <version>1.4.1</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.whirr</groupId>
+          <artifactId>whirr-hadoop</artifactId>
+          <version>0.8.1</version>
+          <exclusions>
+              <!-- excluding things to get rid of shade warnings and cut down jar size -->
+              <exclusion>
+                  <groupId>org.jclouds.provider</groupId>
+                  <artifactId>cloudsigma-zrh</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.jclouds.provider</groupId>
+                  <artifactId>cloudsigma-lvs</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.jclouds.api</groupId>
+                  <artifactId>cloudsigma</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+
+      <dependency>
               <groupId>org.scalatest</groupId>
               <artifactId>scalatest_2.10</artifactId>
               <version>1.9.1</version>
@@ -160,16 +215,59 @@
 					<manifest>
 						<mainClass>edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak</mainClass>
 					</manifest>
+                    <manifestEntries>
+                        <Class-Path>.</Class-Path>
+                    </manifestEntries>
 				</archive>
 			</configuration>
 		</plugin>
 
-         <plugin>
+        <plugin>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.0</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>whirr/cloudbreak-whirr.properties</exclude>
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                        <transformers>
+                            <transformer  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak</mainClass>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <resource>META-INF/services/org.jclouds.apis.ApiMetadata</resource>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <resource>META-INF/services/org.jclouds.providers.ProviderMetadata</resource>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">
+                            </transformer>
+                        </transformers>
+
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin>
 	      <artifactId>maven-assembly-plugin</artifactId>
 
              <configuration>
                  <descriptors>
-                     <descriptor>src/assemble/exe.xml</descriptor>
+                     <!--<descriptor>src/assemble/exe.xml</descriptor>-->
                      <descriptor>src/assemble/dist.xml</descriptor>
                  </descriptors>
                  <archive>
@@ -178,13 +276,13 @@
              </configuration>
 
              <executions>
-              <execution>
-                  <id>exe</id>
-                  <phase>package</phase>
-                  <goals>
-                      <goal>single</goal>
-                  </goals>
-              </execution>
+              <!--<execution>-->
+                  <!--<id>exe</id>-->
+                  <!--<phase>package</phase>-->
+                  <!--<goals>-->
+                      <!--<goal>single</goal>-->
+                  <!--</goals>-->
+              <!--</execution>-->
               <execution>
                   <id>dist</id>
                   <phase>package</phase>
@@ -200,6 +298,7 @@
             <artifactId>maven-release-plugin</artifactId>
             <version>2.4</version>
         </plugin>
+
     </plugins>
           <resources>
               <resource>

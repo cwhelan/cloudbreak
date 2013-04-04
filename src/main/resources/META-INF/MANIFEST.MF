@@ -1,1 +1,2 @@
 Main-Class: edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak
+Class-Path: . whirr/

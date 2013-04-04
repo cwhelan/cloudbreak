@@ -35,11 +35,7 @@
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty-util:6.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api:2.5-20081211" level="project" />
     <orderEntry type="library" name="Maven: tomcat:jasper-runtime:5.5.23" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: commons-el:commons-el:1.0" level="project" />
-    <orderEntry type="library" name="Maven: tomcat:jasper-compiler:5.5.23" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet:jsp-api:2.0" level="project" />
-    <orderEntry type="library" name="Maven: ant:ant:1.6.5" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.5.2" level="project" />
     <orderEntry type="library" name="Maven: asm:asm:3.2" level="project" />
@@ -54,10 +50,8 @@
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-xc:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.8" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet.jsp:jsp-api:2.1" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jets3t:jets3t:0.6.1" level="project" />
     <orderEntry type="library" name="Maven: hsqldb:hsqldb:1.8.0.7" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.jdt:core:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.15" level="project" />
     <orderEntry type="library" name="Maven: org.biojava:biojava3-core:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.biojava:biojava3-genome:3.0.2" level="project" />
@@ -71,6 +65,107 @@
     <orderEntry type="library" name="Maven: net.sf:samtools:1.78" level="project" />
     <orderEntry type="library" name="Maven: javax.mail:mail:1.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:13.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk:1.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.whirr:whirr-hadoop:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.whirr:whirr-core:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: ca.juliusdavies:not-yet-commons-ssl:0.3.11" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-compute:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-scriptbuilder:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-core:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: net.oauth.core:oauth:20100527" level="project" />
+    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-assistedinject:3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.inject:guice:3.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: org.99soft.guice:rocoto:6.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:byon:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.10" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-enterprise:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-joda:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-netty:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty:3.3.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-bouncycastle:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-sshj:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-slf4j:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.4" level="project" />
+    <orderEntry type="library" name="Maven: net.schmizz:sshj:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-jsch:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: com.jcraft:jsch:0.1.48" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-allcompute:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:greenhousedata-element-vcloud:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:vcloud:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: com.jamesmurty.utils:java-xmlbuilder:0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:eucalyptus-partnercloud-ec2:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:eucalyptus:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:ec2:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.common:aws-common:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:deltacloud:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:aws-ec2:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:rimuhosting:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:openstack-nova:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:openstack-keystone:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:openstack-nova-ec2:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:nova:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.common:openstack-common:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:cloudservers-us:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:cloudservers:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:cloudservers-uk:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:trmk-vcloudexpress:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.common:trmk-common:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:trmk-ecloud:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:bluelock-vcloud-zone01:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:stratogen-vcloud-mycloud:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:gogrid:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:slicehost:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:elasticstack:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:elastichosts-lon-p:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:elastichosts-sat-p:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:elastichosts-lon-b:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:openhosting-east1:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:serverlove-z1-man:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:skalicloud-sdg-my:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:go2cloud-jhb1:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:softlayer:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:cloudstack:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:ninefold-compute:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:hpcloud-compute:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:trystack-nova:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:rackspace-cloudservers-us:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:rackspace-cloudidentity:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-allblobstore:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:s3:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds:jclouds-blobstore:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:aws-s3:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:ninefold-storage:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:atmos:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:synaptic-storage:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:cloudonestorage:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:walrus:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:eucalyptus-partnercloud-s3:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:azureblob:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.common:azure-common:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:swift:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:cloudfiles:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:cloudfiles-us:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:cloudfiles-uk:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.api:filesystem:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jclouds.provider:hpcloud-objectstorage:1.5.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.7" level="project" />
+    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-digester:commons-digester:1.8.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.tukaani:xz:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.velocity:velocity:1.7" level="project" />
+    <orderEntry type="library" name="Maven: dnsjava:dnsjava:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.jopt-simple:jopt-simple:4.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.10:1.9.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-library:2.10.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-actors:2.10.0" level="project" />

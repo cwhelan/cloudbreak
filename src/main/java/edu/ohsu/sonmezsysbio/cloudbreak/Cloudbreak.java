@@ -131,6 +131,18 @@ public class Cloudbreak extends Configured implements Tool
         CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
         jc.addCommand("sortGMMResults", commandSortGMMResults);
 
+        CommandCopyToS3 commandCopyFileToS3 = new CommandCopyToS3();
+        jc.addCommand("copyToS3", commandCopyFileToS3);
+
+        CommandLaunchCluster commandLaunchCluster = new CommandLaunchCluster();
+        jc.addCommand("launchCluster", commandLaunchCluster);
+
+        CommandRunScriptOnCluster commandRunScriptOnCluster = new CommandRunScriptOnCluster();
+        jc.addCommand("runScriptOnCluster", commandRunScriptOnCluster);
+
+        CommandDestroyCluster commandDestroyCluster = new CommandDestroyCluster();
+        jc.addCommand("destroyCluster", commandDestroyCluster);
+
         jc.setProgramName("Cloudbreak");
         return jc;
     }
