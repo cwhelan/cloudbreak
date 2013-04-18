@@ -40,8 +40,8 @@ HDFS_EXPERIMENT_DIR=/user/whelanch/cloudbreak/venter_chr2_100bp_dip
 HDFS_GEM_MAPPER_EXECUTABLE=/user/whelanch/executables/gem-mapper
 HDFS_GEM2SAM_EXECUTABLE=/user/whelanch/executables/gem-2-sam
 
-# Paths to the FASTA and FAI files for the reference
-HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.fasta
+# Path to the GEM index for the reference
+HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.gem
 
 # The chromsome length index of your genome reference
 # created by running 'samtools faidx reference.fasta'
