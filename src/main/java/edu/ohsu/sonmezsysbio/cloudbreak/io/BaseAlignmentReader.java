@@ -22,9 +22,20 @@ import java.util.List;
  * Where R1alignment1 is the first alignment for read 1 in the pair, etc.
  *
  */
-public abstract class BaseAlignmentReader implements AlignmentReader {
+public abstract class BaseAlignmentReader implements AlignmentReader, ChromosomeNameCleaner {
 
     boolean legacyAlignments;
+    boolean stripChromosomeNameAtWhitespace;
+
+    @Override
+    public boolean isStripChromosomeNameAtWhitespace() {
+        return stripChromosomeNameAtWhitespace;
+    }
+
+    @Override
+    public void setStripChromosomeNameAtWhitespace(boolean stripChromosomeNameAtWhitespace) {
+        this.stripChromosomeNameAtWhitespace = stripChromosomeNameAtWhitespace;
+    }
 
     public boolean isLegacyAlignments() {
         return legacyAlignments;
@@ -86,4 +97,18 @@ public abstract class BaseAlignmentReader implements AlignmentReader {
         }
         return read1AlignmentList;
     }
+
+    protected String stripChromosomeName(String chromName) {
+        if (isStripChromosomeNameAtWhitespace()) {
+            return chromName.split("\\s+")[0];
+        } else {
+            return chromName;
+        }
+    }
+
+    @Override
+    public String cleanChromosomeName(String chromosomeName) {
+        return stripChromosomeName(chromosomeName);
+    }
+
 }

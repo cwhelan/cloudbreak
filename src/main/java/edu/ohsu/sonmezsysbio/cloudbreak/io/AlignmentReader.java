@@ -27,6 +27,10 @@ public interface AlignmentReader {
 
     boolean isLegacyAlignments();
 
+    boolean isStripChromosomeNameAtWhitespace();
+
+    void setStripChromosomeNameAtWhitespace(boolean stripChromosomeNameAtWhitespace);
+
     /**
      * Factory method to grab the correct implementing class.
      */

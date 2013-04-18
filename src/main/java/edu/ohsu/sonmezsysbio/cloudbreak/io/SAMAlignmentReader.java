@@ -30,7 +30,8 @@ public class SAMAlignmentReader extends BaseAlignmentReader {
     }
 
     public AlignmentRecord parseRecord(String[] fields) {
-        return SAMRecord.parseSamRecord(fields);
+        SAMRecord samRecord = SAMRecord.parseSamRecord(fields, this);
+        return samRecord;
     }
 
     public double probabilityMappingIsCorrect(AlignmentRecord record1, AlignmentRecord record2, ReadPairAlignments readPairAlignments) {

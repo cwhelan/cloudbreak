@@ -58,6 +58,9 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
     @Parameter(names = {"--targetIsizeSD"}, required = true)
     int targetIsizeSD;
 
+    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"})
+    boolean stripChromosomeNamesAtWhitespace = false;
+
     public void run(Configuration configuration) throws IOException, URISyntaxException {
         runHadoopJob(configuration);
     }
@@ -99,6 +102,8 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
         conf.set("pileupDeletionScore.targetIsizeSD", String.valueOf(targetIsizeSD));
 
         conf.set("pileupDeletionScore.minScore", String.valueOf(minScore));
+
+        conf.set("alignments.strip.chromosome.name.at.whitespace", String.valueOf(stripChromosomeNamesAtWhitespace));
 
         conf.setMapperClass(SingleEndAlignmentsToBedSpansMapper.class);
         conf.setMapOutputKeyClass(Text.class);

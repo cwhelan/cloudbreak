@@ -1,5 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak;
 
+import edu.ohsu.sonmezsysbio.cloudbreak.io.ChromosomeNameCleaner;
 import net.sf.samtools.Cigar;
 import net.sf.samtools.TextCigarCodec;
 import org.apache.log4j.Logger;
@@ -31,14 +32,15 @@ public class SAMRecord implements AlignmentRecord {
     String sequence;
     String cigar;
 
-    public static SAMRecord parseSamRecord(String[] fields) {
+    public static SAMRecord parseSamRecord(String[] fields, ChromosomeNameCleaner chromNameCleaner) {
         if (fields.length < 10) {
             throw new IllegalArgumentException("Bad sam record; not enough fields: " + fields.length);
         }
         SAMRecord samRecord = new SAMRecord();
         samRecord.readPairId = fields[0];
         samRecord.flag = Integer.parseInt(fields[1]);
-        samRecord.referenceName = fields[2];
+
+        samRecord.referenceName =  chromNameCleaner.cleanChromosomeName(fields[2]);
         samRecord.position = Integer.parseInt(fields[3]);
         samRecord.cigar = fields[5];
         samRecord.sequence = fields[9];
@@ -46,7 +48,7 @@ public class SAMRecord implements AlignmentRecord {
             return samRecord;
         }
 
-        samRecord.pairReferenceName = fields[6];
+        samRecord.pairReferenceName = chromNameCleaner.cleanChromosomeName(fields[6]);
         samRecord.insertSize = Integer.parseInt(fields[8]);
 
         int optionalFieldsStart = 11;

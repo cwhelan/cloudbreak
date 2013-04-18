@@ -82,6 +82,7 @@ public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapp
     public void configure(JobConf job) {
         super.configure(job);
         configureReadGroups(job);
+        alignmentReader.setStripChromosomeNameAtWhitespace(Boolean.parseBoolean(job.get("alignments.strip.chromosome.name.at.whitespace")));
 
         maxInsertSize = Integer.parseInt(job.get("pileupDeletionScore.maxInsertSize"));
         parseRegion(job.get("pileupDeletionScore.region"));

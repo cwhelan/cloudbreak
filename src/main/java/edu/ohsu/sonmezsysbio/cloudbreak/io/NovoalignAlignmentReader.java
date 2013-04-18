@@ -29,7 +29,7 @@ public class NovoalignAlignmentReader extends BaseAlignmentReader {
             String recordReferenceName = fields[7];
             // cut off the ">" that starts the chromosome name
             if (recordReferenceName.startsWith(">")) {
-                recordReferenceName = recordReferenceName.substring(1);
+                recordReferenceName = stripChromosomeName(recordReferenceName.substring(1));
             }
             record.setChromosomeName(recordReferenceName);
 

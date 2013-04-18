@@ -31,7 +31,7 @@ public class MrfastAlignmentReader extends BaseAlignmentReader {
         // return readId + "\t" + orientation + "\t" + chrom + "\t" + position + "\t" + nm + "\t" + sequenceLength;
         record.setReadId(fields[0]);
         record.setForward("F".equals(fields[1]));
-        record.setChromosomeName(parseChromosome(fields[2]));
+        record.setChromosomeName(stripChromosomeName(parseChromosome(fields[2])));
         record.setPosition(Integer.parseInt(fields[3]));
         record.setMismatches(Integer.parseInt(fields[4]));
         record.setSequenceLength(Integer.parseInt(fields[5]));

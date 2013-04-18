@@ -55,4 +55,16 @@ public class BaseAlignmentReaderTest {
         assertEquals(2, alignments.getRead1Alignments().size());
         assertEquals(0, alignments.getRead2Alignments().size());
     }
+
+    @Test
+    public void testGetChromosomeName() {
+        SAMAlignmentReader reader = new SAMAlignmentReader();
+        reader.setStripChromosomeNameAtWhitespace(true);
+        SAMRecord record = (SAMRecord) reader.parseRecord("ERR024163.10000199/1\t322\t9 dna\t46892287\t255\t100M\t*\t0\t0\tCCATCTTTGCAACTCTATGTAAATCTAAAATTATTCCAGAGAATGACTTCACAAGGTGGCAGAATAGAATTTCTCCAGCTCCACACCCCCACACGGAAAT\tFFEDFD?EEGE@DBDEFEBFEEEB?BDECAEAFDFAAGFGGGEGGGGDGGFGGGGGGAGGFGGGGFFGEGGGEGGEGGGGEEAE?EFEFFGEGGGGGGGE\tRG:Z:0\tNM:i:0\tXT:A:R\tmd:Z:100");
+        assertEquals("9", record.getChromosomeName());
+        reader.setStripChromosomeNameAtWhitespace(false);
+        record = (SAMRecord) reader.parseRecord("ERR024163.10000199/1\t322\t9 dna\t46892287\t255\t100M\t*\t0\t0\tCCATCTTTGCAACTCTATGTAAATCTAAAATTATTCCAGAGAATGACTTCACAAGGTGGCAGAATAGAATTTCTCCAGCTCCACACCCCCACACGGAAAT\tFFEDFD?EEGE@DBDEFEBFEEEB?BDECAEAFDFAAGFGGGEGGGGDGGFGGGGGGAGGFGGGGFFGEGGGEGGEGGGGEEAE?EFEFFGEGGGGGGGE\tRG:Z:0\tNM:i:0\tXT:A:R\tmd:Z:100");
+        assertEquals("9 dna", record.getChromosomeName());
+    }
+
 }
