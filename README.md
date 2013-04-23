@@ -1,5 +1,4 @@
 ## cloudbreak
-## ==========
 
 Cloudbreak is a Hadoop-based structural variation (SV) caller for Illumina
 paired-end DNA sequencing data. Currently Cloudbreak calls genomic insertions
