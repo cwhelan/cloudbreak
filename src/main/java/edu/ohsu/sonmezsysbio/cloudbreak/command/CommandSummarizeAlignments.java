@@ -10,7 +10,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,9 +24,6 @@ import java.io.IOException;
 public class CommandSummarizeAlignments implements CloudbreakCommand {
     @Parameter(names = {"--inputHDFSDir"}, required = true)
     String inputHDFSDir;
-
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
-    String outputHDFSDir;
 
     @Parameter(names = {"--aligner"})
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
@@ -38,6 +38,7 @@ public class CommandSummarizeAlignments implements CloudbreakCommand {
         conf.setJobName("Summarize Single End Alignments");
         conf.setJarByClass(Cloudbreak.class);
         FileInputFormat.addInputPath(conf, new Path(inputHDFSDir));
+        String outputHDFSDir = inputHDFSDir + "_cbtemp_summary";
         Path outputDir = new Path(outputHDFSDir);
         FileSystem.get(conf).delete(outputDir);
 
@@ -62,5 +63,12 @@ public class CommandSummarizeAlignments implements CloudbreakCommand {
 
         JobClient.runJob(conf);
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(FileSystem.get(conf).open(new Path(outputDir + "/part-00000"))));
+        String summaryLine = reader.readLine();
+        String[] fields = summaryLine.split("\t");
+        System.out.println("Reads\tAlignments\tBest Align Mismatches");
+        System.out.println(fields[1] + "\t" + fields[2] + "\t" + fields[3]);
+
+        FileSystem.get(conf).delete(outputDir);
     }
 }

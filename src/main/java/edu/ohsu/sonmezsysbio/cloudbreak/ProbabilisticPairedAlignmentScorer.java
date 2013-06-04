@@ -62,22 +62,6 @@ public class ProbabilisticPairedAlignmentScorer extends PairedAlignmentScorer {
         double likelihoodRatio = pDeletionNew
                                 - pNoDeletionNew;
 
-        logger.debug("-----");
-        logger.debug("pMappingCorrect:\t" + pMappingCorrect);
-        logger.debug("pMappingIncorrect:\t" + pMappingIncorrect);
-        logger.debug("pISgivenDeletion:\t" + pISgivenDeletion);
-        logger.debug("pISgivenNoDeletion:\t" + pISgivenNoDeletion);
-        logger.debug("pDeletionGivenIS:\t" + pDeletionGivenIS);
-        logger.debug("pNoDeletionGivenIS:\t" + pNoDeletionGivenIS);
-        logger.debug("pDeletion:\t" + pDeletion);
-        logger.debug("pNoDeletion:\t" + pNoDeletion);
-
-        logger.debug("pDeletionGivenIS + pMappingCorrect:\t" + (pDeletionGivenIS + pMappingCorrect));
-        logger.debug("pNoDeletionGivenIS + pMappingCorrect:\t" + (pNoDeletionGivenIS + pMappingCorrect));
-
-        logger.debug("pDeletionNew:\t" + pDeletionNew);
-        logger.debug("pNoDeletionNew:\t" + pNoDeletionNew);
-        logger.debug("-----");
 
         return likelihoodRatio;
     }

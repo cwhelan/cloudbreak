@@ -15,7 +15,13 @@ import java.util.Iterator;
  * User: cwhelan
  * Date: 4/16/12
  * Time: 1:46 PM
+ *
+ * This class reduces the alignment counts and outputs the following totals:
+ * number of reads
+ * number of alignments
+ * number of mismatches in the best mappings for each read
  */
+
 public class SingleEndAlignmentSummaryReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
     public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
         Long[] totals = null;
