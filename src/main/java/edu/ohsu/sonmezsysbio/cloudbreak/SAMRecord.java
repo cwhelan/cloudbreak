@@ -172,7 +172,7 @@ public class SAMRecord implements AlignmentRecord {
             return 0;
         }
         try {
-            nm = Integer.parseInt(tags.get("NM"));
+            nm = Integer.parseInt(tags.get("NM").trim());
         } catch (NumberFormatException e) {
             e.printStackTrace();
             log.error(e);

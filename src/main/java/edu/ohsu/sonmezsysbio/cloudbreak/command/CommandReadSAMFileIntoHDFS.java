@@ -86,6 +86,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         long i = 0;
         while (it.hasNext()) {
             SAMRecord samRecord = it.next();
+            // todo check sorting against previous record
             String readName = samRecord.getReadName();
             if (! readName.equals(currentReadName) && ! currentReadName.equals("")) {
                 logger.debug("writing " + readName);
@@ -111,6 +112,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
     private void writeRecords(String currentReadName, HDFSWriter writer, List<String> read1Records, List<String> read2Records, Joiner readAlignmentJoiner, long i) throws IOException {
         logger.debug("r1 records: " + read1Records.size());
         logger.debug("r2 records: " + read1Records.size());
+        // todo: not importing OEA mappings yet
         if (read1Records.size() > 0 && read2Records.size() > 0) {
             writer.write(new Text(currentReadName), readAlignmentJoiner.join(read1Records) + Cloudbreak.READ_SEPARATOR + readAlignmentJoiner.join(read2Records) + "\n");
         }

@@ -39,11 +39,18 @@ public class SingleEndAlignmentSummaryMapper extends CloudbreakMapReduceBase imp
         String vals = "1\t" + (alignments.size());
         if (alignments.size() > 0) {
             int bestMismatches = Integer.MAX_VALUE;
+
             if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(getAlignerName())) {
                 for (AlignmentRecord alignmentRecord : alignments) {
-                    SAMRecord samRecord = (SAMRecord) alignmentRecord;
-                    if (samRecord.getMismatches() < bestMismatches) {
-                        bestMismatches = samRecord.getMismatches();
+                    SAMRecord samRecord = null;
+                    try {
+                        samRecord = (SAMRecord) alignmentRecord;
+                        if (samRecord.getMismatches() < bestMismatches) {
+                            bestMismatches = samRecord.getMismatches();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new IllegalArgumentException("Failed to parse SAM Record: " + samRecord);
                     }
                 }
                 vals = vals + "\t" + bestMismatches;

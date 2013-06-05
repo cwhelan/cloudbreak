@@ -2,6 +2,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import com.google.common.base.Joiner;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -26,7 +27,13 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
     @Parameter(names = {"--inputHDFSDir"}, required = true)
     String inputHDFSDir;
 
+    @Parameter(names = {"--aligner"})
+    String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
+
     public void run(Configuration conf) throws Exception {
+        if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(aligner)) {
+            System.err.println("Warnign: if you aligned these reads in single ended mode, you'll have to run samtools fixmate on the resulting bam file");
+        }
         FileSystem dfs = DistributedFileSystem.get(conf);
         FileStatus[] stati = dfs.listStatus(new Path(inputHDFSDir));
         if (stati == null) {
@@ -46,13 +53,43 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
                     while(reader.next(key, value)) {
                         String line = value.toString();
                         String[] reads = line.split(Cloudbreak.READ_SEPARATOR);
+                        if (reads.length < 1 || reads.length > 2) {
+                            throw new IllegalArgumentException("Bad line: " + line);
+                        }
                         String[] read1Alignments = reads[0].split(Cloudbreak.ALIGNMENT_SEPARATOR);
                         for (String read1Alignment : read1Alignments) {
-                            System.out.println(read1Alignment);
+                            // fix the flags to show this a is a paired read
+                            if (! read1Alignment.equals("")) {
+                                if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(aligner)) {
+                                    String[] fields = read1Alignment.split("\t");
+                                    if (fields.length < 2) {
+                                        throw new IllegalArgumentException("Bad alignment record for key " + key.toString() + ": " + read1Alignment);
+                                    }
+                                    int flag = Integer.parseInt(fields[1]);
+                                    flag = flag | 0x1;
+                                    fields[1] = String.valueOf(flag);
+                                    System.out.println(Joiner.on("\t").join(fields));
+                                } else {
+                                    System.out.println(read1Alignment);
+                                }
+                            }
                         }
-                        String[] read2Alignments = reads[1].split(Cloudbreak.ALIGNMENT_SEPARATOR);
-                        for (String read2Alignment : read2Alignments) {
-                            System.out.println(read2Alignment);
+                        if (reads.length == 2) {
+                            String[] read2Alignments = reads[1].split(Cloudbreak.ALIGNMENT_SEPARATOR);
+                            for (String read2Alignment : read2Alignments) {
+                                if (! "".equals(read2Alignment)) {
+                                    // fix the flags to show this a is a paired read
+                                    if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(aligner)) {
+                                        String[] fields = read2Alignment.split("\t");
+                                        int flag = Integer.parseInt(fields[1]);
+                                        flag = flag | 0x1;
+                                        fields[1] = String.valueOf(flag);
+                                        System.out.println(Joiner.on("\t").join(fields));
+                                    } else {
+                                        System.out.println(read2Alignment);
+                                    }
+                                }
+                            }
                         }
                     }
                 } finally {
