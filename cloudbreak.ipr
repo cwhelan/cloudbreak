@@ -603,6 +603,17 @@
         <root url="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4/mail-1.4-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: javax.ws.rs:jsr311-api:1.1.1">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: javax.xml.bind:jaxb-api:2.2.2">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/xml/bind/jaxb-api/2.2.2/jaxb-api-2.2.2.jar!/" />
@@ -667,17 +678,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/jets3t/jets3t/0.6.1/jets3t-0.6.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: net.oauth.core:oauth:20100527">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/net/oauth/core/oauth/20100527/oauth-20100527.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/net/oauth/core/oauth/20100527/oauth-20100527-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/net/oauth/core/oauth/20100527/oauth-20100527-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: net.schmizz:sshj:0.8.1">
@@ -801,26 +801,26 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/apache/velocity/velocity/1.7/velocity-1.7-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.apache.whirr:whirr-core:0.8.1">
+    <library name="Maven: org.apache.whirr:whirr-core:0.8.2">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.1/whirr-core-0.8.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.2/whirr-core-0.8.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.1/whirr-core-0.8.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.2/whirr-core-0.8.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.1/whirr-core-0.8.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-core/0.8.2/whirr-core-0.8.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.apache.whirr:whirr-hadoop:0.8.1">
+    <library name="Maven: org.apache.whirr:whirr-hadoop:0.8.2">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.1/whirr-hadoop-0.8.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.2/whirr-hadoop-0.8.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.1/whirr-hadoop-0.8.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.2/whirr-hadoop-0.8.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.1/whirr-hadoop-0.8.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/whirr/whirr-hadoop/0.8.2/whirr-hadoop-0.8.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.biojava:biojava3-alignment:3.0.2">
@@ -945,763 +945,774 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/jettison/jettison/1.1/jettison-1.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:atmos:1.5.1">
+    <library name="Maven: org.jclouds.api:atmos:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.1/atmos-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.8/atmos-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.1/atmos-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.8/atmos-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.1/atmos-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/atmos/1.5.8/atmos-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:byon:1.5.1">
+    <library name="Maven: org.jclouds.api:byon:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.1/byon-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.8/byon-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.1/byon-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.8/byon-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.1/byon-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/byon/1.5.8/byon-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:cloudfiles:1.5.1">
+    <library name="Maven: org.jclouds.api:cloudfiles:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.1/cloudfiles-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.8/cloudfiles-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.1/cloudfiles-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.8/cloudfiles-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.1/cloudfiles-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudfiles/1.5.8/cloudfiles-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:cloudservers:1.5.1">
+    <library name="Maven: org.jclouds.api:cloudservers:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.1/cloudservers-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.8/cloudservers-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.1/cloudservers-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.8/cloudservers-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.1/cloudservers-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudservers/1.5.8/cloudservers-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:cloudstack:1.5.1">
+    <library name="Maven: org.jclouds.api:cloudstack:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.1/cloudstack-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.8/cloudstack-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.1/cloudstack-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.8/cloudstack-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.1/cloudstack-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/cloudstack/1.5.8/cloudstack-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:deltacloud:1.5.1">
+    <library name="Maven: org.jclouds.api:deltacloud:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.1/deltacloud-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.8/deltacloud-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.1/deltacloud-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.8/deltacloud-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.1/deltacloud-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/deltacloud/1.5.8/deltacloud-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:ec2:1.5.1">
+    <library name="Maven: org.jclouds.api:ec2:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.1/ec2-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.8/ec2-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.1/ec2-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.8/ec2-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.1/ec2-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/ec2/1.5.8/ec2-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:elasticstack:1.5.1">
+    <library name="Maven: org.jclouds.api:elasticstack:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.1/elasticstack-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.8/elasticstack-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.1/elasticstack-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.8/elasticstack-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.1/elasticstack-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/elasticstack/1.5.8/elasticstack-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:eucalyptus:1.5.1">
+    <library name="Maven: org.jclouds.api:eucalyptus:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.1/eucalyptus-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.8/eucalyptus-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.1/eucalyptus-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.8/eucalyptus-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.1/eucalyptus-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/eucalyptus/1.5.8/eucalyptus-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:filesystem:1.5.1">
+    <library name="Maven: org.jclouds.api:filesystem:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.1/filesystem-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.8/filesystem-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.1/filesystem-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.8/filesystem-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.1/filesystem-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/filesystem/1.5.8/filesystem-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:nova:1.5.1">
+    <library name="Maven: org.jclouds.api:nova:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.1/nova-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.8/nova-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.1/nova-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.8/nova-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.1/nova-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/nova/1.5.8/nova-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:openstack-keystone:1.5.1">
+    <library name="Maven: org.jclouds.api:openstack-keystone:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.1/openstack-keystone-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.8/openstack-keystone-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.1/openstack-keystone-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.8/openstack-keystone-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.1/openstack-keystone-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-keystone/1.5.8/openstack-keystone-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:openstack-nova-ec2:1.5.1">
+    <library name="Maven: org.jclouds.api:openstack-nova-ec2:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.1/openstack-nova-ec2-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.8/openstack-nova-ec2-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.1/openstack-nova-ec2-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.8/openstack-nova-ec2-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.1/openstack-nova-ec2-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova-ec2/1.5.8/openstack-nova-ec2-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:openstack-nova:1.5.1">
+    <library name="Maven: org.jclouds.api:openstack-nova:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.1/openstack-nova-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.8/openstack-nova-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.1/openstack-nova-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.8/openstack-nova-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.1/openstack-nova-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/openstack-nova/1.5.8/openstack-nova-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:rackspace-cloudidentity:1.5.1">
+    <library name="Maven: org.jclouds.api:rackspace-cloudidentity:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.1/rackspace-cloudidentity-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.8/rackspace-cloudidentity-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.1/rackspace-cloudidentity-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.8/rackspace-cloudidentity-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.1/rackspace-cloudidentity-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/rackspace-cloudidentity/1.5.8/rackspace-cloudidentity-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:s3:1.5.1">
+    <library name="Maven: org.jclouds.api:s3:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.1/s3-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.8/s3-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.1/s3-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.8/s3-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.1/s3-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/s3/1.5.8/s3-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:swift:1.5.1">
+    <library name="Maven: org.jclouds.api:swift:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.1/swift-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.8/swift-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.1/swift-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.8/swift-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.1/swift-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/swift/1.5.8/swift-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:vcloud:1.5.1">
+    <library name="Maven: org.jclouds.api:vcloud:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.1/vcloud-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.8/vcloud-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.1/vcloud-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.8/vcloud-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.1/vcloud-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/vcloud/1.5.8/vcloud-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.api:walrus:1.5.1">
+    <library name="Maven: org.jclouds.api:walrus:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.1/walrus-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.8/walrus-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.1/walrus-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.8/walrus-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.1/walrus-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/api/walrus/1.5.8/walrus-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.common:aws-common:1.5.1">
+    <library name="Maven: org.jclouds.common:aws-common:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.1/aws-common-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.8/aws-common-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.1/aws-common-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.8/aws-common-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.1/aws-common-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/aws-common/1.5.8/aws-common-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.common:azure-common:1.5.1">
+    <library name="Maven: org.jclouds.common:azure-common:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.1/azure-common-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.8/azure-common-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.1/azure-common-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.8/azure-common-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.1/azure-common-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/azure-common/1.5.8/azure-common-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.common:openstack-common:1.5.1">
+    <library name="Maven: org.jclouds.common:openstack-common:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.1/openstack-common-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.8/openstack-common-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.1/openstack-common-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.8/openstack-common-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.1/openstack-common-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/openstack-common/1.5.8/openstack-common-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.common:trmk-common:1.5.1">
+    <library name="Maven: org.jclouds.common:trmk-common:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.1/trmk-common-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.8/trmk-common-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.1/trmk-common-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.8/trmk-common-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.1/trmk-common-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/common/trmk-common/1.5.8/trmk-common-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-bouncycastle:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-bouncycastle:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.1/jclouds-bouncycastle-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.8/jclouds-bouncycastle-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.1/jclouds-bouncycastle-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.8/jclouds-bouncycastle-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.1/jclouds-bouncycastle-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-bouncycastle/1.5.8/jclouds-bouncycastle-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-enterprise:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-enterprise:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.1/jclouds-enterprise-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.8/jclouds-enterprise-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.1/jclouds-enterprise-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.8/jclouds-enterprise-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.1/jclouds-enterprise-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-enterprise/1.5.8/jclouds-enterprise-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-joda:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-joda:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.1/jclouds-joda-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.8/jclouds-joda-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.1/jclouds-joda-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.8/jclouds-joda-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.1/jclouds-joda-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-joda/1.5.8/jclouds-joda-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-jsch:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-jsch:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.1/jclouds-jsch-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.8/jclouds-jsch-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.1/jclouds-jsch-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.8/jclouds-jsch-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.1/jclouds-jsch-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-jsch/1.5.8/jclouds-jsch-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-netty:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-netty:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.1/jclouds-netty-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.8/jclouds-netty-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.1/jclouds-netty-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.8/jclouds-netty-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.1/jclouds-netty-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-netty/1.5.8/jclouds-netty-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-slf4j:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-slf4j:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.1/jclouds-slf4j-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.8/jclouds-slf4j-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.1/jclouds-slf4j-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.8/jclouds-slf4j-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.1/jclouds-slf4j-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-slf4j/1.5.8/jclouds-slf4j-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.driver:jclouds-sshj:1.5.1">
+    <library name="Maven: org.jclouds.driver:jclouds-sshj:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.1/jclouds-sshj-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.8/jclouds-sshj-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.1/jclouds-sshj-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.8/jclouds-sshj-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.1/jclouds-sshj-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/driver/jclouds-sshj/1.5.8/jclouds-sshj-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:aws-ec2:1.5.1">
+    <library name="Maven: org.jclouds.provider:aws-ec2:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.1/aws-ec2-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.8/aws-ec2-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.1/aws-ec2-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.8/aws-ec2-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.1/aws-ec2-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-ec2/1.5.8/aws-ec2-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:aws-s3:1.5.1">
+    <library name="Maven: org.jclouds.provider:aws-s3:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.1/aws-s3-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.8/aws-s3-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.1/aws-s3-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.8/aws-s3-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.1/aws-s3-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/aws-s3/1.5.8/aws-s3-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:azureblob:1.5.1">
+    <library name="Maven: org.jclouds.provider:azureblob:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.1/azureblob-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.8/azureblob-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.1/azureblob-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.8/azureblob-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.1/azureblob-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/azureblob/1.5.8/azureblob-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:bluelock-vcloud-zone01:1.5.1">
+    <library name="Maven: org.jclouds.provider:bluelock-vcloud-zone01:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.1/bluelock-vcloud-zone01-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.8/bluelock-vcloud-zone01-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.1/bluelock-vcloud-zone01-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.8/bluelock-vcloud-zone01-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.1/bluelock-vcloud-zone01-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/bluelock-vcloud-zone01/1.5.8/bluelock-vcloud-zone01-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:cloudfiles-uk:1.5.1">
+    <library name="Maven: org.jclouds.provider:cloudfiles-uk:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.1/cloudfiles-uk-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.8/cloudfiles-uk-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.1/cloudfiles-uk-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.8/cloudfiles-uk-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.1/cloudfiles-uk-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-uk/1.5.8/cloudfiles-uk-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:cloudfiles-us:1.5.1">
+    <library name="Maven: org.jclouds.provider:cloudfiles-us:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.1/cloudfiles-us-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.8/cloudfiles-us-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.1/cloudfiles-us-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.8/cloudfiles-us-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.1/cloudfiles-us-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudfiles-us/1.5.8/cloudfiles-us-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:cloudonestorage:1.5.1">
+    <library name="Maven: org.jclouds.provider:cloudonestorage:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.1/cloudonestorage-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.8/cloudonestorage-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.1/cloudonestorage-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.8/cloudonestorage-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.1/cloudonestorage-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudonestorage/1.5.8/cloudonestorage-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:cloudservers-uk:1.5.1">
+    <library name="Maven: org.jclouds.provider:cloudservers-uk:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.1/cloudservers-uk-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.8/cloudservers-uk-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.1/cloudservers-uk-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.8/cloudservers-uk-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.1/cloudservers-uk-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-uk/1.5.8/cloudservers-uk-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:cloudservers-us:1.5.1">
+    <library name="Maven: org.jclouds.provider:cloudservers-us:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.1/cloudservers-us-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.8/cloudservers-us-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.1/cloudservers-us-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.8/cloudservers-us-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.1/cloudservers-us-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/cloudservers-us/1.5.8/cloudservers-us-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:elastichosts-lon-b:1.5.1">
+    <library name="Maven: org.jclouds.provider:elastichosts-lon-b:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.1/elastichosts-lon-b-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.8/elastichosts-lon-b-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.1/elastichosts-lon-b-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.8/elastichosts-lon-b-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.1/elastichosts-lon-b-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-b/1.5.8/elastichosts-lon-b-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:elastichosts-lon-p:1.5.1">
+    <library name="Maven: org.jclouds.provider:elastichosts-lon-p:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.1/elastichosts-lon-p-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.8/elastichosts-lon-p-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.1/elastichosts-lon-p-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.8/elastichosts-lon-p-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.1/elastichosts-lon-p-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-lon-p/1.5.8/elastichosts-lon-p-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:elastichosts-sat-p:1.5.1">
+    <library name="Maven: org.jclouds.provider:elastichosts-sat-p:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.1/elastichosts-sat-p-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.8/elastichosts-sat-p-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.1/elastichosts-sat-p-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.8/elastichosts-sat-p-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.1/elastichosts-sat-p-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/elastichosts-sat-p/1.5.8/elastichosts-sat-p-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:eucalyptus-partnercloud-ec2:1.5.1">
+    <library name="Maven: org.jclouds.provider:eucalyptus-partnercloud-ec2:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.1/eucalyptus-partnercloud-ec2-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.8/eucalyptus-partnercloud-ec2-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.1/eucalyptus-partnercloud-ec2-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.8/eucalyptus-partnercloud-ec2-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.1/eucalyptus-partnercloud-ec2-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-ec2/1.5.8/eucalyptus-partnercloud-ec2-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:eucalyptus-partnercloud-s3:1.5.1">
+    <library name="Maven: org.jclouds.provider:eucalyptus-partnercloud-s3:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.1/eucalyptus-partnercloud-s3-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.8/eucalyptus-partnercloud-s3-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.1/eucalyptus-partnercloud-s3-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.8/eucalyptus-partnercloud-s3-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.1/eucalyptus-partnercloud-s3-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/eucalyptus-partnercloud-s3/1.5.8/eucalyptus-partnercloud-s3-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:go2cloud-jhb1:1.5.1">
+    <library name="Maven: org.jclouds.provider:go2cloud-jhb1:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.1/go2cloud-jhb1-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.8/go2cloud-jhb1-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.1/go2cloud-jhb1-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.8/go2cloud-jhb1-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.1/go2cloud-jhb1-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/go2cloud-jhb1/1.5.8/go2cloud-jhb1-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:gogrid:1.5.1">
+    <library name="Maven: org.jclouds.provider:gogrid:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.1/gogrid-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.8/gogrid-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.1/gogrid-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.8/gogrid-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.1/gogrid-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/gogrid/1.5.8/gogrid-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:greenhousedata-element-vcloud:1.5.1">
+    <library name="Maven: org.jclouds.provider:greenhousedata-element-vcloud:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.1/greenhousedata-element-vcloud-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.8/greenhousedata-element-vcloud-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.1/greenhousedata-element-vcloud-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.8/greenhousedata-element-vcloud-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.1/greenhousedata-element-vcloud-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/greenhousedata-element-vcloud/1.5.8/greenhousedata-element-vcloud-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:hpcloud-compute:1.5.1">
+    <library name="Maven: org.jclouds.provider:hpcloud-compute:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.1/hpcloud-compute-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.8/hpcloud-compute-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.1/hpcloud-compute-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.8/hpcloud-compute-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.1/hpcloud-compute-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-compute/1.5.8/hpcloud-compute-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:hpcloud-objectstorage:1.5.1">
+    <library name="Maven: org.jclouds.provider:hpcloud-objectstorage:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.1/hpcloud-objectstorage-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.8/hpcloud-objectstorage-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.1/hpcloud-objectstorage-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.8/hpcloud-objectstorage-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.1/hpcloud-objectstorage-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/hpcloud-objectstorage/1.5.8/hpcloud-objectstorage-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:ninefold-compute:1.5.1">
+    <library name="Maven: org.jclouds.provider:ninefold-compute:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.1/ninefold-compute-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.8/ninefold-compute-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.1/ninefold-compute-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.8/ninefold-compute-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.1/ninefold-compute-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-compute/1.5.8/ninefold-compute-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:ninefold-storage:1.5.1">
+    <library name="Maven: org.jclouds.provider:ninefold-storage:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.1/ninefold-storage-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.8/ninefold-storage-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.1/ninefold-storage-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.8/ninefold-storage-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.1/ninefold-storage-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/ninefold-storage/1.5.8/ninefold-storage-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:openhosting-east1:1.5.1">
+    <library name="Maven: org.jclouds.provider:openhosting-east1:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.1/openhosting-east1-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.8/openhosting-east1-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.1/openhosting-east1-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.8/openhosting-east1-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.1/openhosting-east1-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/openhosting-east1/1.5.8/openhosting-east1-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:rackspace-cloudservers-us:1.5.1">
+    <library name="Maven: org.jclouds.provider:rackspace-cloudservers-uk:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.1/rackspace-cloudservers-us-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-uk/1.5.8/rackspace-cloudservers-uk-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.1/rackspace-cloudservers-us-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-uk/1.5.8/rackspace-cloudservers-uk-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.1/rackspace-cloudservers-us-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-uk/1.5.8/rackspace-cloudservers-uk-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:rimuhosting:1.5.1">
+    <library name="Maven: org.jclouds.provider:rackspace-cloudservers-us:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.1/rimuhosting-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.8/rackspace-cloudservers-us-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.1/rimuhosting-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.8/rackspace-cloudservers-us-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.1/rimuhosting-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rackspace-cloudservers-us/1.5.8/rackspace-cloudservers-us-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:serverlove-z1-man:1.5.1">
+    <library name="Maven: org.jclouds.provider:rimuhosting:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.1/serverlove-z1-man-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.8/rimuhosting-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.1/serverlove-z1-man-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.8/rimuhosting-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.1/serverlove-z1-man-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/rimuhosting/1.5.8/rimuhosting-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:skalicloud-sdg-my:1.5.1">
+    <library name="Maven: org.jclouds.provider:serverlove-z1-man:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.1/skalicloud-sdg-my-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.8/serverlove-z1-man-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.1/skalicloud-sdg-my-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.8/serverlove-z1-man-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.1/skalicloud-sdg-my-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/serverlove-z1-man/1.5.8/serverlove-z1-man-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:slicehost:1.5.1">
+    <library name="Maven: org.jclouds.provider:skalicloud-sdg-my:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.1/slicehost-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.8/skalicloud-sdg-my-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.1/slicehost-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.8/skalicloud-sdg-my-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.1/slicehost-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/skalicloud-sdg-my/1.5.8/skalicloud-sdg-my-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:softlayer:1.5.1">
+    <library name="Maven: org.jclouds.provider:slicehost:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.1/softlayer-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.8/slicehost-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.1/softlayer-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.8/slicehost-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.1/softlayer-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/slicehost/1.5.8/slicehost-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:stratogen-vcloud-mycloud:1.5.1">
+    <library name="Maven: org.jclouds.provider:softlayer:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.1/stratogen-vcloud-mycloud-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.8/softlayer-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.1/stratogen-vcloud-mycloud-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.8/softlayer-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.1/stratogen-vcloud-mycloud-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/softlayer/1.5.8/softlayer-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:synaptic-storage:1.5.1">
+    <library name="Maven: org.jclouds.provider:stratogen-vcloud-mycloud:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.1/synaptic-storage-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.8/stratogen-vcloud-mycloud-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.1/synaptic-storage-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.8/stratogen-vcloud-mycloud-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.1/synaptic-storage-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/stratogen-vcloud-mycloud/1.5.8/stratogen-vcloud-mycloud-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:trmk-ecloud:1.5.1">
+    <library name="Maven: org.jclouds.provider:synaptic-storage:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.1/trmk-ecloud-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.8/synaptic-storage-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.1/trmk-ecloud-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.8/synaptic-storage-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.1/trmk-ecloud-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/synaptic-storage/1.5.8/synaptic-storage-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:trmk-vcloudexpress:1.5.1">
+    <library name="Maven: org.jclouds.provider:trmk-ecloud:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.1/trmk-vcloudexpress-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.8/trmk-ecloud-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.1/trmk-vcloudexpress-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.8/trmk-ecloud-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.1/trmk-vcloudexpress-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-ecloud/1.5.8/trmk-ecloud-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds.provider:trystack-nova:1.5.1">
+    <library name="Maven: org.jclouds.provider:trmk-vcloudexpress:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.1/trystack-nova-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.8/trmk-vcloudexpress-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.1/trystack-nova-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.8/trmk-vcloudexpress-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.1/trystack-nova-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trmk-vcloudexpress/1.5.8/trmk-vcloudexpress-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-allblobstore:1.5.1">
+    <library name="Maven: org.jclouds.provider:trystack-nova:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.1/jclouds-allblobstore-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.8/trystack-nova-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.1/jclouds-allblobstore-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.8/trystack-nova-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.1/jclouds-allblobstore-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/provider/trystack-nova/1.5.8/trystack-nova-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-allcompute:1.5.1">
+    <library name="Maven: org.jclouds:jclouds-allblobstore:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.1/jclouds-allcompute-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.8/jclouds-allblobstore-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.1/jclouds-allcompute-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.8/jclouds-allblobstore-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.1/jclouds-allcompute-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allblobstore/1.5.8/jclouds-allblobstore-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-blobstore:1.5.1">
+    <library name="Maven: org.jclouds:jclouds-allcompute:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.1/jclouds-blobstore-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.8/jclouds-allcompute-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.1/jclouds-blobstore-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.8/jclouds-allcompute-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.1/jclouds-blobstore-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-allcompute/1.5.8/jclouds-allcompute-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-compute:1.5.1">
+    <library name="Maven: org.jclouds:jclouds-blobstore:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.1/jclouds-compute-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.8/jclouds-blobstore-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.1/jclouds-compute-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.8/jclouds-blobstore-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.1/jclouds-compute-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-blobstore/1.5.8/jclouds-blobstore-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-core:1.5.1">
+    <library name="Maven: org.jclouds:jclouds-compute:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.1/jclouds-core-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.8/jclouds-compute-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.1/jclouds-core-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.8/jclouds-compute-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.1/jclouds-core-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-compute/1.5.8/jclouds-compute-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.jclouds:jclouds-scriptbuilder:1.5.1">
+    <library name="Maven: org.jclouds:jclouds-core:1.5.8">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.1/jclouds-scriptbuilder-1.5.1.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.8/jclouds-core-1.5.8.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.1/jclouds-scriptbuilder-1.5.1-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.8/jclouds-core-1.5.8-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.1/jclouds-scriptbuilder-1.5.1-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-core/1.5.8/jclouds-core-1.5.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jclouds:jclouds-scriptbuilder:1.5.8">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.8/jclouds-scriptbuilder-1.5.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.8/jclouds-scriptbuilder-1.5.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jclouds/jclouds-scriptbuilder/1.5.8/jclouds-scriptbuilder-1.5.8-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.mockito:mockito-all:1.8.1">
@@ -1801,6 +1812,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.6.4/slf4j-api-1.6.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:slf4j-log4j12:1.5.6">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-log4j12/1.5.6/slf4j-log4j12-1.5.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-log4j12/1.5.6/slf4j-log4j12-1.5.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-log4j12/1.5.6/slf4j-log4j12-1.5.6-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.tukaani:xz:1.0">

@@ -169,7 +169,7 @@
       <dependency>
           <groupId>org.apache.whirr</groupId>
           <artifactId>whirr-hadoop</artifactId>
-          <version>0.8.1</version>
+          <version>0.8.2</version>
           <exclusions>
               <!-- excluding things to get rid of shade warnings and cut down jar size -->
               <exclusion>
@@ -193,6 +193,14 @@
               <version>1.9.1</version>
               <scope>test</scope>
           </dependency>
+
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.5.6</version>
+          <scope>test</scope>
+      </dependency>
+
   </dependencies>
       <build>
 	<plugins>
