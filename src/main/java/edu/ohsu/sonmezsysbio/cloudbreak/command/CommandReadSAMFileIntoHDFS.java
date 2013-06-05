@@ -79,44 +79,14 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         SAMFileReader samFileReader = new SAMFileReader(new File(samFile));
         samFileReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
         SAMRecordIterator it = samFileReader.iterator();
+
         String currentReadName = "";
-        List<String> read1Records = new ArrayList<String>();
-        List<String> read2Records = new ArrayList<String>();
-        Joiner readAlignmentJoiner = Joiner.on(Cloudbreak.ALIGNMENT_SEPARATOR);
-        long i = 0;
+
         while (it.hasNext()) {
             SAMRecord samRecord = it.next();
-            // todo check sorting against previous record
             String readName = samRecord.getReadName();
-            if (! readName.equals(currentReadName) && ! currentReadName.equals("")) {
-                logger.debug("writing " + readName);
-                writeRecords(currentReadName, writer, read1Records, read2Records, readAlignmentJoiner, i);
-                currentReadName = readName;
-                i++;
-            }
-
-            if (currentReadName.equals("")) {
-                currentReadName = readName;
-            }
-            if (samRecord.getReadPairedFlag() && ! samRecord.getReadUnmappedFlag()) {
-                if (samRecord.getFirstOfPairFlag()) {
-                    read1Records.add(samRecord.getSAMString().trim());
-                } else {
-                    read2Records.add(samRecord.getSAMString().trim());
-                }
-            }
+            writer.write(new Text(currentReadName), samRecord.getSAMString());
         }
-        writeRecords(currentReadName, writer, read1Records, read2Records, readAlignmentJoiner, i);
     }
 
-    private void writeRecords(String currentReadName, HDFSWriter writer, List<String> read1Records, List<String> read2Records, Joiner readAlignmentJoiner, long i) throws IOException {
-        logger.debug("r1 records: " + read1Records.size());
-        logger.debug("r2 records: " + read1Records.size());
-        // todo: not importing OEA mappings yet
-        if (read1Records.size() > 0 && read2Records.size() > 0) {
-            writer.write(new Text(currentReadName), readAlignmentJoiner.join(read1Records) + Cloudbreak.READ_SEPARATOR + readAlignmentJoiner.join(read2Records) + "\n");
-        }
-        read1Records.clear();
-        read2Records.clear();
-    }
 }
