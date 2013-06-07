@@ -28,10 +28,10 @@ public class SingleEndAlignmentsToPairsReducer extends MapReduceBase
         List<String> read2Alignments = new ArrayList<String>();
         while (values.hasNext()) {
             String alignment = values.next().toString();
-            char readNum = alignment.charAt(alignment.indexOf("\t") - 1);
-            if (readNum == '1') {
+            String[] fields = alignment.split("\t");
+            if ((Integer.valueOf(fields[1]) & 0x40) > 0) {
                 read1Alignments.add(alignment);
-            } else if (readNum == '2') {
+            } else if ((Integer.valueOf(fields[1]) & 0x80) > 0) {
                 read2Alignments.add(alignment);
             } else {
                 throw new RuntimeException("bad line: " + alignment);

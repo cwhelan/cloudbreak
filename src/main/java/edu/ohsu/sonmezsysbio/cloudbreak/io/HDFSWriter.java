@@ -20,12 +20,14 @@ import java.io.IOException;
 public class HDFSWriter {
     public BufferedWriter textFileWriter;
     public SequenceFile.Writer seqFileWriter;
+    public Text value = new Text();
 
     public void write(Object key, String line) throws IOException {
         if (textFileWriter != null) {
             textFileWriter.write(line);
         } else {
-            seqFileWriter.append(key, new Text(line));
+            value.set(line);
+            seqFileWriter.append(key, value);
         }
     }
 

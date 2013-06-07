@@ -711,6 +711,19 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/net/sf/samtools/1.78/samtools-1.78-sources.jar!/" />
+        <root url="file://$USER_HOME$/software/picard-trunk/trunk/src/java" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.sf:samtools:1.92">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sf/samtools/1.92/samtools-1.92.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sf/samtools/1.92/samtools-1.92-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sf/samtools/1.92/samtools-1.92-sources.jar!/" />
+        <root url="file://$USER_HOME$/software/picard-trunk/trunk/src/java" />
       </SOURCES>
     </library>
     <library name="Maven: org.99soft.guice:rocoto:6.1">
@@ -766,6 +779,7 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-core/0.20.2-cdh3u5/hadoop-core-0.20.2-cdh3u5-sources.jar!/" />
+        <root url="file://$USER_HOME$/software/CDH3/hadoop-0.20.2-cdh3u5/src/core" />
       </SOURCES>
     </library>
     <library name="Maven: org.apache.httpcomponents:httpclient:4.1">
