@@ -37,12 +37,12 @@ temp_file_name = temp_file.name
 
 if sv_type == "DEL":
     cb_subcommand = "extractDeletionCalls"
-    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + '/lib/cloudbreak-${project.version}-exe.jar', cb_subcommand, "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd, "--inputHDFSDir", input_hdfs_dir, "--outputHDFSDir", "/user/whelanch/tmp/" + temp_file_name]
+    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + 'cloudbreak-${project.version}.jar', cb_subcommand, "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd, "--inputHDFSDir", input_hdfs_dir, "--outputHDFSDir", "/user/whelanch/tmp/" + temp_file_name]
     subprocess.call(extract_regions_cmd)
     subprocess.call("hadoop dfs -cat /user/whelanch/tmp/" + temp_file_name + "/part* | sort -k1,1 -k2,2n > " + temp_file_name, shell=True)
 else:
     cb_subcommand = "extractInsertionCalls"
-    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + '/lib/cloudbreak-${project.version}-exe.jar', cb_subcommand, "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd, "--inputHDFSDir", input_hdfs_dir, "--outputHDFSDir", "/user/whelanch/tmp/" + temp_file_name]
+    extract_regions_cmd = ['hadoop', 'jar', cloudbreak_home + 'cloudbreak-${project.version}.jar', cb_subcommand, "--faidx", faidx_filename, "--threshold", str(q), "--medianFilterWindow", median_filter_window, "--targetIsize", target_isize, "--targetIsizeSD", target_isize_sd, "--inputHDFSDir", input_hdfs_dir, "--outputHDFSDir", "/user/whelanch/tmp/" + temp_file_name]
     subprocess.call(extract_regions_cmd)
     subprocess.call("hadoop dfs -cat /user/whelanch/tmp/" + temp_file_name + "/part* | sort -k1,1 -k2,2n > " + temp_file_name, shell=True)
 
