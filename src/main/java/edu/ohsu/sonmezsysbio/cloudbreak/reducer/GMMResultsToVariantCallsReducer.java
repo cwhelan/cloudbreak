@@ -35,6 +35,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
     double lrThreshold;
     int medianFilterWindow;
     private String variantType;
+    private boolean insNoCovFilter;
 
     @Override
     public void reduce(IntWritable chromosome,
@@ -60,6 +61,11 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
 
         double[] muFileValues = new double[numTiles];;
         double[] w0Values = new double[numTiles];
+        // -1 values in w0 indicate a bin in which we had 0 coverage or less than
+        // min coverage
+        for (int i = 0; i < w0Values.length; i++) {
+            w0Values[i] = -1;
+        }
 
         while (gmmScorerResultsIterator.hasNext()) {
             String[] fields = gmmScorerResultsIterator.next().toString().split("\t");
@@ -91,7 +97,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                 targetIsize, targetIsizeSD, variantType, lrThreshold);
     }
 
-    private static int writePositiveRegions(double[] filteredVals, OutputCollector<Text, Text> textTextOutputCollector,
+    private int writePositiveRegions(double[] filteredVals, OutputCollector<Text, Text> textTextOutputCollector,
                                             String currentChromosome, FaidxFileHelper faidx, int resolution,
                                             int peakNum, double[] muFileValues, double[] w0FileValues,
                                             int targetIsize, int targetIsizeSD, String desiredVariantType, double lrThreshold) throws IOException {
@@ -147,7 +153,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                         double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
                         peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                                 targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                                w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
+                                w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
                         inPositivePeak = false;
                         peakMax = 0;
                     }
@@ -160,7 +166,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                     double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
                     peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                             targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                            w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
+                            w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
                     inPositivePeak = false;
                     peakMax = 0;
                 }
@@ -175,7 +181,7 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
             double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
             peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                     targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                    w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold);
+                    w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
         }
         return peakNum;
     }
@@ -191,18 +197,18 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         return (idx >= 2 && Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) > 2 * targetIsizeSD);
     }
 
-    private static int determineVariantTypeAndWriteLine(OutputCollector<Text, Text> outputCollector, String currentChromosome, int resolution, int peakNum,
+    private int determineVariantTypeAndWriteLine(OutputCollector<Text, Text> outputCollector, String currentChromosome, int resolution, int peakNum,
                                                         int targetIsize, boolean usingMuValues, long peakStart,
                                                         double peakMax, double muValMin, double muValMax, double w0ValSum,
                                                         double w0ValMin, double w0ValMax,
-                                                        long endPosition, long length, double avgMu, String desiredVariantType, double lrThreshold) throws IOException {
+                                                        long endPosition, long length, double avgMu, String desiredVariantType, double lrThreshold, double[] w0FileValues) throws IOException {
         log.debug("validating peak num " + peakNum + ", start = " + peakStart + ", end = " + endPosition);
         String variantType = null;
         if (! usingMuValues) {
             variantType = Cloudbreak.VARIANT_TYPE_UNKNOWN;
         } else if (validDeletionPrediction(targetIsize, length, avgMu, peakMax, lrThreshold)) {
             variantType = Cloudbreak.VARIANT_TYPE_DELETION;
-        } else if (validInsertionPrediction(targetIsize, avgMu)) {
+        } else if (validInsertionPrediction(targetIsize, avgMu, peakStart, endPosition, w0FileValues, resolution)) {
             variantType = Cloudbreak.VARIANT_TYPE_INSERTION;
         }
         if (desiredVariantType == null || desiredVariantType.equals(variantType)) {
@@ -229,8 +235,14 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
      * insertions are only valid if:
      * the estimated mean of the second component is smaller than the target insert size and
      */
-    private static boolean validInsertionPrediction(int targetIsize, double avgMu) {
-        return (avgMu < targetIsize);
+    private boolean validInsertionPrediction(int targetIsize, double avgMu, long peakStart, long peakEnd, double[] w0vals, int resolution) {
+        return (avgMu < targetIsize) && (! insNoCovFilter || peakNotFlankedByNoCovBin(peakStart, peakEnd, w0vals, resolution));
+    }
+
+    private static boolean peakNotFlankedByNoCovBin(long peakStart, long peakEnd, double[] w0vals, int resolution) {
+        int startIdx = (int) (peakStart / resolution);
+        int endIdx = (int) (peakEnd / resolution);
+        return (startIdx - 1 >=0 && w0vals[startIdx - 1] > -1) && (endIdx + 1 < w0vals.length && w0vals[endIdx + 1] > -1);
     }
 
     private static void writeLine(OutputCollector<Text,Text> outputCollector, String currentChromosome, int resolution, int peakNum, long peakStart,
@@ -265,5 +277,6 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         lrThreshold = Double.parseDouble(job.get("variant.lr.threshold"));
         medianFilterWindow = Integer.parseInt(job.get("variant.mfw"));
         variantType = job.get("variant.type");
+        insNoCovFilter = Boolean.parseBoolean(job.get("variant.insNoCovFilter"));
     }
 }

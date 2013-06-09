@@ -81,13 +81,7 @@ public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
 
         addDistributedCacheFile(conf, faidxFileName, "alignment.faidx");
 
-        conf.set("legacy.alignments", String.valueOf(legacyAlignments));
-        conf.set("target.isize", String.valueOf(targetIsize));
-        conf.set("target.isizesd", String.valueOf(targetIsizeSD));
-        conf.set("variant.lr.threshold", String.valueOf(threshold));
-        conf.set("variant.mfw", String.valueOf(medianFilterWindow));
-        conf.set("cloudbreak.resolution", String.valueOf(resolution));
-        conf.set("variant.type", getVariantType());
+        configureParams(conf);
 
         DistributedCache.createSymlink(conf);
 
@@ -106,5 +100,15 @@ public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
 
         JobClient.runJob(conf);
 
+    }
+
+    protected void configureParams(JobConf conf) {
+        conf.set("legacy.alignments", String.valueOf(legacyAlignments));
+        conf.set("target.isize", String.valueOf(targetIsize));
+        conf.set("target.isizesd", String.valueOf(targetIsizeSD));
+        conf.set("variant.lr.threshold", String.valueOf(threshold));
+        conf.set("variant.mfw", String.valueOf(medianFilterWindow));
+        conf.set("cloudbreak.resolution", String.valueOf(resolution));
+        conf.set("variant.type", getVariantType());
     }
 }

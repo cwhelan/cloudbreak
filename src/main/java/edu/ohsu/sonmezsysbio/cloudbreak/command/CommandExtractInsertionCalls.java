@@ -1,8 +1,10 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapred.JobConf;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,6 +14,10 @@ import org.apache.hadoop.conf.Configuration;
  */
 @Parameters(separators = "=", commandDescription = "Extract insertion calls into a BED file")
 public class CommandExtractInsertionCalls extends VariantExtractionCommand implements CloudbreakCommand {
+
+    // filter out calls next to a bin with no coverage - recommend on for BWA alignments, off for other aligners
+    @Parameter(names = {"--noCovFilter"})
+    boolean noCovFilter = false;
 
     @Override
     public void run(Configuration conf) throws Exception {
@@ -23,4 +29,9 @@ public class CommandExtractInsertionCalls extends VariantExtractionCommand imple
         return Cloudbreak.VARIANT_TYPE_INSERTION;
     }
 
+    @Override
+    protected void configureParams(JobConf conf) {
+        super.configureParams(conf);
+        conf.set("variant.insNoCovFilter", String.valueOf(noCovFilter));
+    }
 }
