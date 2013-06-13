@@ -10,5 +10,6 @@
     </appender>
     <root>
         <appender-ref ref="CONSOLE" />
+        <level value="INFO"/>
     </root>
 </log4j:configuration>

@@ -2,8 +2,6 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.google.common.base.Joiner;
-import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMRecord;
@@ -21,8 +19,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -55,9 +53,23 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         FileSystem hdfs = FileSystem.get(config);
         Path p = new Path(hdfsDataDir + "/" + outFileName);
 
+        //HDFSWriter writer = getHdfsWriter(config, hdfs, p);
+
+//        try {
+//            readFile(writer, samFile);
+//        } finally {
+//            writer.close();
+//        }
+
+        readFile(null, samFile, config, hdfs);
+    }
+
+    static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress) throws IOException {
         HDFSWriter writer = new HDFSWriter();
         if ("snappy".equals(compress)) {
-            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
+            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class,
+                    131072, (short) 1, hdfs.getDefaultBlockSize(), true,
+                    SequenceFile.CompressionType.BLOCK, new SnappyCodec(), new SequenceFile.Metadata());
         } else {
             FSDataOutputStream outputStream = hdfs.create(p);
             BufferedWriter bufferedWriter = null;
@@ -68,55 +80,87 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
             }
             writer.textFileWriter = bufferedWriter;
         }
-        try {
-            readFile(writer, samFile);
-        } finally {
-            writer.close();
-        }
-
+        return writer;
     }
-    private void readFile(HDFSWriter writer, String samFile) throws IOException {
+
+    private void readFile(HDFSWriter writer, String samFile, Configuration config, FileSystem hdfs) throws IOException {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         SAMFileReader samFileReader = new SAMFileReader(new File(samFile));
-        samFileReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+        samFileReader.setValidationStringency(SAMFileReader.ValidationStringency.SILENT);
         SAMRecordIterator it = samFileReader.iterator();
+
         String currentReadName = "";
-        List<String> read1Records = new ArrayList<String>();
-        List<String> read2Records = new ArrayList<String>();
-        Joiner readAlignmentJoiner = Joiner.on(Cloudbreak.ALIGNMENT_SEPARATOR);
-        long i = 0;
+        int numRecords = 0;
+        long lastTime = System.currentTimeMillis();
+        Text key = new Text();
+        KeyVal[] buffer = new KeyVal[10000000];
         while (it.hasNext()) {
             SAMRecord samRecord = it.next();
-            // todo check sorting against previous record
             String readName = samRecord.getReadName();
-            if (! readName.equals(currentReadName) && ! currentReadName.equals("")) {
-                logger.debug("writing " + readName);
-                writeRecords(currentReadName, writer, read1Records, read2Records, readAlignmentJoiner, i);
-                currentReadName = readName;
-                i++;
-            }
-
-            if (currentReadName.equals("")) {
-                currentReadName = readName;
-            }
-            if (samRecord.getReadPairedFlag() && ! samRecord.getReadUnmappedFlag()) {
-                if (samRecord.getFirstOfPairFlag()) {
-                    read1Records.add(samRecord.getSAMString().trim());
-                } else {
-                    read2Records.add(samRecord.getSAMString().trim());
-                }
+            currentReadName = readName;
+            // key.set(currentReadName);
+            // writer.write(key, samRecord.getSAMString());
+            KeyVal keyVal = new KeyVal();
+            keyVal.key = currentReadName;
+            keyVal.val = samRecord.getSAMString();
+            buffer[numRecords] = keyVal;
+            numRecords++;
+            if (numRecords % 10000000 == 0) {
+                long currentTime = System.currentTimeMillis();
+                System.err.println("Loaded " + numRecords + " in " + (currentTime - lastTime) + "ms");
+                lastTime = currentTime;
+                Path p = new Path(hdfsDataDir + "/" + outFileName + "-" + numRecords);
+                UploadThread uploadThread = new UploadThread();
+                uploadThread.recordNum = numRecords;
+                uploadThread.buff = buffer;
+                uploadThread.path = p;
+                uploadThread.config = config;
+                uploadThread.hdfs = hdfs;
+                buffer = new KeyVal[10000000];
+                executorService.execute(uploadThread);
             }
         }
-        writeRecords(currentReadName, writer, read1Records, read2Records, readAlignmentJoiner, i);
+        executorService.shutdown();
+        while (!executorService.isTerminated()) {
+        }
+
+        System.err.println("Complete: loaded " + numRecords);
     }
 
-    private void writeRecords(String currentReadName, HDFSWriter writer, List<String> read1Records, List<String> read2Records, Joiner readAlignmentJoiner, long i) throws IOException {
-        logger.debug("r1 records: " + read1Records.size());
-        logger.debug("r2 records: " + read1Records.size());
-        // todo: not importing OEA mappings yet
-        if (read1Records.size() > 0 && read2Records.size() > 0) {
-            writer.write(new Text(currentReadName), readAlignmentJoiner.join(read1Records) + Cloudbreak.READ_SEPARATOR + readAlignmentJoiner.join(read2Records) + "\n");
+    static class KeyVal {
+        String key;
+        String val;
+    }
+
+    class UploadThread implements Runnable {
+
+        Path path;
+        KeyVal[] buff;
+        int recordNum;
+        Configuration config;
+        FileSystem hdfs;
+
+        @Override
+        public void run() {
+            HDFSWriter writer = null;
+
+            try {
+                writer = getHdfsWriter(config, hdfs, path, CommandReadSAMFileIntoHDFS.this.compress);
+                for (int i = 0; i < buff.length; i++) {
+                    writer.write(new Text(buff[i].key), buff[i].val);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("Loaded " + recordNum);
+
         }
-        read1Records.clear();
-        read2Records.clear();
     }
 }
