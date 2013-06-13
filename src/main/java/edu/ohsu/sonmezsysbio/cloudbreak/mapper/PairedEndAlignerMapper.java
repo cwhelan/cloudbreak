@@ -11,7 +11,7 @@ import java.io.Writer;
  * Date: 6/12/13
  * Time: 4:18 PM
  */
-public class PairedEndAlignerMapper extends AlignerMapper {
+public abstract class PairedEndAlignerMapper extends AlignerMapper {
 
     protected Writer getRead2FileWriter() {
         return s2FileWriter;
