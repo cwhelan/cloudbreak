@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Date: 5/21/11
  * Time: 5:36 PM
  */
-public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
+public class Bowtie2SingleEndMapper extends SingleEndAlignerMapper {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(Bowtie2SingleEndMapper.class);
 
@@ -49,8 +49,6 @@ public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
     @Override
     public void close() throws IOException {
         super.close();
-
-        s1FileWriter.close();
 
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
@@ -120,5 +118,10 @@ public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
                 "--very-sensitive-local", "--mm", "--score-min", "L,0,1"
         };
         return commandArray;
+    }
+
+    @Override
+    protected String getCommandName() {
+        return "bowtie2";
     }
 }

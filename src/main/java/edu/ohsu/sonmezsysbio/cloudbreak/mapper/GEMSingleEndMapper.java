@@ -6,7 +6,6 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.SAMAlignmentReader;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reporter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -19,7 +18,7 @@ import java.util.Arrays;
  * Date: 1/23/13
  * Time: 10:08 AM
  */
-public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
+public class GEMSingleEndMapper extends SingleEndAlignerMapper {
     private static Logger logger = Logger.getLogger(GEMSingleEndMapper.class);
 
     { logger.setLevel(Level.INFO); }
@@ -60,8 +59,6 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
     public void close() throws IOException {
         super.close();
 
-        s1FileWriter.close();
-
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
         } else {
@@ -100,35 +97,8 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
         }
     }
 
-    private void waitForOpenSlot(int maxGemProcessesOnNode, Reporter reporter) throws IOException, InterruptedException {
-        while (true) {
-            // sleep for a random length of time between 0 and 60 seconds
-            long sleepTime = (long) (Math.random() * 1000 * 60);
-            logger.info("sleeping for " + sleepTime);
-            Thread.sleep(sleepTime);
-            int numRunningMappers = getNumRunningMappers();
-            logger.info("num running mappers: " + numRunningMappers);
-            if (numRunningMappers < maxGemProcessesOnNode) return;
-            reporter.progress();
-        }
-    }
-
-    private int getNumRunningMappers() throws IOException {
-        int numRunningMappers = 0;
-        Runtime runtime = Runtime.getRuntime();
-        String cmds[] = {"ps", "-C", getCommandName(), "--no-headers"};
-        Process proc = runtime.exec(cmds);
-        InputStream inputstream = proc.getInputStream();
-        InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
-        BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
-        while (bufferedreader.readLine() != null) {
-            numRunningMappers++;
-        }
-
-        return numRunningMappers;
-    }
-
-    private String getCommandName() {
+    @Override
+    protected String getCommandName() {
         return "gem-mapper";
     }
 
@@ -181,32 +151,6 @@ public class GEMSingleEndMapper extends SingleEndAlignmentMapper {
                 "0", "|", "./" + gem2SamExecutable, "-o", "map.result", "--expect-single-end-reads"})
         };
         return commandArray;
-    }
-
-    private class ReportableProcess {
-        private Process process;
-        private Reporter reporter;
-
-        public ReportableProcess(Process exec, Reporter reporter) {
-            this.process = exec;
-            this.reporter = reporter;
-        }
-
-        public int waitForWhileReporting() throws InterruptedException {
-            while (true) {
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    throw e;
-                }
-                try {
-                    int exitVal = process.exitValue();
-                    return exitVal;
-                } catch (IllegalThreadStateException e) {
-                    reporter.progress();
-                }
-            }
-        }
     }
 
 }

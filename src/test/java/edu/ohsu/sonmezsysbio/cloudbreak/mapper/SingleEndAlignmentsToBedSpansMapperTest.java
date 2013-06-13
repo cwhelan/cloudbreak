@@ -24,11 +24,11 @@ import static junit.framework.Assert.assertEquals;
  */
 public class SingleEndAlignmentsToBedSpansMapperTest {
 
-    SingleEndAlignmentsToBedSpansMapper mapper;
+    AlignmentsToBedSpansMapper mapper;
 
     @Before
     public void setup() {
-        mapper = new SingleEndAlignmentsToBedSpansMapper();
+        mapper = new AlignmentsToBedSpansMapper();
         mapper.setAlignmentReader(new NovoalignAlignmentReader());
     }
 

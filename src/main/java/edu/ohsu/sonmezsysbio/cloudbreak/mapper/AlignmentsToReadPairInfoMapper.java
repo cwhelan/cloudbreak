@@ -28,10 +28,10 @@ import java.util.Set;
  * Date: 4/6/12
  * Time: 1:03 PM
  */
-public class SingleEndAlignmentsToReadPairInfoMapper extends SingleEndAlignmentsMapper
+public class AlignmentsToReadPairInfoMapper extends AlignmentsMapper
         implements Mapper<Text, Text, GenomicLocationWithQuality, ReadPairInfo>, AlignmentRecordFilter {
 
-    private static org.apache.log4j.Logger logger = Logger.getLogger(SingleEndAlignmentsToReadPairInfoMapper.class);
+    private static org.apache.log4j.Logger logger = Logger.getLogger(AlignmentsToReadPairInfoMapper.class);
 
     { logger.setLevel(Level.INFO); }
 

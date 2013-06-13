@@ -1,7 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
 import edu.ohsu.sonmezsysbio.cloudbreak.ProbabilisticPairedAlignmentScorer;
-import edu.ohsu.sonmezsysbio.cloudbreak.SAMRecord;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.GFFFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
@@ -31,13 +30,13 @@ import static org.junit.Assert.assertTrue;
  * Date: 4/6/12
  * Time: 4:58 PM
  */
-public class SingleEndAlignmentsToReadPairInfoMapperTest {
+public class AlignmentsToReadPairInfoMapperTest {
 
-    private SingleEndAlignmentsToReadPairInfoMapper mapper;
+    private AlignmentsToReadPairInfoMapper mapper;
 
     @Before
     public void setup() {
-        mapper = new SingleEndAlignmentsToReadPairInfoMapper();
+        mapper = new AlignmentsToReadPairInfoMapper();
         mapper.setScorer(new ProbabilisticPairedAlignmentScorer());
         mapper.setAlignmentReader(new NovoalignAlignmentReader());
         mapper.setResolution(100);
@@ -162,7 +161,7 @@ public class SingleEndAlignmentsToReadPairInfoMapperTest {
     @Test
     public void testGetInputPath() throws Exception {
         assertEquals("/user/whelanch/cloudbreak/jcvi_chr2_lc/se_alignments_t180/part-00000",
-                SingleEndAlignmentsMapper.getInputPath("hdfs://bigbird51.csee.ogi.edu:50030/user/whelanch/cloudbreak/jcvi_chr2_lc/se_alignments_t180/part-00000"));
+                AlignmentsMapper.getInputPath("hdfs://bigbird51.csee.ogi.edu:50030/user/whelanch/cloudbreak/jcvi_chr2_lc/se_alignments_t180/part-00000"));
     }
 
     @Test

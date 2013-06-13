@@ -18,7 +18,7 @@ import java.io.IOException;
  * Date: 5/23/11
  * Time: 10:12 AM
  */
-public class SingleEndAlignmentsToBedSpansMapper extends SingleEndAlignmentsMapper implements Mapper<Text, Text, Text, Text> {
+public class AlignmentsToBedSpansMapper extends AlignmentsMapper implements Mapper<Text, Text, Text, Text> {
 
     private boolean matePairs;
     private Integer maxInsertSize = 500000;

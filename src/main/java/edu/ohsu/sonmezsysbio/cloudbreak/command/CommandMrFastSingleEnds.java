@@ -4,7 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.MrFastSingleEndMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
+import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -74,7 +74,7 @@ public class CommandMrFastSingleEnds extends BaseCloudbreakCommand {
         conf.set("mapred.output.compress", "true");
         conf.set("mapred.output.compression", "org.apache.hadoop.io.compress.SnappyCodec");
 
-        conf.setReducerClass(SingleEndAlignmentsToPairsReducer.class);
+        conf.setReducerClass(AlignmentsToPairsReducer.class);
 
         JobClient.runJob(conf);
 

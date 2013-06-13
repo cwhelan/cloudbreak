@@ -10,7 +10,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQuality;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQualityGroupingComparator;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocationWithQualitySortComparator;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentsToReadPairInfoMapper;
+import edu.ohsu.sonmezsysbio.cloudbreak.mapper.AlignmentsToReadPairInfoMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.partitioner.GenomicLocationWithQualityPartitioner;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
@@ -121,7 +121,7 @@ public class CommandDebugReadPairInfo extends BaseCloudbreakCommand {
 
         conf.set("pileupDeletionScore.minScore", String.valueOf(minScore));
 
-        conf.setMapperClass(SingleEndAlignmentsToReadPairInfoMapper.class);
+        conf.setMapperClass(AlignmentsToReadPairInfoMapper.class);
         conf.setMapOutputKeyClass(GenomicLocationWithQuality.class);
         conf.setMapOutputValueClass(ReadPairInfo.class);
         conf.setOutputKeyComparatorClass(GenomicLocationWithQualitySortComparator.class);

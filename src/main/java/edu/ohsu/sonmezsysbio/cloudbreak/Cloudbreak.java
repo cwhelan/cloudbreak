@@ -77,6 +77,9 @@ public class Cloudbreak extends Configured implements Tool
         CommandReadSAMFileIntoHDFS readSamFile = new CommandReadSAMFileIntoHDFS();
         jc.addCommand("readSAMFileIntoHDFS", readSamFile);
 
+        CommandBWAPairedEnds bwaPairedEnds  = new CommandBWAPairedEnds();
+        jc.addCommand("bwaPairedEnds", bwaPairedEnds);
+
         CommandNovoalignSingleEnds singleEnds  = new CommandNovoalignSingleEnds();
         jc.addCommand("alignSingleEnds", singleEnds);
 
@@ -92,7 +95,7 @@ public class Cloudbreak extends Configured implements Tool
         CommandMrFastSingleEnds mrFastSingleEnds  = new CommandMrFastSingleEnds();
         jc.addCommand("mrfastSingleEnds", mrFastSingleEnds);
 
-        CommandGMMFitSingleEndInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitSingleEndInsertSizes();
+        CommandGMMFitInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitInsertSizes();
         jc.addCommand("GMMFitSingleEndInsertSizes", GMMFitSingleEndInsertSizes);
 
         CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();

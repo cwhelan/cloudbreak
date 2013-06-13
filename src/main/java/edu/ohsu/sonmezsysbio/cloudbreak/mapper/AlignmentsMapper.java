@@ -17,9 +17,9 @@ import java.util.Map;
  * Date: 12/9/12
  * Time: 11:24 AM
  */
-public class SingleEndAlignmentsMapper extends CloudbreakMapReduceBase {
+public class AlignmentsMapper extends CloudbreakMapReduceBase {
 
-    private static org.apache.log4j.Logger logger = Logger.getLogger(SingleEndAlignmentsMapper.class);
+    private static org.apache.log4j.Logger logger = Logger.getLogger(AlignmentsMapper.class);
 
     protected boolean matePairs;
     protected Integer maxInsertSize = Cloudbreak.DEFAULT_MAX_INSERT_SIZE;

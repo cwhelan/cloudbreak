@@ -3,7 +3,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 import com.beust.jcommander.Parameter;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentSummaryMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentSummaryReducer;
+import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentSummaryReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -13,7 +13,6 @@ import org.apache.hadoop.mapred.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,9 +51,9 @@ public class CommandSummarizeAlignments implements CloudbreakCommand {
         conf.setMapOutputKeyClass(Text.class);
         conf.setMapOutputValueClass(Text.class);
 
-        conf.setCombinerClass(SingleEndAlignmentSummaryReducer.class);
+        conf.setCombinerClass(AlignmentSummaryReducer.class);
 
-        conf.setReducerClass(SingleEndAlignmentSummaryReducer.class);
+        conf.setReducerClass(AlignmentSummaryReducer.class);
 
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(Text.class);

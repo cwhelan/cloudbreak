@@ -6,7 +6,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.ReadGroupInfo;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.DFSFacade;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.ReadGroupInfoFileHelper;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentsToBedSpansMapper;
+import edu.ohsu.sonmezsysbio.cloudbreak.mapper.AlignmentsToBedSpansMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -105,7 +105,7 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
 
         conf.set("alignments.strip.chromosome.name.at.whitespace", String.valueOf(stripChromosomeNamesAtWhitespace));
 
-        conf.setMapperClass(SingleEndAlignmentsToBedSpansMapper.class);
+        conf.setMapperClass(AlignmentsToBedSpansMapper.class);
         conf.setMapOutputKeyClass(Text.class);
         conf.setMapOutputValueClass(Text.class);
 

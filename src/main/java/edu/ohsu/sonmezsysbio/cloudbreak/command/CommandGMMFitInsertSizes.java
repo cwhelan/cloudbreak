@@ -4,11 +4,10 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.ReadGroupInfo;
-import edu.ohsu.sonmezsysbio.cloudbreak.combiner.DifferentialScoreCutoffCombiner;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.DFSFacade;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.ReadGroupInfoFileHelper;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.*;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentsToReadPairInfoMapper;
+import edu.ohsu.sonmezsysbio.cloudbreak.mapper.AlignmentsToReadPairInfoMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.partitioner.GenomicLocationWithQualityPartitioner;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GMMScorerResults;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.ReadPairInfoToGMMResultsReducer;
@@ -31,8 +30,8 @@ import java.util.Map;
  * Date: 4/06/12
  * Time: 2:53 PM
  */
-@Parameters(separators = "=", commandDescription = "Calculate Deletion Scores Across the Genome via Incremental Belief Update")
-public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
+@Parameters(separators = "=", commandDescription = "Compute GMM features in each bin across the genome")
+public class CommandGMMFitInsertSizes extends BaseCloudbreakCommand {
 
     @Parameter(names = {"--inputFileDescriptor"}, required = true)
     String inputFileDescriptor;
@@ -151,7 +150,7 @@ public class CommandGMMFitSingleEndInsertSizes extends BaseCloudbreakCommand {
 
         conf.setInputFormat(SequenceFileInputFormat.class);
 
-        conf.setMapperClass(SingleEndAlignmentsToReadPairInfoMapper.class);
+        conf.setMapperClass(AlignmentsToReadPairInfoMapper.class);
         conf.setMapOutputKeyClass(GenomicLocationWithQuality.class);
         conf.setMapOutputValueClass(ReadPairInfo.class);
         conf.setOutputKeyComparatorClass(GenomicLocationWithQualitySortComparator.class);

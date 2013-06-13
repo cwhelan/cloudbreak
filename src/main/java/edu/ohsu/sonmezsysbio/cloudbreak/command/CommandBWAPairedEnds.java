@@ -3,7 +3,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.NovoalignSingleEndMapper;
+import edu.ohsu.sonmezsysbio.cloudbreak.mapper.BWAPairedEndMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
@@ -18,58 +18,61 @@ import java.net.URISyntaxException;
 /**
  * Created by IntelliJ IDEA.
  * User: cwhelan
- * Date: 5/18/11
- * Time: 2:01 PM
+ * Date: 6/12/13
+ * Time: 3:23 PM
  */
-@Parameters(separators = "=", commandDescription = "Run a novoalign mate pair alignment")
-public class CommandNovoalignSingleEnds extends BaseCloudbreakCommand {
-
+@Parameters(separators = "=", commandDescription = "Run a BWA alignment")
+public class CommandBWAPairedEnds extends BaseCloudbreakCommand {
     @Parameter(names = {"--HDFSDataDir"}, required = true)
     String hdfsDataDir;
 
     @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--referenceBasename"}, required = true)
     String reference;
-    
-    @Parameter(names = {"--threshold"}, required = true)
-    String threshold;
 
-    @Parameter(names = {"--qualityFormat"})
-    String qualityFormat = "ILMFQ";
+    @Parameter(names = {"--numExtraReports"}, required = true)
+    String numExtraReports = "0";
 
-    @Parameter(names = {"--HDFSPathToNovoalign"}, required = true)
-    String pathToNovoalign;
+    @Parameter(names = {"--HDFSPathToBWA"}, required = true)
+    String pathToBWA;
 
-    @Parameter(names = {"--HDFSPathToNovoalignLicense"})
-    String pathToNovoalignLicense;
+    @Parameter(names = {"--HDFSPathToXA2multi"})
+    String pathToXA2multi;
+
+    @Parameter(names = {"--maxProcessesOnNode"}, required = true)
+    int maxProcessesOnNode = 6;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
         JobConf conf = new JobConf(configuration);
 
-        conf.setJobName("Single End Alignment");
+        conf.setJobName("BWA Paired End Alignment");
         conf.setJarByClass(Cloudbreak.class);
         FileInputFormat.addInputPath(conf, new Path(hdfsDataDir));
         Path outputDir = new Path(hdfsAlignmentsDir);
         FileSystem.get(conf).delete(outputDir);
         FileOutputFormat.setOutputPath(conf, outputDir);
 
-        addDistributedCacheFile(conf, reference, "novoalign.reference");
+        conf.set("bwa.reference", reference);
+        addDistributedCacheFile(conf, reference + ".amb");
+        addDistributedCacheFile(conf, reference + ".ann");
+        addDistributedCacheFile(conf, reference + ".bwt");
+        addDistributedCacheFile(conf, reference + ".pac");
+        addDistributedCacheFile(conf, reference + ".sa");
 
-        addDistributedCacheFile(conf, pathToNovoalign, "novoalign.executable");
-        if (pathToNovoalignLicense != null) {
-            addDistributedCacheFile(conf, pathToNovoalignLicense, "novoalign.license");
-        }
+        addDistributedCacheFile(conf, pathToBWA, "bwa.executable");
+        addDistributedCacheFile(conf, pathToXA2multi, "bwa.xa2multi");
 
         DistributedCache.createSymlink(conf);
         conf.set("mapred.task.timeout", "3600000");
-        conf.set("novoalign.threshold", threshold);
-        conf.set("novoalign.quality.format", qualityFormat);
+        conf.set("bwa.num.extra.reports", numExtraReports);
+
+        conf.set("bwa.max.processes.on.node", String.valueOf(maxProcessesOnNode));
 
         conf.setInputFormat(SequenceFileInputFormat.class);
 
-        conf.setMapperClass(NovoalignSingleEndMapper.class);
+        conf.setMapperClass(BWAPairedEndMapper.class);
         conf.setMapOutputKeyClass(Text.class);
         conf.setMapOutputValueClass(Text.class);
         conf.setCompressMapOutput(true);
@@ -89,4 +92,5 @@ public class CommandNovoalignSingleEnds extends BaseCloudbreakCommand {
     public void run(Configuration conf) throws Exception {
         runHadoopJob(conf);
     }
+
 }
