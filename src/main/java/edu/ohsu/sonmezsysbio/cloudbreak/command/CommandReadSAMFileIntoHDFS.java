@@ -9,21 +9,15 @@ import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMRecord;
 import net.sf.samtools.SAMRecordIterator;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,19 +49,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         FileSystem hdfs = FileSystem.get(config);
         Path p = new Path(hdfsDataDir + "/" + outFileName);
 
-        HDFSWriter writer = new HDFSWriter();
-        if ("snappy".equals(compress)) {
-            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
-        } else {
-            FSDataOutputStream outputStream = hdfs.create(p);
-            BufferedWriter bufferedWriter = null;
-            if ("gzip".equals(compress)) {
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(outputStream)));
-            } else {
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-            }
-            writer.textFileWriter = bufferedWriter;
-        }
+        HDFSWriter writer = Cloudbreak.getHdfsWriter(config, hdfs, p, compress);
         try {
             readFile(writer, samFile);
         } finally {
@@ -75,6 +57,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         }
 
     }
+
     private void readFile(HDFSWriter writer, String samFile) throws IOException {
         SAMFileReader samFileReader = new SAMFileReader(new File(samFile));
         samFileReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);

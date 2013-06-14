@@ -102,46 +102,6 @@ public class GEMSingleEndMapper extends SingleEndAlignerMapper {
         return "gem-mapper";
     }
 
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
-
-    protected void readAlignments(BufferedReader stdInput, InputStream errorStream) throws IOException {
-        String outLine;
-        SAMAlignmentReader alignmentReader = new SAMAlignmentReader();
-        while ((outLine = stdInput.readLine()) != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("LINE: " + outLine);
-            }
-            if (outLine.startsWith("@"))  {
-                logger.debug("SAM HEADER LINE: " + outLine);
-                continue;
-            }
-
-            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
-            AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
-
-            if (! alignment.isMapped()) {
-                continue;
-            }
-
-            getOutput().collect(new Text(readPairId), new Text(outLine));
-        }
-
-        String errLine;
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-        while ((errLine = errorReader.readLine()) != null) {
-            logger.error("ERROR: " + errLine);
-        }
-    }
-
     protected static String[] buildCommandLine(String gemMapperExecutable, String gem2SamExecutable, String referenceBaseName,
                                                String path1, String numReports, String editDistance, String strata
     ) {

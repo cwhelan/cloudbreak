@@ -65,9 +65,7 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
                                     if (fields.length < 2) {
                                         throw new IllegalArgumentException("Bad alignment record for key " + key.toString() + ": " + read1Alignment);
                                     }
-                                    int flag = Integer.parseInt(fields[1]);
-                                    flag = flag | 0x1;
-                                    fields[1] = String.valueOf(flag);
+                                    addPairedFlag(fields[1]);
                                     System.out.println(Joiner.on("\t").join(fields));
                                 } else {
                                     System.out.println(read1Alignment);
@@ -81,9 +79,7 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
                                     // fix the flags to show this a is a paired read
                                     if (Cloudbreak.ALIGNER_GENERIC_SAM.equals(aligner)) {
                                         String[] fields = read2Alignment.split("\t");
-                                        int flag = Integer.parseInt(fields[1]);
-                                        flag = flag | 0x1;
-                                        fields[1] = String.valueOf(flag);
+                                        addPairedFlag(fields[1]);
                                         System.out.println(Joiner.on("\t").join(fields));
                                     } else {
                                         System.out.println(read2Alignment);
@@ -98,5 +94,11 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
             }
         }
 
+    }
+
+    private void addPairedFlag(String field) {
+        int flag = Integer.parseInt(field);
+        flag = flag | 0x1;
+        field = String.valueOf(flag);
     }
 }

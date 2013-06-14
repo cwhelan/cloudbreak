@@ -100,17 +100,6 @@ public class NovoalignSingleEndMapper extends SingleEndAlignerMapper {
         }
     }
 
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
-
     protected static String[] buildCommandLine(String novoalignExecutable, String reference, String path1, String threshold, String baseQualityFormat) {
         String[] commandArray = {
                 "./" + novoalignExecutable,

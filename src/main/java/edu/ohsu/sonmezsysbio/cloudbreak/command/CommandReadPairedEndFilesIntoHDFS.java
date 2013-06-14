@@ -2,6 +2,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
@@ -64,24 +65,12 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     public void copyReadFilesToHdfs() throws IOException {
         Configuration config = new Configuration();
 
-        FileSystem fileSystem = FileSystem.get(config);
+        FileSystem hdfs = FileSystem.get(config);
         Path p = new Path(hdfsDataDir + "/" + outFileName);
 
-        HDFSWriter writer = new HDFSWriter();
-        if ("snappy".equals(compress)) {
-            writer.seqFileWriter = SequenceFile.createWriter(fileSystem, config, p, LongWritable.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
-        } else {
-            FSDataOutputStream outputStream = fileSystem.create(p);
-            BufferedWriter bufferedWriter = null;
-            if ("gzip".equals(compress)) {
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(outputStream)));
-            } else {
-                bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-            }
-            writer.textFileWriter = bufferedWriter;
-        }
+        HDFSWriter writer = Cloudbreak.getHdfsWriter(config, hdfs, p, compress);
         try {
-            readFile(fileSystem, writer, readFile1, readFile2);
+            readFile(hdfs, writer, readFile1, readFile2);
         } finally {
             writer.close();
         }

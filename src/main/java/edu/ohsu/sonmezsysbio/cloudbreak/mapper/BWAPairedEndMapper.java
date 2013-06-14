@@ -103,47 +103,6 @@ public class BWAPairedEndMapper extends PairedEndAlignerMapper {
         readAlignments(stdInput, sampe.getErrorStream());
     }
 
-    protected void readAlignments(BufferedReader stdInput, InputStream errorStream) throws IOException {
-        String outLine;
-        SAMAlignmentReader alignmentReader = new SAMAlignmentReader();
-        while ((outLine = stdInput.readLine()) != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("LINE: " + outLine);
-            }
-            if (outLine.startsWith("@"))  {
-                logger.debug("SAM HEADER LINE: " + outLine);
-                continue;
-            }
-
-            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
-            AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
-
-            if (! alignment.isMapped()) {
-                continue;
-            }
-
-            getOutput().collect(new Text(readPairId), new Text(outLine));
-
-        }
-
-        String errLine;
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-        while ((errLine = errorReader.readLine()) != null) {
-            logger.error("ERROR: " + errLine);
-        }
-    }
-
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
-
     protected static String[] buildAlnCommandLine(String bwaExecutable, String referenceBaseName, String path, String numReports, String xa2multiExecutable) {
         String alnOptions = "-e 5";
         String[] commandArray = {

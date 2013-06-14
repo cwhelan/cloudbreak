@@ -3,10 +3,22 @@ package edu.ohsu.sonmezsysbio.cloudbreak;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import edu.ohsu.sonmezsysbio.cloudbreak.command.*;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * The main class for Cloudbreak. Run "hadoop jar" on the assembled jar file to get the list of commands and options.
@@ -39,6 +51,23 @@ public class Cloudbreak extends Configured implements Tool
     public static void main(String[] args) throws Exception {
         int res = ToolRunner.run(new Configuration(), new Cloudbreak(), args);
         System.exit(res);
+    }
+
+    public static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress) throws IOException {
+        HDFSWriter writer = new HDFSWriter();
+        if ("snappy".equals(compress)) {
+            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
+        } else {
+            FSDataOutputStream outputStream = hdfs.create(p);
+            BufferedWriter bufferedWriter = null;
+            if ("gzip".equals(compress)) {
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(outputStream)));
+            } else {
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+            }
+            writer.textFileWriter = bufferedWriter;
+        }
+        return writer;
     }
 
     public int run(String[] args) throws Exception {

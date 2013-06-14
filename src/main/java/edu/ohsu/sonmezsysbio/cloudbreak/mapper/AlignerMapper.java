@@ -1,5 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.mapper;
 
+import edu.ohsu.sonmezsysbio.cloudbreak.AlignmentRecord;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.SAMAlignmentReader;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
@@ -74,6 +76,47 @@ public abstract class AlignerMapper extends MapReduceBase implements Mapper<Long
             if (numRunningMappers < maxProcessesOnNode) return;
             reporter.progress();
         }
+    }
+
+    protected void readAlignments(BufferedReader stdInput, InputStream errorStream) throws IOException {
+        String outLine;
+        SAMAlignmentReader alignmentReader = new SAMAlignmentReader();
+        while ((outLine = stdInput.readLine()) != null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("LINE: " + outLine);
+            }
+            if (outLine.startsWith("@"))  {
+                logger.debug("SAM HEADER LINE: " + outLine);
+                continue;
+            }
+
+            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
+            AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
+
+            if (! alignment.isMapped()) {
+                continue;
+            }
+
+            getOutput().collect(new Text(readPairId), new Text(outLine));
+
+        }
+
+        String errLine;
+        BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+        while ((errLine = errorReader.readLine()) != null) {
+            logger.error("ERROR: " + errLine);
+        }
+    }
+
+    protected String printErrorStream(InputStream errorStream) throws IOException {
+        String outLine;BufferedReader stdErr = new BufferedReader(new
+                InputStreamReader(errorStream));
+        String firstErrorLine = null;
+        while ((outLine = stdErr.readLine()) != null) {
+            if (firstErrorLine == null) firstErrorLine = outLine;
+            logger.error(outLine);
+        }
+        return firstErrorLine;
     }
 
     static class FileAndWriter {
