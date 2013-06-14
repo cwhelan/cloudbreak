@@ -112,14 +112,22 @@ public class BWAPairedEndMapper extends PairedEndAlignerMapper {
     }
 
     protected static String[] buildSampeCommandLine(String bwaExecutable, String referenceBaseName, String path1, String path2, String numReports, String xa2multiExecutable) {
-        String[] commandArray = {
-                "./bwa", "sampe", referenceBaseName, path1 + ".sai", path2 + ".sai", path1, path2
-        };
+        String[] commandArray;
+        if (Integer.parseInt(numReports) == 0) {
+            commandArray = new String[]{
+                "./" + bwaExecutable, "sampe", referenceBaseName, path1 + ".sai", path2 + ".sai", path1, path2
+            };
+        } else {
+            commandArray = new String[]{
+                    "/bin/sh", "-c", Joiner.on(" ").join(new String[]
+                    {"./" + bwaExecutable, "sampe", "-n", numReports, "-N", numReports, referenceBaseName, path1 + ".sai", path2 + ".sai", path1, path2, "|", "./" + xa2multiExecutable})
+            };
+        }
         return commandArray;
     }
 
     @Override
     protected String getCommandName() {
-        return "bwa";
+        return bwaExecutable;
     }
 }

@@ -85,7 +85,12 @@ public class Cloudbreak extends Configured implements Tool
                 return 1;
             }
             CloudbreakCommand command = (CloudbreakCommand) jc.getCommands().get(parsedCommand).getObjects().get(0);
-            command.run(getConf());
+            try {
+                command.run(getConf());
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                jc.usage(jc.getParsedCommand());
+            }
 
             return 0;
         } catch (ParameterException pe) {

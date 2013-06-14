@@ -32,7 +32,7 @@ public class CommandBWAPairedEnds extends BaseCloudbreakCommand {
     @Parameter(names = {"--referenceBasename"}, required = true)
     String reference;
 
-    @Parameter(names = {"--numExtraReports"}, required = true)
+    @Parameter(names = {"--numExtraReports"})
     String numExtraReports = "0";
 
     @Parameter(names = {"--HDFSPathToBWA"}, required = true)
@@ -46,6 +46,10 @@ public class CommandBWAPairedEnds extends BaseCloudbreakCommand {
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
         JobConf conf = new JobConf(configuration);
+
+        if (Integer.parseInt(numExtraReports) != 0 && pathToXA2multi == null) {
+            throw new IllegalArgumentException("Need to specify path to xa2multi.pl if numExtraReports is not 0");
+        }
 
         conf.setJobName("BWA Paired End Alignment");
         conf.setJarByClass(Cloudbreak.class);
