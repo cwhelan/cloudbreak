@@ -10,9 +10,8 @@ set -u
 ## EXPERIMENT DETAILS
 ###############################################################################
 
-# locations of your FASTQ files in the local filesystem
-FASTQ_FILE_1=/g/whelanch/cloudbreak_data/venter_sim/new3_c15_i100_s30_rl100.read1.fastq.gz
-FASTQ_FILE_2=/g/whelanch/cloudbreak_data/venter_sim/new3_c15_i100_s30_rl100.read2.fastq.gz
+# locations of your name-sorted BAM file in the local filesystem
+BAM_FILE=/g/whelanch/cloudbreak_data/venter_sim/new3_c15_i100_s30_rl100.name_sort.bam
 
 # insert size stats of your library
 INSERT_SIZE=300
@@ -36,33 +35,13 @@ CLOUDBREAK_HOME=/g/whelanch/cloudbreak-${project.version}
 # Directory in HDFS to do the work in
 HDFS_EXPERIMENT_DIR=/user/whelanch/cloudbreak/venter_chr2_100bp_dip
 
-# Path to the BAW executables in HDFS
-HDFS_BWA_EXECUTABLE=/user/whelanch/executables/bwa
-HDFS_BWA_XA2MULTI_EXECUTABLE=/user/whelanch/executables/xa2multi.pl
-
-# Base path to the BWA reference. In the example below, the following files
-# should exist in HDFS:
-# /user/whelanch/indices/human_b36_male_chr2.fasta.amb
-# /user/whelanch/indices/human_b36_male_chr2.fasta.ann
-# /user/whelanch/indices/human_b36_male_chr2.fasta.bwt
-# /user/whelanch/indices/human_b36_male_chr2.fasta.pac
-# /user/whelanch/indices/human_b36_male_chr2.fasta.sa
-HDFS_GENOME_INDEX=/user/whelanch/indices/human_b36_male_chr2.fasta
-
 # The chromsome length index of your genome reference
 # created by running 'samtools faidx reference.fasta'
 HDFS_GENOME_INDEX_FAI=/user/whelanch/indices/human_b36_male_chr2.fasta.fai
 
 ###############################################################################
-# BWA ALIGNMENT PARAMETERS
-###############################################################################
-NUM_EXTRA_REPORTS=0
-BWA_MAPPER_MAX_PROCESSES_ON_NODE=6
-
-###############################################################################
 # CLOUDBREAK PARAMETERS
 ###############################################################################
-ALIGNMENT_REDUCE_TASKS=50
 GMM_REDUCE_TASKS=100
 MAX_INSERT=25000
 RESOLUTION=25
@@ -78,24 +57,11 @@ GENOTYPING_ALPHA_THRESHOLD=.35
 # experiment name
 NAME=cloudbreak_${LIBRARY_NAME}_${READ_GROUP_NAME}
 
-# read paired end files into HDFS
-echo "reading fastq files into HDFS"
-time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readPairedEndFilesIntoHDFS \
-    --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
-    --fastqFile1  $FASTQ_FILE_1 \
-    --fastqFile2  $FASTQ_FILE_2
-
-# run BWA alignments
-echo "Running BWA in Hadoop"
-time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS bwaPairedEnds \
-    --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
-    --HDFSAlignmentsDir $HDFS_EXPERIMENT_DIR/alignments/ \
-    --reference $HDFS_GENOME_INDEX \
-    --HDFSPathToBWA $HDFS_BWA_EXECUTABLE \
-    --HDFSPathToXA2multi $HDFS_BWA_XA2MULTI_EXECUTABLE \
-    --numExtraReports $NUM_EXTRA_REPORTS \
-    --maxProcessesOnNode $BWA_MAPPER_MAX_PROCESSES_ON_NODE
-
+# read BAM file into HDFS
+echo "reading BAM file into HDFS"
+time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readSAMFileIntoHDFS \
+    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments/ \
+    --samFile  $BAM_FILE
 
 # write a read group info file and copy into HDFS
 echo "creating readgroup file"
@@ -144,7 +110,3 @@ hadoop dfs -cat $HDFS_EXPERIMENT_DIR/ins_calls/part* | sort -k1,1 -k2,2n > ${NAM
 
 # genotype the calls based on avg w0
 cat ${NAME}_insertions.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < $GENOTYPING_ALPHA_THRESHOLD ? "Homozygous" : "Heterozygous")}' > ${NAME}_insertions_genotyped.bed
-
-## Optional step - export alignments from HDFS back to a BAM file in your local filesystem
-# hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar exportAlignmentsFromHDFS \
-#    --inputHDFSDir $HDFS_EXPERIMENT_DIR/alignments | samtools view -Sb - > cloudbreak_alignments.bam
