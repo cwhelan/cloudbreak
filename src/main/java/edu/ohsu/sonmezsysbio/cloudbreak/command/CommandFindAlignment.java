@@ -23,13 +23,13 @@ import java.net.URISyntaxException;
 @Parameters(separators = "=", commandDescription = "Find an alignment record that matches the input string")
 public class CommandFindAlignment extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS path to the directory that stores the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
+    @Parameter(names = {"--outputHDFSDir"}, required = true, description = "HDFS path to the directory in which to put the results")
     String ouptutHDFSDir;
 
-    @Parameter(names = {"--read"}, required = true)
+    @Parameter(names = {"--read"}, required = true, description = "Read name or portion of the read name to search for")
     String read;
 
     public void run(Configuration conf) throws Exception {

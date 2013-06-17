@@ -21,22 +21,22 @@ import java.net.URISyntaxException;
  * Date: 5/18/11
  * Time: 2:01 PM
  */
-@Parameters(separators = "=", commandDescription = "Run a bowtie2 alignment")
+@Parameters(separators = "=", commandDescription = "Run a bowtie2 alignment in single ended mode")
 public class CommandBowtie2SingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the bowtie 2 fasta reference file")
     String reference;
     
-    @Parameter(names = {"--numReports"}, required = true)
+    @Parameter(names = {"--numReports"}, required = true, description = "Max number of alignment hits to report with the -k option")
     String numReports;
 
-    @Parameter(names = {"--HDFSPathToBowtieAlign"}, required = true)
+    @Parameter(names = {"--HDFSPathToBowtieAlign"}, required = true, description = "HDFS path to the bowtie2 executable")
     String pathToBowtie2;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {

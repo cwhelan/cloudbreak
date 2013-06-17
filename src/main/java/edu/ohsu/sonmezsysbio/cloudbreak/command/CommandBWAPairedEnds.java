@@ -21,27 +21,27 @@ import java.net.URISyntaxException;
  * Date: 6/12/13
  * Time: 3:23 PM
  */
-@Parameters(separators = "=", commandDescription = "Run a BWA alignment")
+@Parameters(separators = "=", commandDescription = "Run a BWA paired-end alignment")
 public class CommandBWAPairedEnds extends BaseCloudbreakCommand {
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--referenceBasename"}, required = true)
+    @Parameter(names = {"--referenceBasename"}, required = true, description = "HDFS path of the FASTA file from which the BWA index files were generated.")
     String reference;
 
-    @Parameter(names = {"--numExtraReports"})
+    @Parameter(names = {"--numExtraReports"}, description = "If > 0, set -n and -N params to bwa sampe, and use xa2multi.pl to report multiple hits")
     String numExtraReports = "0";
 
-    @Parameter(names = {"--HDFSPathToBWA"}, required = true)
+    @Parameter(names = {"--HDFSPathToBWA"}, required = true, description = "HDFS path to the bwa executable")
     String pathToBWA;
 
-    @Parameter(names = {"--HDFSPathToXA2multi"})
+    @Parameter(names = {"--HDFSPathToXA2multi"}, description = "HDFS path to the bwa xa2multi.pl executable")
     String pathToXA2multi;
 
-    @Parameter(names = {"--maxProcessesOnNode"}, required = true)
+    @Parameter(names = {"--maxProcessesOnNode"}, required = true, description = "Ensure that only a max of this many BWA processes are running on each node at once.")
     int maxProcessesOnNode = 6;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {

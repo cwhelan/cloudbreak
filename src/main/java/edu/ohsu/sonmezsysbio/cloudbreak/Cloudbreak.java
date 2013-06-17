@@ -178,14 +178,14 @@ public class Cloudbreak extends Configured implements Tool
         CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
         jc.addCommand("sortGMMResults", commandSortGMMResults);
 
-        CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
-        jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
-
-        CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
-        jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
-
-        CommandExtractPositiveRegionsFromWig commandExtractPositiveRegionsFromWig = new CommandExtractPositiveRegionsFromWig();
-        jc.addCommand("extractPositiveRegionsFromWig", commandExtractPositiveRegionsFromWig);
+//        CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
+//        jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
+//
+//        CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
+//        jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
+//
+//        CommandExtractPositiveRegionsFromWig commandExtractPositiveRegionsFromWig = new CommandExtractPositiveRegionsFromWig();
+//        jc.addCommand("extractPositiveRegionsFromWig", commandExtractPositiveRegionsFromWig);
 
         jc.setProgramName("Cloudbreak");
         return jc;

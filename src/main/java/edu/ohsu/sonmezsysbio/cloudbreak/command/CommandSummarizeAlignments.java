@@ -1,6 +1,7 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentSummaryMapper;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentSummaryReducer;
@@ -20,11 +21,13 @@ import java.io.InputStreamReader;
  * Date: 4/16/12
  * Time: 1:39 PM
  */
+@Parameters(commandDescription = "Gather statistics about a set of alignments: number of reads, number of mappings, and total number of mismatches")
 public class CommandSummarizeAlignments implements CloudbreakCommand {
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path of the directory that holds the alignments")
     String inputHDFSDir;
 
-    @Parameter(names = {"--aligner"})
+    @Parameter(names = {"--aligner"}, description = "Format of the alignment records (" + Cloudbreak.ALIGNER_GENERIC_SAM + "|" + Cloudbreak.ALIGNER_MRFAST + "|" + Cloudbreak.ALIGNER_NOVOALIGN + ")")
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     public void run(Configuration conf) throws Exception {

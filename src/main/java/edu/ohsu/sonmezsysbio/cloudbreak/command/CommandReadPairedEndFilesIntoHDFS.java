@@ -26,36 +26,36 @@ import java.util.zip.GZIPOutputStream;
  * Date: 2/4/12
  * Time: 3:38 PM
  */
-@Parameters(separators = "=", commandDescription = "Load paired fastq files into HDFS")
+@Parameters(separators = "=", commandDescription = "Load paired FASTQ files into HDFS")
 public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
 
     private static org.apache.log4j.Logger log = Logger.getLogger(CommandReadPairedEndFilesIntoHDFS.class);
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory to load reads into")
     String hdfsDataDir;
 
-    @Parameter(names = {"--fastqFile1"}, required = true)
+    @Parameter(names = {"--fastqFile1"}, required = true, description = "File containing the first read in each pair")
     String readFile1;
 
-    @Parameter(names = {"--fastqFile2"}, required = true)
+    @Parameter(names = {"--fastqFile2"}, required = true, description = "File containing the second read in each pair")
     String readFile2;
 
-    @Parameter(names = {"--outFileName"})
+    @Parameter(names = {"--outFileName"}, description = "Filename of the prepped reads in HDFS")
     String outFileName = "reads";
 
-    @Parameter(names = {"--compress"})
+    @Parameter(names = {"--compress"}, description = "Compression codec to use on the reads stored in HDFS")
     String compress = "snappy";
 
-    @Parameter(names = {"--clipReadIdsAtWhitespace"})
+    @Parameter(names = {"--clipReadIdsAtWhitespace"}, description = "Whether to clip all readnames at the first whitespace (prevents trouble with some aligners)")
     boolean clipReadIdsAtWhitespace = true;
 
-    @Parameter(names = {"--trigramEntropyFilter"})
+    @Parameter(names = {"--trigramEntropyFilter"}, description = "Filter out read pairs where at least one read has a trigram entropy less than this value. -1 = no filter")
     Double trigramEntropyFilter = -1.0;
 
-    @Parameter(names = {"--filterBasedOnCasava18Flags"})
+    @Parameter(names = {"--filterBasedOnCasava18Flags"}, description = "Use the CASAVA 1.8 QC filter to filter out read pairs")
     boolean casava18filter = false;
 
-    @Parameter(names = {"--filesInHDFS"})
+    @Parameter(names = {"--filesInHDFS"}, description = "Use this flag if the BAM file has already been copied into HDFS")
     boolean filesInHDFS = false;
 
     private long numRecords;

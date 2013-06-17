@@ -33,56 +33,58 @@ import java.util.Map;
 @Parameters(separators = "=", commandDescription = "Compute GMM features in each bin across the genome")
 public class CommandGMMFitInsertSizes extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--inputFileDescriptor"}, required = true)
+    @Parameter(names = {"--inputFileDescriptor"}, required = true, description = "HDFS path to the directory that holds the alignment records")
     String inputFileDescriptor;
 
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
+    @Parameter(names = {"--outputHDFSDir"}, required = true, description = "HDFS path to the directory that will hold the output of the GMM procedure")
     String outputHDFSDir;
 
-    @Parameter(names = {"--maxInsertSize"})
+    @Parameter(names = {"--maxInsertSize"}, description = "Maximum insert size to consider (= max size of deletion detectable)")
     int maxInsertSize = Cloudbreak.DEFAULT_MAX_INSERT_SIZE;
 
-    @Parameter(names = {"--faidx"}, required=true)
+    @Parameter(names = {"--faidx"}, required=true, description = "HDFS path to the chromosome length file for the reference genome")
     String faidxFileName;
 
-    @Parameter(names = {"--chrFilter"})
+    // todo pass in a single filter in the format chr:start-end
+    @Parameter(names = {"--chrFilter"}, description = "If filter params are used, only consider alignments in the region chrFilter:startFilter-endFilter")
     String chrFilter;
 
-    @Parameter(names = {"--startFilter"})
+    @Parameter(names = {"--startFilter"}, description = "See chrFilter")
     Long startFilter;
 
-    @Parameter(names = {"--endFilter"})
+    @Parameter(names = {"--endFilter"}, description = "See chrFilter")
     Long endFilter;
 
-    @Parameter(names = {"--excludePairsMappingIn"})
+    @Parameter(names = {"--excludePairsMappingIn"}, description = "HDFS path to a BED file. Any reads mapped within those intervals will be excluded from the processing")
     String exclusionRegionsFileName;
 
-    @Parameter(names = {"--resolution"})
+    @Parameter(names = {"--resolution"}, description = "Size of the bins to tile the genome with")
     int resolution = Cloudbreak.DEFAULT_RESOLUTION;
 
-    @Parameter(names = {"--mapabilityWeighting"})
+    @Parameter(names = {"--mapabilityWeighting"}, description = "HDFS path to a BigWig file containing genome uniqness scores. If specified, Cloudbreak will weight reads by the uniqueness of the regions they mapped to")
     String mapabilityWeightingFileName;
 
     // todo: validate aligner choice before launching job
-    @Parameter(names = {"--aligner"})
+    @Parameter(names = {"--aligner"}, description="Format of the alignment records (" + Cloudbreak.ALIGNER_GENERIC_SAM + "|" + Cloudbreak.ALIGNER_MRFAST + "|" + Cloudbreak.ALIGNER_NOVOALIGN + ")")
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
-    @Parameter(names = {"--maxLogMapqDiff"})
+    @Parameter(names = {"--maxLogMapqDiff"}, description = "Adaptive quality score cutoff")
     Double maxLogMapqDiff = 5.0;
 
-    @Parameter(names = {"--minScore"})
+    @Parameter(names = {"--minScore"}, description = "Minimum alignment score (SAM tag AS); all reads with lower AS will be ignored")
     int minScore = -1;
 
-    @Parameter(names = {"--maxMismatches"})
+    @Parameter(names = {"--maxMismatches"}, description = "Max number of mismatches allowed in an alignment; all other will be ignored")
     int maxMismatches = -1;
 
-    @Parameter(names = {"--minCleanCoverage"})
+    @Parameter(names = {"--minCleanCoverage"}, description = "Minimum number of spanning read pairs for a bin to run the GMM fitting procedure")
     int minCleanCoverage = 3;
 
-    @Parameter(names = {"--legacyAlignments"})
+    // todo: remove?
+    @Parameter(names = {"--legacyAlignments"}, description = "Use data generated with an older version of Cloudbreak")
     boolean legacyAlignments = false;
 
-    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"})
+    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"}, description = "Clip chromosome names from the reference at the first whitespace so they match with alignment fields")
     boolean stripChromosomeNamesAtWhitespace = false;
 
     public void run(Configuration conf) throws IOException, URISyntaxException {

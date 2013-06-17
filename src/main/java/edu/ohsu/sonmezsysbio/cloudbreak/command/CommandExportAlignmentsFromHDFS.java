@@ -24,10 +24,10 @@ public class CommandExportAlignmentsFromHDFS implements CloudbreakCommand {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(CommandExportAlignmentsFromHDFS.class);
 
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path to the directory holding the alignment reccords")
     String inputHDFSDir;
 
-    @Parameter(names = {"--aligner"})
+    @Parameter(names = {"--aligner"}, description = "Format of the alignment records (" + Cloudbreak.ALIGNER_GENERIC_SAM + "|" + Cloudbreak.ALIGNER_MRFAST + "|" + Cloudbreak.ALIGNER_NOVOALIGN + ")")
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     public void run(Configuration conf) throws Exception {

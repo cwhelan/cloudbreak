@@ -28,37 +28,28 @@ import java.util.Map;
  * Date: 5/23/11
  * Time: 10:02 AM
  */
-@Parameters(separators = "=", commandDescription = "Dump all spanning read pairs with their deletion scores to BED format (debugging)")
+@Parameters(separators = "=", commandDescription = "Dump all read pairs that span the given region with their deletion scores to BED format (debugging)")
 public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--inputFileDescriptor"}, required = true)
+    @Parameter(names = {"--inputFileDescriptor"}, required = true, description = "HDFS path to the directory that holds the alignment records")
     String inputFileDescriptor;
 
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
-    String ouptutHDFSDir;
+    @Parameter(names = {"--outputHDFSDir"}, required = true, description = "HDFS path to the directory that will hold the output")
+    String outputHDFSDir;
 
-    @Parameter(names = {"--region"}, required = true)
+    @Parameter(names = {"--region"}, required = true, description = "region to find read pairs for, in chr:start-end format")
     String region;
 
-    @Parameter(names = {"--isMatePairs"})
-    boolean matePairs = false;
-
-    @Parameter(names = {"--maxInsertSize"})
+    @Parameter(names = {"--maxInsertSize"}, description = "Maximum possible insert size to consider")
     int maxInsertSize = 500000;
 
-    @Parameter(names = {"--aligner"})
+    @Parameter(names = {"--aligner"}, description="Format of the alignment records (" + Cloudbreak.ALIGNER_GENERIC_SAM + "|" + Cloudbreak.ALIGNER_MRFAST + "|" + Cloudbreak.ALIGNER_NOVOALIGN + ")")
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
-    @Parameter(names = {"--minScore"})
+    @Parameter(names = {"--minScore"}, description = "Minimum alignment score (SAM tag AS); all reads with lower AS will be ignored")
     int minScore = -1;
 
-    @Parameter(names = {"--targetIsize"}, required = true)
-    int targetIsize;
-
-    @Parameter(names = {"--targetIsizeSD"}, required = true)
-    int targetIsizeSD;
-
-    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"})
+    @Parameter(names = {"--stripChromosomeNamesAtWhitespace"}, description = "Clip chromosome names from the reference at the first whitespace so they match with alignment fields")
     boolean stripChromosomeNamesAtWhitespace = false;
 
     public void run(Configuration configuration) throws IOException, URISyntaxException {
@@ -83,7 +74,7 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
             FileInputFormat.addInputPath(conf, new Path(readGroupInfo.hdfsPath));
         }
 
-        Path outputDir = new Path(ouptutHDFSDir);
+        Path outputDir = new Path(outputHDFSDir);
         FileSystem.get(conf).delete(outputDir);
 
         FileOutputFormat.setOutputPath(conf, outputDir);
@@ -94,12 +85,8 @@ public class CommandDumpReadsWithScores extends BaseCloudbreakCommand {
         DistributedCache.createSymlink(conf);
 
         conf.set("cloudbreak.aligner", aligner);
-        conf.set("pileupDeletionScore.isMatePairs", String.valueOf(matePairs));
         conf.set("pileupDeletionScore.maxInsertSize", String.valueOf(maxInsertSize));
         conf.set("pileupDeletionScore.region", region);
-
-        conf.set("pileupDeletionScore.targetIsize", String.valueOf(targetIsize));
-        conf.set("pileupDeletionScore.targetIsizeSD", String.valueOf(targetIsizeSD));
 
         conf.set("pileupDeletionScore.minScore", String.valueOf(minScore));
 

@@ -1,5 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
+import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.cloud.CloudCluster;
 import org.apache.hadoop.conf.Configuration;
 
@@ -9,6 +10,7 @@ import org.apache.hadoop.conf.Configuration;
  * Date: 3/29/13
  * Time: 2:33 PM
  */
+@Parameters(commandDescription = "Use whirr to create a new cluster in the cloud using whirr/cloudbreak-whirr.properties")
 public class CommandLaunchCluster implements CloudbreakCommand {
 
     @Override

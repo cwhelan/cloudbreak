@@ -28,24 +28,22 @@ import java.util.zip.GZIPInputStream;
  * Time: 10:01 AM
  */
 public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
-    @Parameter(names = {"--targetIsize"}, required = true)
+    @Parameter(names = {"--targetIsize"}, required = true, description="Mean insert size of the library")
     int targetIsize;
-    @Parameter(names = {"--targetIsizeSD"}, required = true)
+    @Parameter(names = {"--targetIsizeSD"}, required = true, description = "Standard deviation of the insert size of the library")
     int targetIsizeSD;
-    @Parameter(names = {"--faidx"}, required = true)
+    @Parameter(names = {"--faidx"}, required = true, description = "Chromosome length file for the reference")
     String faidxFileName;
-    @Parameter(names = {"--threshold"})
+    @Parameter(names = {"--threshold"}, description = "Likelihood ratio threshold to call a variant")
     Double threshold = 1.68;
-    @Parameter(names = {"--medianFilterWindow"})
+    @Parameter(names = {"--medianFilterWindow"}, description = "Use a median filter of this size to clean up the results")
     int medianFilterWindow = 5;
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
+    @Parameter(names = {"--outputHDFSDir"}, required = true, description = "HDFS Directory to store the variant calls in")
     String outputHDFSDir;
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path to the GMM fit feature results")
     String inputHDFSDir;
-    @Parameter(names = {"--resolution"})
+    @Parameter(names = {"--resolution"}, description = "Size of the bins to tile the genome with")
     int resolution = Cloudbreak.DEFAULT_RESOLUTION;
-    @Parameter(names = {"--legacyAlignments"})
-    boolean legacyAlignments = false;
 
 
     protected abstract String getVariantType();
@@ -103,7 +101,6 @@ public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
     }
 
     protected void configureParams(JobConf conf) {
-        conf.set("legacy.alignments", String.valueOf(legacyAlignments));
         conf.set("target.isize", String.valueOf(targetIsize));
         conf.set("target.isizesd", String.valueOf(targetIsizeSD));
         conf.set("variant.lr.threshold", String.valueOf(threshold));

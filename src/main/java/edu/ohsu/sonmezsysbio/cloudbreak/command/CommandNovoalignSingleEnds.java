@@ -21,28 +21,28 @@ import java.net.URISyntaxException;
  * Date: 5/18/11
  * Time: 2:01 PM
  */
-@Parameters(separators = "=", commandDescription = "Run a novoalign mate pair alignment")
+@Parameters(separators = "=", commandDescription = "Run a Novoalign alignment in single ended mode")
 public class CommandNovoalignSingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the Novoalign reference index file")
     String reference;
     
-    @Parameter(names = {"--threshold"}, required = true)
+    @Parameter(names = {"--threshold"}, required = true, description = "Quality threshold to use for the -t parameter")
     String threshold;
 
-    @Parameter(names = {"--qualityFormat"})
+    @Parameter(names = {"--qualityFormat"}, description = "Quality score format of the FASTQ files")
     String qualityFormat = "ILMFQ";
 
-    @Parameter(names = {"--HDFSPathToNovoalign"}, required = true)
+    @Parameter(names = {"--HDFSPathToNovoalign"}, required = true, description = "HDFS path to the Novoalign executable")
     String pathToNovoalign;
 
-    @Parameter(names = {"--HDFSPathToNovoalignLicense"})
+    @Parameter(names = {"--HDFSPathToNovoalignLicense"}, description = "HDFS path to the Novoalign license filez")
     String pathToNovoalignLicense;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {

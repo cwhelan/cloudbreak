@@ -27,21 +27,21 @@ import java.util.zip.GZIPOutputStream;
  * Date: 3/16/12
  * Time: 9:30 AM
  */
-@Parameters(separators = "=", commandDescription = "Export Wig files and Bed file of deletions")
+@Parameters(separators = "=", commandDescription = "Export wig files that contain the GMM features across the entire genome")
 public class CommandExportGMMResults implements CloudbreakCommand {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(CommandExportGMMResults.class);
 
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path to the directory holding the GMM features")
     String inputHDFSDir;
 
-    @Parameter(names = {"--outputPrefix"}, required = true)
+    @Parameter(names = {"--outputPrefix"}, required = true, description = "Prefix of the names of the files to create")
     String outputPrefix;
 
-    @Parameter(names = {"--faidx"}, required = true)
+    @Parameter(names = {"--faidx"}, required = true, description = "Local path to the chromosome length file")
     private String faidxFileName;
 
-    @Parameter(names = {"--resolution"})
+    @Parameter(names = {"--resolution"}, description = "Bin size that the GMM features were computed for")
     int resolution = Cloudbreak.DEFAULT_RESOLUTION;
 
     public void run(Configuration conf) throws Exception {

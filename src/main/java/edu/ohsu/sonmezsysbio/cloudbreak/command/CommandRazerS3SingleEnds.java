@@ -24,25 +24,25 @@ import java.net.URISyntaxException;
 @Parameters(separators = "=", commandDescription = "Run a razerS3 alignment")
 public class CommandRazerS3SingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the reference (FASTA) file for the RazerS 3 mapper")
     String reference;
     
-    @Parameter(names = {"--numReports"}, required = true)
+    @Parameter(names = {"--numReports"}, required = true, description = "Max number of alignments to report for each read")
     String numReports;
 
-    @Parameter(names = {"--HDFSPathToRazerS3"}, required = true)
+    @Parameter(names = {"--HDFSPathToRazerS3"}, required = true, description = "HDFS path to the razers3 executable file")
     String pathToRazerS3;
 
-    @Parameter(names = {"--pctIdentity"}, required = true)
+    @Parameter(names = {"--pctIdentity"}, required = true, description = "RazerS 3 percent identity parameter (-i)")
     int pctIdentity;
 
-    @Parameter(names = {"--sensitivity"}, required = true)
+    @Parameter(names = {"--sensitivity"}, required = true, description = "RazerS 3 sensitivity parameter (-rr)")
     int sensitivity;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {

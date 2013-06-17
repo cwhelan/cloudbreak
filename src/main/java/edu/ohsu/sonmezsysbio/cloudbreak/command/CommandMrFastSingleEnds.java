@@ -24,19 +24,19 @@ import java.net.URISyntaxException;
 @Parameters(separators = "=", commandDescription = "Run a novoalign mate pair alignment")
 public class CommandMrFastSingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the mrfast reference index file")
     String reference;
 
-    @Parameter(names = {"--HDFSPathToMrfast"}, required = true)
+    @Parameter(names = {"--HDFSPathToMrfast"}, required = true, description = "HDFS path to the mrfast executable file")
     String pathToMrfast;
 
-    @Parameter(names = {"--threshold"})
+    @Parameter(names = {"--threshold"}, description = "MrFAST threshold parameter (-e)")
     int threshold = -1;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
