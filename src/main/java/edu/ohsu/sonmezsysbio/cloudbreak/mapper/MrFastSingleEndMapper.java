@@ -16,7 +16,7 @@ import java.util.zip.GZIPInputStream;
  * Date: 7/17/12
  * Time: 5:46 PM
  */
-public class MrFastSingleEndMapper extends SingleEndAlignmentMapper {
+public class MrFastSingleEndMapper extends SingleEndAlignerMapper {
 
     private static Logger logger = Logger.getLogger(MrFastSingleEndMapper.class);
 
@@ -38,8 +38,6 @@ public class MrFastSingleEndMapper extends SingleEndAlignmentMapper {
     @Override
     public void close() throws IOException {
         super.close();
-
-        s1FileWriter.close();
 
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
@@ -129,4 +127,8 @@ public class MrFastSingleEndMapper extends SingleEndAlignmentMapper {
         return (String[]) commandArgs.toArray(new String[1]);
     }
 
+    @Override
+    protected String getCommandName() {
+        return "mrfast";
+    }
 }

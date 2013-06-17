@@ -19,7 +19,7 @@ import java.util.List;
  * Date: 6/5/11
  * Time: 2:34 PM
  */
-public class SingleEndAlignmentsToPairsReducer extends MapReduceBase
+public class AlignmentsToPairsReducer extends MapReduceBase
         implements Reducer<Text,Text,Text,Text> {
 
     public void reduce(Text key, Iterator<Text> values,

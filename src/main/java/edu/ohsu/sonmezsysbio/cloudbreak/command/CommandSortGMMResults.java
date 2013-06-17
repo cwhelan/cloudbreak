@@ -19,13 +19,13 @@ import org.apache.hadoop.mapred.lib.IdentityReducer;
  * Time: 12:11 PM
  */
 
-@Parameters(separators = "=", commandDescription = "Sort and merge GMM Results")
+@Parameters(separators = "=", commandDescription = "Sort and merge GMM Results (use with one reducer to get all GMM feature results into a single file")
 public class CommandSortGMMResults extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path to the directory holding the GMM features")
     String inputHDFSDir;
 
-    @Parameter(names = {"--outputHDFSDir"}, required = true)
+    @Parameter(names = {"--outputHDFSDir"}, required = true, description = "Directory in which to put the results")
     String outputHDFSDir;
 
     public void run(Configuration conf) throws Exception {

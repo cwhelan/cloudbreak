@@ -1,6 +1,6 @@
 #!/usr/bin/env/python
 
-# this script can convert the data produced by the SingleEndAlignmentsToBedSpansMapper to the input
+# this script can convert the data produced by the AlignmentsToBedSpansMapper to the input
 # format requested by MoDIL:
 #
 # 1. Position of the end of the left read

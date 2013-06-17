@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Date: 5/21/11
  * Time: 5:36 PM
  */
-public class NovoalignSingleEndMapper extends SingleEndAlignmentMapper {
+public class NovoalignSingleEndMapper extends SingleEndAlignerMapper {
 
     private static Logger logger = Logger.getLogger(NovoalignSingleEndMapper.class);
 
@@ -44,8 +44,6 @@ public class NovoalignSingleEndMapper extends SingleEndAlignmentMapper {
     @Override
     public void close() throws IOException {
         super.close();
-
-        s1FileWriter.close();
 
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
@@ -102,17 +100,6 @@ public class NovoalignSingleEndMapper extends SingleEndAlignmentMapper {
         }
     }
 
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
-
     protected static String[] buildCommandLine(String novoalignExecutable, String reference, String path1, String threshold, String baseQualityFormat) {
         String[] commandArray = {
                 "./" + novoalignExecutable,
@@ -124,5 +111,10 @@ public class NovoalignSingleEndMapper extends SingleEndAlignmentMapper {
                 "-r", "Ex", "100", "-t", threshold, "-x", "10"
         };
         return commandArray;
+    }
+
+    @Override
+    protected String getCommandName() {
+        return "novoalign";
     }
 }

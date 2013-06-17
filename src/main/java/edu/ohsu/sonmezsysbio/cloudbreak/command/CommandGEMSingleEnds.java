@@ -4,8 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.GEMSingleEndMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.mapper.RazerS3SingleEndMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
+import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -25,31 +24,31 @@ import java.net.URISyntaxException;
 @Parameters(separators = "=", commandDescription = "Run a GEM alignment")
 public class CommandGEMSingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the GEM reference file")
     String reference;
 
-    @Parameter(names = {"--numReports"}, required = true)
+    @Parameter(names = {"--numReports"}, required = true, description = "Max number of hits to report from GEM")
     String numReports;
 
-    @Parameter(names = {"--HDFSPathToGEMMapper"}, required = true)
+    @Parameter(names = {"--HDFSPathToGEMMapper"}, required = true, description = "HDFS path to the gem-mapper executable")
     String pathToGEMMapper;
 
-    @Parameter(names = {"--HDFSPathToGEM2SAM"}, required = true)
+    @Parameter(names = {"--HDFSPathToGEM2SAM"}, required = true, description = "HDFS path to the gem-2-sam executable")
     String pathToGEM2SAM;
 
-    @Parameter(names = {"--editDistance"}, required = true)
+    @Parameter(names = {"--editDistance"}, required = true, description = "Edit distance parameter (-e) to use in the GEM mapping")
     int editDistance;
 
-    @Parameter(names = {"--strata"})
+    @Parameter(names = {"--strata"}, description = "Strata parameter (-s) to use in the GEM mapping")
     String strata = "all";
 
-    @Parameter(names = {"--maxProcessesOnNode"}, required = true)
+    @Parameter(names = {"--maxProcessesOnNode"}, required = true, description = "Maximum number of GEM mapping processes to run on one node simultaneously")
     int maxProcessesOnNode = 6;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
@@ -80,7 +79,7 @@ public class CommandGEMSingleEnds extends BaseCloudbreakCommand {
         conf.setMapOutputValueClass(Text.class);
         conf.setCompressMapOutput(true);
 
-        conf.setReducerClass(SingleEndAlignmentsToPairsReducer.class);
+        conf.setReducerClass(AlignmentsToPairsReducer.class);
         conf.setOutputFormat(SequenceFileOutputFormat.class);
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(Text.class);

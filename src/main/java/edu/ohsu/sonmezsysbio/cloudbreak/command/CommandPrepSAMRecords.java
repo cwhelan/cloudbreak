@@ -3,8 +3,8 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 import com.beust.jcommander.Parameter;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentSummaryMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentSummaryReducer;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
+//import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentSummaryReducer;
+//import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -53,7 +53,7 @@ public class CommandPrepSAMRecords implements CloudbreakCommand {
         conf.setMapOutputKeyClass(Text.class);
         conf.setMapOutputValueClass(Text.class);
 
-        conf.setReducerClass(SingleEndAlignmentsToPairsReducer.class);
+        //conf.setReducerClass(SingleEndAlignmentsToPairsReducer.class);
 
         conf.setOutputFormat(SequenceFileOutputFormat.class);
         conf.setOutputKeyClass(Text.class);

@@ -29,21 +29,21 @@ import java.util.zip.GZIPOutputStream;
  * Date: 10/15/12
  * Time: 10:50 AM
  */
-@Parameters(separators = "=", commandDescription = "Load paired fastq files into HDFS")
+@Parameters(separators = "=", commandDescription = "Load a SAM/BAM file into HDFS")
 public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(CommandReadSAMFileIntoHDFS.class);
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS Directory to hold the alignment data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--samFile"}, required = true)
+    @Parameter(names = {"--samFile"}, required = true, description = "Path to the SAM/BAM file on the local filesystem")
     String samFile;
 
-    @Parameter(names = {"--outFileName"})
-    String outFileName = "reads.txt";
+    @Parameter(names = {"--outFileName"}, description = "Filename to give the file in HDFS")
+    String outFileName = "alignments";
 
-    @Parameter(names = {"--compress"})
+    @Parameter(names = {"--compress"}, description = "Compression codec to use for the data")
     String compress = "snappy";
 
 

@@ -22,7 +22,7 @@ import java.util.Iterator;
  * number of mismatches in the best mappings for each read
  */
 
-public class SingleEndAlignmentSummaryReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+public class AlignmentSummaryReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
     public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
         Long[] totals = null;
         while (values.hasNext()) {

@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Date: 5/21/11
  * Time: 5:36 PM
  */
-public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
+public class Bowtie2SingleEndMapper extends SingleEndAlignerMapper {
 
     private static org.apache.log4j.Logger logger = Logger.getLogger(Bowtie2SingleEndMapper.class);
 
@@ -50,8 +50,6 @@ public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
     public void close() throws IOException {
         super.close();
 
-        s1FileWriter.close();
-
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
         } else {
@@ -70,46 +68,6 @@ public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
         readAlignments(stdInput, p.getErrorStream());
     }
 
-    protected void readAlignments(BufferedReader stdInput, InputStream errorStream) throws IOException {
-        String outLine;
-        SAMAlignmentReader alignmentReader = new SAMAlignmentReader();
-        while ((outLine = stdInput.readLine()) != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("LINE: " + outLine);
-            }
-            if (outLine.startsWith("@"))  {
-                logger.debug("SAM HEADER LINE: " + outLine);
-                continue;
-            }
-
-            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
-            AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
-
-            if (! alignment.isMapped()) {
-                continue;
-            }
-
-            getOutput().collect(new Text(readPairId), new Text(outLine));
-
-        }
-
-        String errLine;
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-        while ((errLine = errorReader.readLine()) != null) {
-            logger.error("ERROR: " + errLine);
-        }
-    }
-
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
 
     protected static String[] buildCommandLine(String bowtie2executable, String referenceBaseName, String path1, String numReports) {
         String[] commandArray = {
@@ -120,5 +78,10 @@ public class Bowtie2SingleEndMapper extends SingleEndAlignmentMapper {
                 "--very-sensitive-local", "--mm", "--score-min", "L,0,1"
         };
         return commandArray;
+    }
+
+    @Override
+    protected String getCommandName() {
+        return "bowtie2";
     }
 }

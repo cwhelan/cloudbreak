@@ -17,7 +17,7 @@ import java.util.Arrays;
  * Date: 5/21/11
  * Time: 5:36 PM
  */
-public class RazerS3SingleEndMapper extends SingleEndAlignmentMapper {
+public class RazerS3SingleEndMapper extends SingleEndAlignerMapper {
 
     private static Logger logger = Logger.getLogger(RazerS3SingleEndMapper.class);
 
@@ -55,8 +55,6 @@ public class RazerS3SingleEndMapper extends SingleEndAlignmentMapper {
     public void close() throws IOException {
         super.close();
 
-        s1FileWriter.close();
-
         if (! s1File.exists()) {
             logger.error("file does not exist: " + s1File.getPath());
         } else {
@@ -81,46 +79,6 @@ public class RazerS3SingleEndMapper extends SingleEndAlignmentMapper {
         readAlignments(stdInput, p.process.getErrorStream());
     }
 
-    protected void readAlignments(BufferedReader stdInput, InputStream errorStream) throws IOException {
-        String outLine;
-        SAMAlignmentReader alignmentReader = new SAMAlignmentReader();
-        while ((outLine = stdInput.readLine()) != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("LINE: " + outLine);
-            }
-            if (outLine.startsWith("@"))  {
-                logger.debug("SAM HEADER LINE: " + outLine);
-                continue;
-            }
-
-            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
-            AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
-
-            if (! alignment.isMapped()) {
-                continue;
-            }
-
-            getOutput().collect(new Text(readPairId), new Text(outLine));
-
-        }
-
-        String errLine;
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-        while ((errLine = errorReader.readLine()) != null) {
-            logger.error("ERROR: " + errLine);
-        }
-    }
-
-    private String printErrorStream(InputStream errorStream) throws IOException {
-        String outLine;BufferedReader stdErr = new BufferedReader(new
-                InputStreamReader(errorStream));
-        String firstErrorLine = null;
-        while ((outLine = stdErr.readLine()) != null) {
-            if (firstErrorLine == null) firstErrorLine = outLine;
-            logger.error(outLine);
-        }
-        return firstErrorLine;
-    }
 
     protected static String[] buildCommandLine(String razers3Executable, String referenceBaseName,
                                                String path1, String numReports, String pctIdentity,
@@ -136,29 +94,8 @@ public class RazerS3SingleEndMapper extends SingleEndAlignmentMapper {
         return commandArray;
     }
 
-    private class ReportableProcess {
-        private Process process;
-        private Reporter reporter;
-
-        public ReportableProcess(Process exec, Reporter reporter) {
-            this.process = exec;
-            this.reporter = reporter;
-        }
-
-        public int waitForWhileReporting() throws InterruptedException {
-            while (true) {
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    throw e;
-                }
-                try {
-                    int exitVal = process.exitValue();
-                    return exitVal;
-                } catch (IllegalThreadStateException e) {
-                    reporter.progress();
-                }
-            }
-        }
+    @Override
+    protected String getCommandName() {
+        return "razers3";
     }
 }

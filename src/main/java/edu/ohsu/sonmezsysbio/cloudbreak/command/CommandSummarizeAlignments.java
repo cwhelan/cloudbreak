@@ -1,9 +1,10 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.SingleEndAlignmentSummaryMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentSummaryReducer;
+import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentSummaryReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -13,7 +14,6 @@ import org.apache.hadoop.mapred.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,11 +21,13 @@ import java.io.Reader;
  * Date: 4/16/12
  * Time: 1:39 PM
  */
+@Parameters(commandDescription = "Gather statistics about a set of alignments: number of reads, number of mappings, and total number of mismatches")
 public class CommandSummarizeAlignments implements CloudbreakCommand {
-    @Parameter(names = {"--inputHDFSDir"}, required = true)
+
+    @Parameter(names = {"--inputHDFSDir"}, required = true, description = "HDFS path of the directory that holds the alignments")
     String inputHDFSDir;
 
-    @Parameter(names = {"--aligner"})
+    @Parameter(names = {"--aligner"}, description = "Format of the alignment records (" + Cloudbreak.ALIGNER_GENERIC_SAM + "|" + Cloudbreak.ALIGNER_MRFAST + "|" + Cloudbreak.ALIGNER_NOVOALIGN + ")")
     String aligner = Cloudbreak.ALIGNER_GENERIC_SAM;
 
     public void run(Configuration conf) throws Exception {
@@ -52,9 +54,9 @@ public class CommandSummarizeAlignments implements CloudbreakCommand {
         conf.setMapOutputKeyClass(Text.class);
         conf.setMapOutputValueClass(Text.class);
 
-        conf.setCombinerClass(SingleEndAlignmentSummaryReducer.class);
+        conf.setCombinerClass(AlignmentSummaryReducer.class);
 
-        conf.setReducerClass(SingleEndAlignmentSummaryReducer.class);
+        conf.setReducerClass(AlignmentSummaryReducer.class);
 
         conf.setOutputKeyClass(Text.class);
         conf.setOutputValueClass(Text.class);

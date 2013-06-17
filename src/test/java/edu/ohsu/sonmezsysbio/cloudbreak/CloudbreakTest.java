@@ -24,7 +24,7 @@ public class CloudbreakTest {
         } catch (ParameterException e) {
         }
 
-        String[] argv2 = { "alignSingleEnds",
+        String[] argv2 = { "novoalignSingleEnds",
                 "--HDFSDataDir", "/user/whelanch/tmp/svpipelinetest",
                 "--HDFSAlignmentsDir", "s_1_1_sequence.txt",
                 "--reference", "ref",

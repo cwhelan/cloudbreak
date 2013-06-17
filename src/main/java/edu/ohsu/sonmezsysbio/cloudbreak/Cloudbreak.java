@@ -3,10 +3,22 @@ package edu.ohsu.sonmezsysbio.cloudbreak;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import edu.ohsu.sonmezsysbio.cloudbreak.command.*;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * The main class for Cloudbreak. Run "hadoop jar" on the assembled jar file to get the list of commands and options.
@@ -41,6 +53,23 @@ public class Cloudbreak extends Configured implements Tool
         System.exit(res);
     }
 
+    public static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress) throws IOException {
+        HDFSWriter writer = new HDFSWriter();
+        if ("snappy".equals(compress)) {
+            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
+        } else {
+            FSDataOutputStream outputStream = hdfs.create(p);
+            BufferedWriter bufferedWriter = null;
+            if ("gzip".equals(compress)) {
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(outputStream)));
+            } else {
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+            }
+            writer.textFileWriter = bufferedWriter;
+        }
+        return writer;
+    }
+
     public int run(String[] args) throws Exception {
         JCommander jc = buildJCommander();
 
@@ -56,7 +85,12 @@ public class Cloudbreak extends Configured implements Tool
                 return 1;
             }
             CloudbreakCommand command = (CloudbreakCommand) jc.getCommands().get(parsedCommand).getObjects().get(0);
-            command.run(getConf());
+            try {
+                command.run(getConf());
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                jc.usage(jc.getParsedCommand());
+            }
 
             return 0;
         } catch (ParameterException pe) {
@@ -71,17 +105,22 @@ public class Cloudbreak extends Configured implements Tool
     protected static JCommander buildJCommander() {
         JCommander jc = new JCommander(new CommanderMain());
 
+        // commands for importing data into HDFS
         CommandReadPairedEndFilesIntoHDFS readFiles = new CommandReadPairedEndFilesIntoHDFS();
         jc.addCommand("readPairedEndFilesIntoHDFS", readFiles);
 
         CommandReadSAMFileIntoHDFS readSamFile = new CommandReadSAMFileIntoHDFS();
         jc.addCommand("readSAMFileIntoHDFS", readSamFile);
 
-        CommandPrepSAMRecords commandPrepSAMRecords = new CommandPrepSAMRecords();
-        jc.addCommand("prepSAMRecords", commandPrepSAMRecords);
+//        CommandPrepSAMRecords commandPrepSAMRecords = new CommandPrepSAMRecords();
+//        jc.addCommand("prepSAMRecords", commandPrepSAMRecords);
+
+        // Alignment commands
+        CommandBWAPairedEnds bwaPairedEnds  = new CommandBWAPairedEnds();
+        jc.addCommand("bwaPairedEnds", bwaPairedEnds);
 
         CommandNovoalignSingleEnds singleEnds  = new CommandNovoalignSingleEnds();
-        jc.addCommand("alignSingleEnds", singleEnds);
+        jc.addCommand("novoalignSingleEnds", singleEnds);
 
         CommandBowtie2SingleEnds bowtie2SingleEnds  = new CommandBowtie2SingleEnds();
         jc.addCommand("bowtie2SingleEnds", bowtie2SingleEnds);
@@ -95,45 +134,21 @@ public class Cloudbreak extends Configured implements Tool
         CommandMrFastSingleEnds mrFastSingleEnds  = new CommandMrFastSingleEnds();
         jc.addCommand("mrfastSingleEnds", mrFastSingleEnds);
 
-        CommandGMMFitSingleEndInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitSingleEndInsertSizes();
+        CommandExportAlignmentsFromHDFS commandExportAlignmentsFromHDFS = new CommandExportAlignmentsFromHDFS();
+        jc.addCommand("exportAlignmentsFromHDFS", commandExportAlignmentsFromHDFS);
+
+        // GMM fit command
+        CommandGMMFitInsertSizes GMMFitSingleEndInsertSizes = new CommandGMMFitInsertSizes();
         jc.addCommand("GMMFitSingleEndInsertSizes", GMMFitSingleEndInsertSizes);
 
-        CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
-        jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
-
-        CommandExportGMMResults exportGMMResults = new CommandExportGMMResults();
-        jc.addCommand("exportGMMResults", exportGMMResults);
-
+        // Variant extraction commands
         CommandExtractDeletionCalls commandExtractDeletionCalls = new CommandExtractDeletionCalls();
         jc.addCommand("extractDeletionCalls", commandExtractDeletionCalls);
 
         CommandExtractInsertionCalls commandExtractInsertionCalls = new CommandExtractInsertionCalls();
         jc.addCommand("extractInsertionCalls", commandExtractInsertionCalls);
 
-        CommandDumpReadsWithScores dumpReadsWithScores = new CommandDumpReadsWithScores();
-        jc.addCommand("dumpReadsWithScores", dumpReadsWithScores);
-
-        CommandExtractPositiveRegionsFromWig commandExtractPositiveRegionsFromWig = new CommandExtractPositiveRegionsFromWig();
-        jc.addCommand("extractPositiveRegionsFromWig", commandExtractPositiveRegionsFromWig);
-
-        CommandDebugReadPairInfo commandDebugReadPairInfo = new CommandDebugReadPairInfo();
-        jc.addCommand("debugReadPairInfo", commandDebugReadPairInfo);
-
-        CommandFindAlignment commandFindAlignment = new CommandFindAlignment();
-        jc.addCommand("findAlignment", commandFindAlignment);
-
-        CommandSummarizeAlignments commandSummarizeAlignments = new CommandSummarizeAlignments();
-        jc.addCommand("summarizeAlignments", commandSummarizeAlignments);
-
-        CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
-        jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
-
-        CommandExportAlignmentsFromHDFS commandExportAlignmentsFromHDFS = new CommandExportAlignmentsFromHDFS();
-        jc.addCommand("exportAlignmentsFromHDFS", commandExportAlignmentsFromHDFS);
-
-        CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
-        jc.addCommand("sortGMMResults", commandSortGMMResults);
-
+        // commands to help with running on a cloud provider
         CommandCopyToS3 commandCopyFileToS3 = new CommandCopyToS3();
         jc.addCommand("copyToS3", commandCopyFileToS3);
 
@@ -145,6 +160,35 @@ public class Cloudbreak extends Configured implements Tool
 
         CommandDestroyCluster commandDestroyCluster = new CommandDestroyCluster();
         jc.addCommand("destroyCluster", commandDestroyCluster);
+
+        // commands that let you export extra information from HDFS, for debugging or extra analysis
+        CommandSummarizeAlignments commandSummarizeAlignments = new CommandSummarizeAlignments();
+        jc.addCommand("summarizeAlignments", commandSummarizeAlignments);
+
+        CommandExportGMMResults exportGMMResults = new CommandExportGMMResults();
+        jc.addCommand("exportGMMResults", exportGMMResults);
+
+        CommandDumpReadsWithScores dumpReadsWithScores = new CommandDumpReadsWithScores();
+        jc.addCommand("dumpReadsWithScores", dumpReadsWithScores);
+
+        CommandDebugReadPairInfo commandDebugReadPairInfo = new CommandDebugReadPairInfo();
+        jc.addCommand("debugReadPairInfo", commandDebugReadPairInfo);
+
+        CommandFindAlignment commandFindAlignment = new CommandFindAlignment();
+        jc.addCommand("findAlignment", commandFindAlignment);
+
+        // utilties (unsupported)
+        CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
+        jc.addCommand("sortGMMResults", commandSortGMMResults);
+
+//        CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
+//        jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
+//
+//        CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
+//        jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
+//
+//        CommandExtractPositiveRegionsFromWig commandExtractPositiveRegionsFromWig = new CommandExtractPositiveRegionsFromWig();
+//        jc.addCommand("extractPositiveRegionsFromWig", commandExtractPositiveRegionsFromWig);
 
         jc.setProgramName("Cloudbreak");
         return jc;

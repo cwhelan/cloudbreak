@@ -15,8 +15,7 @@ import org.apache.hadoop.mapred.JobConf;
 @Parameters(separators = "=", commandDescription = "Extract insertion calls into a BED file")
 public class CommandExtractInsertionCalls extends VariantExtractionCommand implements CloudbreakCommand {
 
-    // filter out calls next to a bin with no coverage - recommend on for BWA alignments, off for other aligners
-    @Parameter(names = {"--noCovFilter"})
+    @Parameter(names = {"--noCovFilter"}, description = "filter out calls next to a bin with no coverage - recommend on for BWA alignments, off for other aligners")
     boolean noCovFilter = false;
 
     @Override

@@ -4,7 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.MrFastSingleEndMapper;
-import edu.ohsu.sonmezsysbio.cloudbreak.reducer.SingleEndAlignmentsToPairsReducer;
+import edu.ohsu.sonmezsysbio.cloudbreak.reducer.AlignmentsToPairsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -24,19 +24,19 @@ import java.net.URISyntaxException;
 @Parameters(separators = "=", commandDescription = "Run a novoalign mate pair alignment")
 public class CommandMrFastSingleEnds extends BaseCloudbreakCommand {
 
-    @Parameter(names = {"--HDFSDataDir"}, required = true)
+    @Parameter(names = {"--HDFSDataDir"}, required = true, description = "HDFS directory that holds the read data")
     String hdfsDataDir;
 
-    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true)
+    @Parameter(names = {"--HDFSAlignmentsDir"}, required = true, description = "HDFS directory to hold the alignment data")
     String hdfsAlignmentsDir;
 
-    @Parameter(names = {"--reference"}, required = true)
+    @Parameter(names = {"--reference"}, required = true, description = "HDFS path to the mrfast reference index file")
     String reference;
 
-    @Parameter(names = {"--HDFSPathToMrfast"}, required = true)
+    @Parameter(names = {"--HDFSPathToMrfast"}, required = true, description = "HDFS path to the mrfast executable file")
     String pathToMrfast;
 
-    @Parameter(names = {"--threshold"})
+    @Parameter(names = {"--threshold"}, description = "MrFAST threshold parameter (-e)")
     int threshold = -1;
 
     public void runHadoopJob(Configuration configuration) throws IOException, URISyntaxException {
@@ -74,7 +74,7 @@ public class CommandMrFastSingleEnds extends BaseCloudbreakCommand {
         conf.set("mapred.output.compress", "true");
         conf.set("mapred.output.compression", "org.apache.hadoop.io.compress.SnappyCodec");
 
-        conf.setReducerClass(SingleEndAlignmentsToPairsReducer.class);
+        conf.setReducerClass(AlignmentsToPairsReducer.class);
 
         JobClient.runJob(conf);
 

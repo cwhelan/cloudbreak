@@ -1,5 +1,6 @@
 package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
+import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.cloud.CloudCluster;
 import org.apache.hadoop.conf.Configuration;
 
@@ -9,6 +10,7 @@ import org.apache.hadoop.conf.Configuration;
  * Date: 3/30/13
  * Time: 11:33 AM
  */
+@Parameters(commandDescription = "Destroy the currently running whirr cluster")
 public class CommandDestroyCluster implements CloudbreakCommand {
 
     @Override
