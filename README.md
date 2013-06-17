@@ -1,4 +1,4 @@
-##cloudbreak
+#cloudbreak
 
 Cloudbreak is a Hadoop-based structural variation (SV) caller for Illumina
 paired-end DNA sequencing data. Currently Cloudbreak calls genomic insertions
@@ -10,7 +10,7 @@ read, in the Hadoop framework. It then contains Hadoop jobs for computing
 genomic features from the alignments, and for calling insertion and deletion
 variants from those features.
 
-#Building From Source
+##Building From Source
 
 To build the latest version of Cloudbreak, clone the gitub repository. You'll
 need to install Maven to build the executables. (http://maven.apache.org/)
@@ -21,7 +21,7 @@ Enter the top level directory of the Cloudbreak repository and tyoe command:
 This should compile the code, execute tests, and create the final jar file
 in the `target/` directory.
 
-#Dependencies
+##Dependencies
 
 Cloudbreak requires a cluster Hadoop 0.20.2 or Cloudera CDH3 to run (the older
 mapreduce API). If you don't have a Hadoop cluster, Cloudbreak can also use the
@@ -37,7 +37,7 @@ supported aligners:
 * Bowtie2: http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 * Novoalign: http://www.novocraft.com
 
-#User Guide
+##User Guide
 
 You can use Cloudbreak in several different ways, depending on whether you want
 to start with FASTQ files and use Hadoop to create alignments, or if you already
@@ -48,7 +48,7 @@ below that best fits your use case for more details on how to run that workflow.
 each scenario, we have created a template script that contains all of the steps
 and parameters you need, which you can modify for your particular data set.
 
-#Scenario 1: Compute alignments in Hadoop, using a local Hadoop cluster
+###Scenario 1: Compute alignments in Hadoop, using a local Hadoop cluster
 
 To install aligner dependencies for use by Cloudbreak, first generate the index
 for the genome reference you would like to run against. Then, copy all of the
@@ -99,7 +99,7 @@ it to a new location and edit the variables in the first three sections:
 "EXPERIMENT DETAILS", "LOCAL FILES AND DIRECTORIES", and
 "HDFS FILES AND DIRECTORIES".
 
-#Scenario 2: Call variants on existing alignments, using a local Hadoop cluster
+###Scenario 2: Call variants on existing alignments, using a local Hadoop cluster
 
 For this scenario you don't need to worry about having an aligner executable or
 aligner-generated reference in HDFS. You will however, need a chromosome length
@@ -128,7 +128,7 @@ To prepare alignments for Cloudbreak, they must be sorted by read name. If you a
 Templates for both of these scenarios are available in the script `Cloudbreak-variants-only.sh`
 located in the scripts directory of the Cloudbreak distribution.
 
-#Scenario 3: Compute alignments in Hadoop, using a cloud provider like EC2
+###Scenario 3: Compute alignments in Hadoop, using a cloud provider like EC2
 
 First, see the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below, and modify the file
 `cloudbreak-whirr.properties` to include your access credentials and the appropriate cluster
@@ -142,14 +142,14 @@ You can see an example workflow involving EC2 by examining the script
 uses Apache Whirr to launch an EC2 Hadoop cluster, copies the necessary executable files
 to EC2, and runs the algorithm.
 
-#Scenario 4: Call variants on existing alignments, using a cloud provider like EC2
+###Scenario 4: Call variants on existing alignments, using a cloud provider like EC2
 
 Again, please read the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below to learn how to
 update the `cloudbreak-whirr.properties` file with your credentials and cluster specifications. After that,
 follow the template in the script `Cloudbreak-EC2-whirr-variants-only.sh` to create a workflow
 involving calling variants in the cloud.
 
-#Output Files
+##Output Files
 
 The output from running Cloudbreak using one of the scripts above will be found in the files named
 
@@ -168,7 +168,7 @@ format of the files is tab-delimited with the following columns:
 *W: The average weight of the estimated GMM mixing parameter alpha, used in genotyping
 *GENOTYPE: The predicted genotype of the call
 
-#Running on a cloud provider like Amazon EC2
+##Running on a cloud provider like Amazon EC2
 
 Cloudbreak has limited support for automatically deploying a Hadoop cluster on
 cloud providers such as Amazon EC2, transferring your data there, running the Cloudbreak algorithm, and
@@ -196,11 +196,11 @@ are using to minimize the chance of having your instances terminated.
 Please consult Amazon's EC2 documentation and the documentation for Whirr for
 more information on how to configure and deploy clusters in the cloud.
 
-#Contact information
+##Contact information
 
 Please contact cwhelan@gmail.com with any questions on running cloudbreak.
 
-#Reference Guide
+##Reference Guide
 
 All of Cloudbreak's functionality is contained in the executable jar file in the
 directory where you unpacked the Cloudbreak distribution. Use the 'hadoop'
