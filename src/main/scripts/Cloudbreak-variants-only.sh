@@ -104,7 +104,8 @@ time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar extractInsert
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
     --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm/ \
-    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/ \
+    --noCovFilter
 
 hadoop dfs -cat $HDFS_EXPERIMENT_DIR/ins_calls/part* | sort -k1,1 -k2,2n > ${NAME}_insertions.bed
 

@@ -130,11 +130,28 @@ located in the scripts directory of the Cloudbreak distribution.
 
 #SCENARIO 3: Compute alignments in Hadoop, using a cloud provider like EC2
 
+First, see the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below, and modify the file
+`cloudbreak-whirr.properties` to include your access credentials and the appropriate cluster
+specifications. After that, the workflow is similar to the workflow described for scenario #1
+above, whith the additionals first steps of copying your reads and dependency files to the cloud and
+creating a cluster before processing begins, and then destroying the cluster after processing has
+completed.
+
+You can see an example workflow involving EC2 by examining the script
+`Cloudbreak-EC2-whirr.sh`. This begins by transferring your reads to Amazon S3. It then
+uses Apache Whirr to launch an EC2 Hadoop cluster, copies the necessary executable files
+to EC2, and runs the algorithm.
+
 #SCENARIO 4: Call variants on existing alignments, using a cloud provider like EC2
+
+Again, please read the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below to learn how to
+update the `cloudbreak-whirr.properties` file with your credentials and cluster specifications. After that,
+follow the template in the script `Cloudbreak-EC2-whirr-variants-only.sh` to create a workflow
+involving calling variants in the cloud.
 
 #OUTPUT FILES
 
-The output from Cloudbreak will be found in the files named
+The output from running Cloudbreak using one of the scripts above will be found in the files named
 
 *READ_GROUP_LIBRARY_dels_genotyped.bed
 *READ_GROUP_LIBRARY_ins_genotyped.bed
@@ -151,19 +168,15 @@ format of the files is tab-delimited with the following columns:
 *W: The average weight of the estimated GMM mixing parameter alpha, used in genotyping
 *GENOTYPE: The predicted genotype of the call
 
-#RUNNING ON EC2 WITH WHIRR
+#RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR
 
 Cloudbreak has limited support for automatically deploying a Hadoop cluster on
-Amazon EC2, transferring your data there, running the Cloudbreak algorithm, and
-downloading the results. Of course, renting compute time on EC2 costs money, so
-we recommend that you be familiar with EC2 usage and billing before attempting this.
-WE ARE NOT RESPONSIBLE FOR UNEXPECTED CHARGES THAT YOU MIGHT INCUR ON EC2.
+cloud providers such as Amazon EC2, transferring your data there, running the Cloudbreak algorithm, and
+downloading the results.
 
-You can see an example workflow involving EC2 by examining the script
-`Cloudbreak-EC2-whirr.sh`. This begins by transferring your reads to Amazon S3. It then
-uses Apache Whirr to launch an EC2 Hadoop cluster, copies the necessary executable files
-to EC2, and run the algorithm. Finally, Cloudbreak will download the results from
-the cloud and destroy the cluster.
+Of course, renting compute time on EC2 or other clouds costs money, so
+we recommend that you be familiar with the appropriate usage and billing before attempting this.
+WE ARE NOT RESPONSIBLE FOR UNEXPECTED CHARGES THAT YOU MIGHT INCUR ON EC2 OR OTHER CLOUD PROVIDERS.
 
 Many properties that affect the cluster created can be set in the file
 cloudbreak-whirr.properties. You will need to edit this file to set your AWS
@@ -172,6 +185,7 @@ private SSH keys to use to access the cluster. You can also control the number
 and type of nodes to include in the cluster. The default settings in the file
 create 40 nodes of type m2.xlarge, which is sufficient to fully process a 30X
 simulation of human chromsome 2, including read alignment, in about 90 minutes.
+We have only tested this capability using EC2; other cloud providers may not work as well.
 You can also direct Whirr to use Amazon EC2's spot instances, which are
 dramatically cheaper than on-demand instances, although they carry the risk of
 being terminated if your price is out-bid. Using recent spot pricing, it cost
@@ -193,6 +207,16 @@ directory where you unpacked the Cloudbreak distribution. Use the 'hadoop'
 command to run the jar file to ensure that the necessary Hadoop dependencies
 are available to Cloudbreak.
 
-Each command is detailed below; you can view usage information by typing
-'hadoop jar cloudbreak-${project.version}.jar' without any additional parameters:
+To invoke any Cloudbreak command, use a command line in this format:
+
+`hadoop cloudbreak-${project.version}.jar [options] [command] [command options]`
+
+Where `command` is the name of the command, `command options` are the arguments specific
+to that command, and `options` are general options, including options for how to run
+Hadoop jobs. For example, if you'd like to specify 50 reduce tasks
+for one of your commands, pass in `-Dmapred.reduce.tasks=50` as one of the general options. 
+
+Each command is detailed below and its options are listed below. You can view this information by typing
+'hadoop jar cloudbreak-${project.version}.jar' without any additional parameters.
+
 

@@ -69,7 +69,7 @@ RESOLUTION=25
 ALIGNER=sam
 MAX_MAPQ_DIFF=6
 MIN_CLEAN_COVERAGE=3
-DELETION_LR_THRESHOLD=1.98
+DELETION_LR_THRESHOLD=2.29
 DELETION_MEDIAN_FILTER_WINDOW=5
 INSERTION_LR_THRESHOLD=0.26
 INSERTION_MEDIAN_FILTER_WINDOW=5
@@ -138,7 +138,8 @@ time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar extractInsert
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
     --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm/ \
-    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/ \
+    --noCovFilter
 
 hadoop dfs -cat $HDFS_EXPERIMENT_DIR/ins_calls/part* | sort -k1,1 -k2,2n > ${NAME}_insertions.bed
 

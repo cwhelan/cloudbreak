@@ -12,19 +12,8 @@ CLOUDBREAK_HOME=/l2/users/whelanch/svpipeline/snapshots/cloudbreak-${CLOUDBREAK_
 WHIRR_PUBLIC_KEY=/g/whelanch/.ssh/id_rsa_whirr
 
 # Update the paths below for the locations of these files:
-FASTQ_FILE1=/l2/users/whelanch/gene_rearrange/data/jcvi/human_b36_male_chr2_venterindels_c15_i100_s30_rl100.read1.fastq.gz
-FASTQ_FILE2=/l2/users/whelanch/gene_rearrange/data/jcvi/human_b36_male_chr2_venterindels_c15_i100_s30_rl100.read2.fastq.gz
-BWA_EXECUTABLE=/g/whelanch/software/bwa/bin/bwa
-BWA_XA2MULTI_EXECUTABLE=/g/whelanch/software/bwa/bin/xa2multi.pl
+BAM_FILE=/l2/users/whelanch/gene_rearrange/data/jcvi/human_b36_male_chr2_venterindels_c15_i100_s30_rl100.bam
 
-# Base path to the BWA reference. In the example below, the following files
-# should also:
-# /g/whelanch/indices/human_b36_male_chr2.fasta.amb
-# /g/whelanch/indices/human_b36_male_chr2.fasta.ann
-# /g/whelanch/indices/human_b36_male_chr2.fasta.bwt
-# /g/whelanch/indices/human_b36_male_chr2.fasta.pac
-# /g/whelanch/indices/human_b36_male_chr2.fasta.sa
-BWA_GENOME_INDEX=/g/whelanch/indices/human_b36_male_chr2.fasta
 REFERENCE_FAIDX=/g/whelanch/genome_refs/10KG/hg18/human_b36_male_chr2.fasta.fai
 
 # update the name of your bucket on S3
@@ -65,9 +54,7 @@ NAME=cloudbreak_${LIBRARY_NAME}_${READ_GROUP_NAME}
 CLOUDBREAK_JAR_NAME=cloudbreak-${CLOUDBREAK_VERSION}.jar
 CLOUDBREAK_JAR=$CLOUDBREAK_HOME/$CLOUDBREAK_JAR_NAME
 
-FASTQ_FILE1_BASENAME=`basename $FASTQ_FILE1`
-FASTQ_FILE2_BASENAME=`basename $FASTQ_FILE2`
-REFERENCE_BWA_INDEX_BASENAME=`basename $BWA_GENOME_INDEX`
+BAM_FILE_BASENAME=`basename $BAM_FILE`
 REFERENCE_FAIDX_BASENAME=`basename $REFERENCE_FAIDX`
 
 echo "=================================="
@@ -75,24 +62,6 @@ echo "Copying files to S3"
 echo "=================================="
 echo "File: $CLOUDBREAK_JAR"
 hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $CLOUDBREAK_JAR
-echo "File: $FASTQ_FILE1"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $FASTQ_FILE1
-echo "File: $FASTQ_FILE2"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $FASTQ_FILE2
-echo "File: $BWA_EXECUTABLE"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_EXECUTABLE
-echo "File: $BWA_XA2MULTI_EXECUTABLE"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_XA2MULTI_EXECUTABLE
-echo "File: $BWA_GENOME_INDEX.amb"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_GENOME_INDEX.amb
-echo "File: $BWA_GENOME_INDEX.ann"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_GENOME_INDEX.ann
-echo "File: $BWA_GENOME_INDEX.bwt"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_GENOME_INDEX.bwt
-echo "File: $BWA_GENOME_INDEX.pac"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_GENOME_INDEX.pac
-echo "File: $BWA_GENOME_INDEX.sa"
-hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BWA_GENOME_INDEX.sa
 echo "File: $REFERENCE_FAIDX"
 hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $REFERENCE_FAIDX
 
@@ -118,33 +87,12 @@ echo "=================================="
 hadoop distcp s3n://$MY_BUCKET_NAME/ /user/cloudbreak
 
 echo "=================================="
-echo "Prepping reads for Cloudbreak"
+echo "Reading alignments into HDFS"
 echo "=================================="
+time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readSAMFileIntoHDFS \
+    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments/ \
+    --samFile  $BAM_FILE
 
-# execute readPairedEndFiles command on cluster
-TASK_TRACKER_INSTANCE1_ADDRESS=`cat ~/.whirr/cloudbreak/instances | grep 'hadoop-tasktracker' | head -1 | cut -f3`
-echo "running on $TASK_TRACKER_INSTANCE1_ADDRESS "
-
-ssh -o "StrictHostKeyChecking no" -i $WHIRR_PUBLIC_KEY ${TASK_TRACKER_INSTANCE1_ADDRESS} << EOF
-    hadoop fs -copyToLocal /user/cloudbreak/$CLOUDBREAK_JAR_NAME .
-    hadoop jar $CLOUDBREAK_JAR_NAME readPairedEndFilesIntoHDFS  \
-       --HDFSDataDir /user/cloudbreak/data/   \
-       --fastqFile1  /user/cloudbreak/$FASTQ_FILE1_BASENAME \
-       --fastqFile2  /user/cloudbreak/$FASTQ_FILE2_BASENAME \
-       --filesInHDFS
-EOF
-
-echo "=================================="
-echo "Running BWA Aligner"
-echo "=================================="
-time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS bwaPairedEnds \
-    --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
-    --HDFSAlignmentsDir $HDFS_EXPERIMENT_DIR/alignments/ \
-    --reference $HDFS_GENOME_INDEX \
-    --HDFSPathToBWA $HDFS_BWA_EXECUTABLE \
-    --HDFSPathToXA2multi $HDFS_BWA_XA2MULTI_EXECUTABLE \
-    --numExtraReports $NUM_EXTRA_REPORTS \
-    --maxProcessesOnNode $BWA_MAPPER_MAX_PROCESSES_ON_NODE
 
 echo "=================================="
 echo "Creating a readgroup file"
