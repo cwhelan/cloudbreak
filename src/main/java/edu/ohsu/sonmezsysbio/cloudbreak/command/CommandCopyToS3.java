@@ -21,9 +21,15 @@ public class CommandCopyToS3 implements CloudbreakCommand {
     @Parameter(names = {"--S3Bucket"}, required = true, description = "S3 Bucket to upload to")
     String s3bucket;
 
+    @Parameter(names = {"--destinationPath"}, description = "Key of the destination file in the bucket")
+    String destination;
+
     @Override
     public void run(Configuration conf) throws Exception {
-        new S3Uploader(s3bucket, fileName).uploadToS3();
+        if (destination == null) {
+            destination = fileName;
+        }
+        new S3Uploader(s3bucket, fileName, destination).uploadToS3();
     }
 
 

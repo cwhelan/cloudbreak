@@ -32,10 +32,12 @@ public class S3Uploader {
     private String bucketname;
     private String filename;
     private Upload upload;
+    private String key;
 
-    public S3Uploader(String bucketname, String filename) {
+    public S3Uploader(String bucketname, String filename, String dest) {
         this.bucketname = bucketname;
         this.filename = filename;
+        this.key = dest;
     }
 
     public void uploadToS3() throws InterruptedException {
@@ -81,7 +83,6 @@ public class S3Uploader {
 
             TransferManager tm = new TransferManager(s3);
             File file = new File(filename);
-            String key = file.getName();
 
             PutObjectRequest request = new PutObjectRequest(bucketname, key, file).withProgressListener(new ProgressListener() {
                 int percentComplete = 0;
