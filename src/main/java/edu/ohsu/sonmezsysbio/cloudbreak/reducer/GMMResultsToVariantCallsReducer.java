@@ -84,14 +84,6 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
 
         log.debug("applying median filter with window size " + medianFilterWindow);
         double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, lrThreshold);
-        if (log.isDebugEnabled()) {
-            if ("2".equals(faix.getNameForChromKey(chromosome))) {
-                for (int i = 64865; i < 64885; i++) {
-                    log.debug("pos " + i * resolution + ": " + values[i] + "\t" + filteredVals[i] + "\t" + muFileValues[i]);
-                }
-            }
-        }
-
         writePositiveRegions(filteredVals, textTextOutputCollector, faix.getNameForChromKey(chromosome), faix,
                 resolution, peakNum, muFileValues, w0Values,
                 targetIsize, targetIsizeSD, variantType, lrThreshold);
