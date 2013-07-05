@@ -181,6 +181,9 @@ public class Cloudbreak extends Configured implements Tool
         CommandSortGMMResults commandSortGMMResults = new CommandSortGMMResults();
         jc.addCommand("sortGMMResults", commandSortGMMResults);
 
+        CommandSplitSequenceFile commandSplitSequenceFile = new CommandSplitSequenceFile();
+        jc.addCommand("splitSequenceFile", commandSplitSequenceFile);
+
 //        CommandFindGenomicLocationsOverThreshold commandFindGenomicLocationsOverThreshold = new CommandFindGenomicLocationsOverThreshold();
 //        jc.addCommand("findGenomicLocationsOverThreshold", commandFindGenomicLocationsOverThreshold);
 //
