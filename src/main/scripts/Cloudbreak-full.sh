@@ -90,7 +90,7 @@ echo "Running BWA in Hadoop"
 time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS bwaPairedEnds \
     --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
     --HDFSAlignmentsDir $HDFS_EXPERIMENT_DIR/alignments/ \
-    --reference $HDFS_GENOME_INDEX \
+    --referenceBasename $HDFS_GENOME_INDEX \
     --HDFSPathToBWA $HDFS_BWA_EXECUTABLE \
     --HDFSPathToXA2multi $HDFS_BWA_XA2MULTI_EXECUTABLE \
     --numExtraReports $NUM_EXTRA_REPORTS \

@@ -69,6 +69,8 @@ FASTQ_FILE1_BASENAME=`basename $FASTQ_FILE1`
 FASTQ_FILE2_BASENAME=`basename $FASTQ_FILE2`
 REFERENCE_BWA_INDEX_BASENAME=`basename $BWA_GENOME_INDEX`
 REFERENCE_FAIDX_BASENAME=`basename $REFERENCE_FAIDX`
+BWA_EXECUTABLE_BASENAME=`basename $BWA_EXECUTABLE`
+BWA_XA2MULTI_BASENAME=`basename $BWA_XA2MULTI_EXECUTABLE`
 
 echo "=================================="
 echo "Copying files to S3"
@@ -117,6 +119,8 @@ echo "Copying from S3"
 echo "=================================="
 hadoop distcp s3n://$MY_BUCKET_NAME/ /user/cloudbreak
 
+HDFS_EXPERIMENT_DIR=/user/cloudbreak
+
 echo "=================================="
 echo "Prepping reads for Cloudbreak"
 echo "=================================="
@@ -140,9 +144,9 @@ echo "=================================="
 time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS bwaPairedEnds \
     --HDFSDataDir $HDFS_EXPERIMENT_DIR/data/ \
     --HDFSAlignmentsDir $HDFS_EXPERIMENT_DIR/alignments/ \
-    --reference $HDFS_GENOME_INDEX \
-    --HDFSPathToBWA $HDFS_BWA_EXECUTABLE \
-    --HDFSPathToXA2multi $HDFS_BWA_XA2MULTI_EXECUTABLE \
+    --referenceBasename $HDFS_EXPERIMENT_DIR/$REFERENCE_BWA_INDEX_BASENAME \
+    --HDFSPathToBWA $HDFS_EXPERIMENT_DIR/$BWA_EXECUTABLE_BASENAME \
+    --HDFSPathToXA2multi $HDFS_EXPERIMENT_DIR/$BWA_XA2MULTI_BASENAME \
     --numExtraReports $NUM_EXTRA_REPORTS \
     --maxProcessesOnNode $BWA_MAPPER_MAX_PROCESSES_ON_NODE
 
@@ -151,27 +155,27 @@ echo "Creating a readgroup file"
 echo "=================================="
 echo "creating readgroup file"
 echo "$READ_GROUP_NAME	$LIBRARY_NAME	$INSERT_SIZE	$INSERT_SIZE_SD	false	/user/cloudbreak/alignments" >> readGroupInfo.txt
-hadoop dfs -copyFromLocal readGroupInfo.txt /user/cloudbreak/readGroupInfo.txt
+hadoop dfs -copyFromLocal readGroupInfo.txt $HDFS_EXPERIMENT_DIR/readGroupInfo.txt
 
 hadoop jar $CLOUDBREAK_JAR -Dmapred.reduce.tasks=$GMM_REDUCE_TASKS GMMFitSingleEndInsertSizes \
-    --inputFileDescriptor /user/cloudbreak/readGroupInfo.txt  \
-    --outputHDFSDir /user/cloudbreak/gmm_features/ \
-    --faidx /user/cloudbreak/$REFERENCE_FAIDX_BASENAME \
+    --inputFileDescriptor $HDFS_EXPERIMENT_DIR/readGroupInfo.txt  \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/gmm_features/ \
+    --faidx $HDFS_EXPERIMENT_DIR/$REFERENCE_FAIDX_BASENAME \
     --maxInsertSize $MAX_INSERT    --resolution $RESOLUTION --aligner sam    --maxLogMapqDiff $MAX_MAPQ_DIFF --minCleanCoverage $MIN_CLEAN_COVERAGE
 
 echo "=================================="
 echo "Extracting Deletion Calls"
 echo "=================================="
 time hadoop jar $CLOUDBREAK_JAR extractDeletionCalls \
-    --faidx /user/cloudbreak/$REFERENCE_FAIDX_BASENAME  \
+    --faidx $HDFS_EXPERIMENT_DIR/$REFERENCE_FAIDX_BASENAME  \
     --threshold $DELETION_LR_THRESHOLD \
     --medianFilterWindow $DELETION_MEDIAN_FILTER_WINDOW \
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
-    --inputHDFSDir /user/cloudbreak/gmm_features/ \
-    --outputHDFSDir /user/cloudbreak/del_calls/
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm_features/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/del_calls/
 
-hadoop dfs -cat /user/cloudbreak/del_calls/part* | sort -k1,1 -k2,2n > ${NAME}_dels.bed
+hadoop dfs -cat $HDFS_EXPERIMENT_DIR/del_calls/part* | sort -k1,1 -k2,2n > ${NAME}_dels.bed
 
 # genotype the calls based on avg w0
 cat ${NAME}_dels.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_deletions_genotyped.bed
@@ -180,15 +184,15 @@ echo "=================================="
 echo "Extracting Insertion Calls"
 echo "=================================="
 time hadoop jar $CLOUDBREAK_JAR extractInsertionCalls \
-    --faidx /user/cloudbreak/$REFERENCE_FAIDX_BASENAME \
+    --faidx $HDFS_EXPERIMENT_DIR/$REFERENCE_FAIDX_BASENAME \
     --threshold $INSERTION_LR_THRESHOLD \
     --medianFilterWindow $INSERTION_MEDIAN_FILTER_WINDOW \
     --targetIsize $INSERT_SIZE \
     --targetIsizeSD $INSERT_SIZE_SD \
-    --inputHDFSDir /user/cloudbreak/gmm_features/ \
-    --outputHDFSDir /user/cloudbreak/ins_calls/
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/gmm_features/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/ins_calls/
 
-hadoop dfs -cat /user/cloudbreak/ins_calls/part* | sort -k1,1 -k2,2n > ${NAME}_insertions.bed
+hadoop dfs -cat $HDFS_EXPERIMENT_DIR/ins_calls/part* | sort -k1,1 -k2,2n > ${NAME}_insertions.bed
 
 # genotype the calls based on avg w0
 cat ${NAME}_insertions.bed | awk 'NR != 1 {OFS="\t"; print $1,$2,$3,$4,$5,$10,($10 < .2 ? "Homozygous" : "Heterozygous")}' > ${NAME}_insertions_genotyped.bed
