@@ -2,9 +2,9 @@ package edu.ohsu.sonmezsysbio.cloudbreak.command;
 
 import com.beust.jcommander.Parameter;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
-import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
-import edu.ohsu.sonmezsysbio.cloudbreak.file.WigFileHelper;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.*;
 import edu.ohsu.sonmezsysbio.cloudbreak.mapper.GMMResultsToChromosomeMapper;
+import edu.ohsu.sonmezsysbio.cloudbreak.partitioner.GenomicLocationChromosomePartitioner;
 import edu.ohsu.sonmezsysbio.cloudbreak.reducer.GMMResultsToVariantCallsReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
@@ -16,10 +16,6 @@ import org.apache.hadoop.mapred.*;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Created by IntelliJ IDEA.
@@ -86,9 +82,10 @@ public abstract class VariantExtractionCommand extends BaseCloudbreakCommand {
         conf.setInputFormat(SequenceFileInputFormat.class);
 
         conf.setMapperClass(GMMResultsToChromosomeMapper.class);
-        conf.setMapOutputKeyClass(IntWritable.class);
+        conf.setMapOutputKeyClass(GenomicLocation.class);
         conf.setMapOutputValueClass(Text.class);
-
+        conf.setPartitionerClass(GenomicLocationChromosomePartitioner.class);
+        conf.setOutputValueGroupingComparator(GenomicLocationChromosomeGroupingComparator.class);
         conf.setReducerClass(GMMResultsToVariantCallsReducer.class);
 
         conf.setOutputKeyClass(Text.class);

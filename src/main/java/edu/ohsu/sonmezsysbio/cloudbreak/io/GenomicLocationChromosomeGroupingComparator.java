@@ -8,22 +8,18 @@ import java.io.IOException;
 /**
  * Created by IntelliJ IDEA.
  * User: cwhelan
- * Date: 8/30/12
- * Time: 2:14 PM
+ * Date: 8/22/12
+ * Time: 1:22 PM
  */
+public class GenomicLocationChromosomeGroupingComparator implements RawComparator<GenomicLocation> {
 
-/**
- * Compares GenomicLocationWithQuality, ranked by their pMappingCorrect for each location. For MapReduce
- * secondary sorting.
- */
-public class GenomicLocationWithQualitySortComparator implements RawComparator<GenomicLocationWithQuality> {
-    private final GenomicLocationWithQuality key1;
-    private final GenomicLocationWithQuality key2;
+    private final GenomicLocation key1;
+    private final GenomicLocation key2;
     private final DataInputBuffer buffer;
 
-    public GenomicLocationWithQualitySortComparator() {
-        key1 = new GenomicLocationWithQuality();
-        key2 = new GenomicLocationWithQuality();
+    public GenomicLocationChromosomeGroupingComparator() {
+        key1 = new GenomicLocation();
+        key2 = new GenomicLocation();
         buffer = new DataInputBuffer();
     }
 
@@ -42,14 +38,9 @@ public class GenomicLocationWithQualitySortComparator implements RawComparator<G
         return compare(key1, key2);                   // compare them
     }
 
-    public int compare(GenomicLocationWithQuality o1, GenomicLocationWithQuality o2) {
+    public int compare(GenomicLocation o1, GenomicLocation o2) {
         if (o1.chromosome < o2.chromosome) return  -1;
         if (o1.chromosome > o2.chromosome) return  1;
-        if (o1.pos < o2.pos) return -1;
-        if (o1.pos > o2.pos) return 1;
-        if (o1.pMappingCorrect > o2.pMappingCorrect) return -1;
-        if (o1.pMappingCorrect < o2.pMappingCorrect) return 1;
         return 0;
     }
-
 }

@@ -190,9 +190,6 @@ public class Cloudbreak extends Configured implements Tool
 //        CommandExportWigAndBedFiles exportWigAndBedFiles = new CommandExportWigAndBedFiles();
 //        jc.addCommand("exportWigAndBedFiles", exportWigAndBedFiles);
 //
-//        CommandExtractPositiveRegionsFromWig commandExtractPositiveRegionsFromWig = new CommandExtractPositiveRegionsFromWig();
-//        jc.addCommand("extractPositiveRegionsFromWig", commandExtractPositiveRegionsFromWig);
-
         jc.setProgramName("Cloudbreak");
         return jc;
     }

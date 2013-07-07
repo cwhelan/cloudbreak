@@ -3,6 +3,7 @@ package edu.ohsu.sonmezsysbio.cloudbreak.reducer;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.CloudbreakMapReduceBase;
 import edu.ohsu.sonmezsysbio.cloudbreak.file.FaidxFileHelper;
+import edu.ohsu.sonmezsysbio.cloudbreak.io.GenomicLocation;
 import edu.ohsu.sonmezsysbio.cloudbreak.util.MedianFilter;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -22,7 +23,7 @@ import java.util.Iterator;
  * Date: 3/11/13
  * Time: 4:29 PM
  */
-public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase implements Reducer<IntWritable, Text, Text, Text> {
+public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase implements Reducer<GenomicLocation, Text, Text, Text> {
 
     private static Logger log = Logger.getLogger(GMMResultsToVariantCallsReducer.class);
 
@@ -38,68 +39,96 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
     private boolean insNoCovFilter;
 
     @Override
-    public void reduce(IntWritable chromosome,
+    public void reduce(GenomicLocation genomicLocation,
                        Iterator<Text> gmmScorerResultsIterator,
                        OutputCollector<Text, Text> textTextOutputCollector,
                        Reporter reporter) throws IOException {
-        exportRegionsOverThresholdFromWig(gmmScorerResultsIterator, textTextOutputCollector, lrThreshold,
-                medianFilterWindow, targetIsize, targetIsizeSD, variantType, (short) chromosome.get());
+        callVariants(gmmScorerResultsIterator, textTextOutputCollector, lrThreshold,
+                medianFilterWindow, targetIsize, targetIsizeSD, variantType, (short) genomicLocation.chromosome);
 
     }
 
-    private void exportRegionsOverThresholdFromWig(Iterator<Text> gmmScorerResultsIterator,
-                                                   OutputCollector<Text, Text> textTextOutputCollector,
-                                                   double lrThreshold, int medianFilterWindow,
-                                                   int targetIsize, int targetIsizeSD, String variantType,
-                                                   short chromosome) throws IOException {
+    private void callVariants(Iterator<Text> gmmScorerResultsIterator,
+                              OutputCollector<Text, Text> textTextOutputCollector,
+                              double lrThreshold, int medianFilterWindow,
+                              int targetIsize, int targetIsizeSD, String variantType,
+                              short chromosome) throws IOException {
         Long lengthForChromName = faix.getLengthForChromName(faix.getNameForChromKey(chromosome));
         int numTiles = (int) Math.ceil(((double) lengthForChromName) / resolution);
-        double[] values = new double[numTiles];;
         log.debug("computing results for chr " + chromosome + ", num tiles = " + numTiles);
-
         int peakNum = 1;
 
-        double[] muFileValues = new double[numTiles];;
-        double[] w0Values = new double[numTiles];
-        // -1 values in w0 indicate a bin in which we had 0 coverage or less than
-        // min coverage
-        for (int i = 0; i < w0Values.length; i++) {
-            w0Values[i] = -1;
-        }
-
-        while (gmmScorerResultsIterator.hasNext()) {
-            String[] fields = gmmScorerResultsIterator.next().toString().split("\t");
-            long pos = Long.valueOf(fields[0]);
-            if (pos > lengthForChromName) continue;
-            double val = Double.valueOf(fields[1]);
-            int tileNum = (int) pos / resolution;
-            values[tileNum] = val;
-
-            double muVal = Double.valueOf(fields[2]);
-            muFileValues[tileNum] = muVal;
-
-            double w0Val = Double.valueOf(fields[3]);
-            w0Values[tileNum] = w0Val;
-        }
-
         log.debug("applying median filter with window size " + medianFilterWindow);
-        double[] filteredVals = MedianFilter.medianFilterValues(values, medianFilterWindow, lrThreshold);
-        writePositiveRegions(filteredVals, textTextOutputCollector, faix.getNameForChromKey(chromosome), faix,
-                resolution, peakNum, muFileValues, w0Values,
-                targetIsize, targetIsizeSD, variantType, lrThreshold);
+        FilteredValueSet[] filteredValues = MedianFilter.medianFilterValues(new GMMResultsIterator(gmmScorerResultsIterator),
+                medianFilterWindow, lrThreshold, lengthForChromName, resolution);
+        log.debug("got back filtered regions: lrs have " + filteredValues[0].values.keySet().size() + " keys");
+        writePositiveRegions(filteredValues[0], textTextOutputCollector, faix.getNameForChromKey(chromosome),
+                resolution, peakNum, filteredValues[1], filteredValues[2],
+                targetIsize, targetIsizeSD, variantType, lrThreshold, faix.getLengthForChromName(faix.getNameForChromKey(chromosome)) - 1);
     }
 
-    private int writePositiveRegions(double[] filteredVals, OutputCollector<Text, Text> textTextOutputCollector,
-                                            String currentChromosome, FaidxFileHelper faidx, int resolution,
-                                            int peakNum, double[] muFileValues, double[] w0FileValues,
-                                            int targetIsize, int targetIsizeSD, String desiredVariantType, double lrThreshold) throws IOException {
+    public static class GMMResult {
+        public long pos;
+        public double lrVal;
+        public double w0val;
+        public double muval;
+
+        public GMMResult(long pos, double lrVal, double muval, double w0val) {
+            this.pos = pos;
+            this.lrVal = lrVal;
+            this.w0val = w0val;
+            this.muval = muval;
+        }
+    }
+
+    public static class GMMResultsIterator {
+        Iterator<Text> textIterator;
+        String nextLine;
+
+        public GMMResultsIterator(Iterator<Text> textIterator) {
+            this.textIterator = textIterator;
+            if (textIterator.hasNext()) nextLine = textIterator.next().toString();
+        }
+
+        public boolean hasNext() {
+            return nextLine != null;
+        }
+
+        public GMMResult getNextResult(long pos) {
+            if (nextLine != null) {
+                String[] fields = nextLine.split("\t");
+                if (pos == Long.valueOf(fields[0])) {
+                    if (textIterator.hasNext()) {
+                        nextLine = textIterator.next().toString();
+                    } else {
+                        nextLine = null;
+                    }
+                    return new GMMResult(pos, Double.valueOf(fields[1]), Double.valueOf(fields[2]), Double.valueOf(fields[3]));
+                } else {
+                    return new GMMResult(pos, 0, 0, -1);
+                }
+            } else {
+                return new GMMResult(pos, 0, 0, -1);
+            }
+        }
+    }
+
+    public int writePositiveRegions(FilteredValueSet filteredVals, OutputCollector<Text, Text> textTextOutputCollector,
+                                     String currentChromosome, int resolution,
+                                     int peakNum, FilteredValueSet muFileValues, FilteredValueSet w0FileValues,
+                                     int targetIsize, int targetIsizeSD, String desiredVariantType, double lrThreshold,
+                                     long chromLength) throws IOException {
         log.debug("writing positive regions");
         boolean usingMuValues = true;
 
         boolean inPositivePeak = false;
+
         long peakStart = 0;
         int idx = 0;
         double peakMax = 0;
+
+        double preceedingW0Val = -1;
+        double succeedingW0Val = -1;
 
         double muValSum = 0;
         double muValMin = 0;
@@ -109,15 +138,24 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         double w0ValMin = 0;
         double w0ValMax = 0;
 
-        while (idx < filteredVals.length) {
+        double muFileValuesN = -1;
+        double muFileValuesNminus1 = -1;
+        double muFileValuesNminus2 = -1;
+
+        while (idx < filteredVals.maxIndex) {
             long pos = idx * resolution;
+            muFileValuesNminus2 = muFileValuesNminus1;
+            muFileValuesNminus1 = muFileValuesN;
+
+
+            muFileValuesN = muFileValues.getVal(idx);
 
             // If we are filtering regions based on the estimated mean of the second component,
             // if the mean changes more by more than twice the SD of the library we break up the
             // prediction for deletions
-            if (filteredVals[idx] > 0) {
+            if (filteredVals.getVal(idx) > 0) {
                 if (!Cloudbreak.VARIANT_TYPE_DELETION.equals(desiredVariantType) ||
-                        ! muHasChangedTooMuch(muFileValues, targetIsizeSD, idx)) {
+                        ! muHasChangedTooMuch(targetIsizeSD, idx, muFileValuesN, muFileValuesNminus2)) {
                     if (!inPositivePeak) {
                         log.debug("beginning peak at " + pos);
                         peakStart = pos;
@@ -128,24 +166,26 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                         w0ValSum = 0;
                         w0ValMin = Double.POSITIVE_INFINITY;
                         w0ValMax = Double.NEGATIVE_INFINITY;
+                        preceedingW0Val = idx == 0 ? -1 : w0FileValues.getVal(idx - 1);
                     }
-                    peakMax = Math.max(peakMax, filteredVals[idx]);
-                    muValSum += muFileValues[idx];
-                    muValMin = Math.min(muValMin, muFileValues[idx]);
-                    muValMax = Math.max(muValMax, muFileValues[idx]);
-                    w0ValSum += w0FileValues[idx];
-                    w0ValMin = Math.min(w0ValMin, w0FileValues[idx]);
-                    w0ValMax = Math.max(w0ValMax, w0FileValues[idx]);
+                    peakMax = Math.max(peakMax, filteredVals.getVal(idx));
+                    muValSum += muFileValuesN;
+                    muValMin = Math.min(muValMin, muFileValuesN);
+                    muValMax = Math.max(muValMax, muFileValuesN);
+                    w0ValSum += w0FileValues.getVal(idx);
+                    w0ValMin = Math.min(w0ValMin, w0FileValues.getVal(idx));
+                    w0ValMax = Math.max(w0ValMax, w0FileValues.getVal(idx));
 
                 } else {
                     if (inPositivePeak) {
-                        log.debug("ending peak because of mu shift at idx " + idx + "; muFileValues[idx] = " + muFileValues[idx] + "; muFileValues[idx - 2] = " + muFileValues[(idx - 2)]);
+                        log.debug("ending peak because of mu shift at idx " + idx + "; muFileValuesN = " + muFileValuesN + "; muFileValuesNminus2 = " + muFileValuesNminus2);
                         long endPosition = pos - 1;
                         long length = endPosition - peakStart;
                         double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
+                        succeedingW0Val = w0FileValues.getVal(idx);
                         peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                                 targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                                w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
+                                w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, preceedingW0Val, succeedingW0Val);
                         inPositivePeak = false;
                         peakMax = 0;
                     }
@@ -156,9 +196,10 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
                     long endPosition = pos - 1;
                     long length = endPosition - peakStart;
                     double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
+                    succeedingW0Val = w0FileValues.getVal(idx);
                     peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                             targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                            w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
+                            w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, preceedingW0Val, succeedingW0Val);
                     inPositivePeak = false;
                     peakMax = 0;
                 }
@@ -167,18 +208,19 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         }
         if (inPositivePeak) {
             log.debug("ending peak because there are no more values to look at");
-            long endPosition = faidx.getLengthForChromName(currentChromosome) - 1;
+            long endPosition = chromLength;
             if (endPosition < peakStart) return peakNum;
             long length = endPosition - peakStart;
             double avgMu = muValSum * resolution / ((endPosition + 1) - peakStart);
+            succeedingW0Val = -1;
             peakNum = determineVariantTypeAndWriteLine(textTextOutputCollector, currentChromosome, resolution, peakNum,
                     targetIsize, usingMuValues, peakStart, peakMax, muValMin, muValMax, w0ValSum, w0ValMin,
-                    w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, w0FileValues);
+                    w0ValMax, endPosition, length, avgMu, desiredVariantType, lrThreshold, preceedingW0Val, succeedingW0Val);
         }
         return peakNum;
     }
 
-    public static boolean muHasChangedTooMuch(double[] muFileValues, int targetIsizeSD, int idx) {
+    public static boolean muHasChangedTooMuch(int targetIsizeSD, int idx, double muFileValueN, double muFileValueNminus2) {
         if (idx < 2) return false;
         // x is far from x - 3
         // x is far from x - 2
@@ -186,21 +228,22 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
         // x - 1 is far from x - 3
         // x and x - 1 are close
         // x - 2 and x - 3 are close
-        return (idx >= 2 && Math.abs(muFileValues[idx] - muFileValues[(idx - 2)]) > 2 * targetIsizeSD);
+        return (idx >= 2 && Math.abs(muFileValueN - muFileValueNminus2) > 2 * targetIsizeSD);
     }
 
     private int determineVariantTypeAndWriteLine(OutputCollector<Text, Text> outputCollector, String currentChromosome, int resolution, int peakNum,
                                                         int targetIsize, boolean usingMuValues, long peakStart,
                                                         double peakMax, double muValMin, double muValMax, double w0ValSum,
                                                         double w0ValMin, double w0ValMax,
-                                                        long endPosition, long length, double avgMu, String desiredVariantType, double lrThreshold, double[] w0FileValues) throws IOException {
+                                                        long endPosition, long length, double avgMu, String desiredVariantType, double lrThreshold,
+                                                        double preceedingW0Val, double succeedingW0Val) throws IOException {
         log.debug("validating peak num " + peakNum + ", start = " + peakStart + ", end = " + endPosition);
         String variantType = null;
         if (! usingMuValues) {
             variantType = Cloudbreak.VARIANT_TYPE_UNKNOWN;
         } else if (validDeletionPrediction(targetIsize, length, avgMu, peakMax, lrThreshold)) {
             variantType = Cloudbreak.VARIANT_TYPE_DELETION;
-        } else if (validInsertionPrediction(targetIsize, avgMu, peakStart, endPosition, w0FileValues, resolution)) {
+        } else if (validInsertionPrediction(targetIsize, avgMu, preceedingW0Val, succeedingW0Val)) {
             variantType = Cloudbreak.VARIANT_TYPE_INSERTION;
         }
         if (desiredVariantType == null || desiredVariantType.equals(variantType)) {
@@ -227,14 +270,12 @@ public class GMMResultsToVariantCallsReducer extends CloudbreakMapReduceBase imp
      * insertions are only valid if:
      * the estimated mean of the second component is smaller than the target insert size and
      */
-    private boolean validInsertionPrediction(int targetIsize, double avgMu, long peakStart, long peakEnd, double[] w0vals, int resolution) {
-        return (avgMu < targetIsize) && (! insNoCovFilter || peakNotFlankedByNoCovBin(peakStart, peakEnd, w0vals, resolution));
+    private boolean validInsertionPrediction(int targetIsize, double avgMu, double preceedingW0Val, double succeedingW0Val) {
+        return (avgMu < targetIsize) && (! insNoCovFilter || peakNotFlankedByNoCovBin(preceedingW0Val, succeedingW0Val));
     }
 
-    private static boolean peakNotFlankedByNoCovBin(long peakStart, long peakEnd, double[] w0vals, int resolution) {
-        int startIdx = (int) (peakStart / resolution);
-        int endIdx = (int) (peakEnd / resolution);
-        return (startIdx - 1 >=0 && w0vals[startIdx - 1] > -1) && (endIdx + 1 < w0vals.length && w0vals[endIdx + 1] > -1);
+    private static boolean peakNotFlankedByNoCovBin(double preceedingW0Val, double succeedingW0Val) {
+        return (preceedingW0Val > -1) && (succeedingW0Val > -1);
     }
 
     private static void writeLine(OutputCollector<Text,Text> outputCollector, String currentChromosome, int resolution, int peakNum, long peakStart,
