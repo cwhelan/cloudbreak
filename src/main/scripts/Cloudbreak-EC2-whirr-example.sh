@@ -35,8 +35,8 @@ BWA_MAPPER_MAX_PROCESSES_ON_NODE=6
 ###############################################################################
 # CLOUDBREAK PARAMETERS
 ###############################################################################
-ALIGNMENT_REDUCE_TASKS=50
-GMM_REDUCE_TASKS=100
+ALIGNMENT_REDUCE_TASKS=30
+GMM_REDUCE_TASKS=60
 MAX_INSERT=25000
 RESOLUTION=25
 ALIGNER=sam
@@ -92,10 +92,12 @@ time hadoop jar $CLOUDBREAK_JAR -Dmapred.reduce.tasks=$ALIGNMENT_REDUCE_TASKS bw
 echo "=================================="
 echo "Creating a readgroup file"
 echo "=================================="
-echo "creating readgroup file"
 echo "$READ_GROUP_NAME	$LIBRARY_NAME	$INSERT_SIZE	$INSERT_SIZE_SD	false	/user/cloudbreak/alignments" >> readGroupInfo.txt
 hadoop dfs -copyFromLocal readGroupInfo.txt $HDFS_EXPERIMENT_DIR/readGroupInfo.txt
 
+echo "=================================="
+echo "Running GMM Feature Generation"
+echo "=================================="
 hadoop jar $CLOUDBREAK_JAR -Dmapred.reduce.tasks=$GMM_REDUCE_TASKS GMMFitSingleEndInsertSizes \
     --inputFileDescriptor $HDFS_EXPERIMENT_DIR/readGroupInfo.txt  \
     --outputHDFSDir $HDFS_EXPERIMENT_DIR/gmm_features/ \
