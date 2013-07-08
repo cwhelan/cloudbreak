@@ -449,7 +449,7 @@ Each command is detailed below and its options are listed below. You can view th
                   --noCovFilter          filter out calls next to a bin with no
                                          coverage - recommend on for BWA alignments, off for
                                          other aligners
-                                         Default: false
+                                         Default: true
             *     --outputHDFSDir        HDFS Directory to store the variant calls
                                          in
                   --resolution           Size of the bins to tile the genome with

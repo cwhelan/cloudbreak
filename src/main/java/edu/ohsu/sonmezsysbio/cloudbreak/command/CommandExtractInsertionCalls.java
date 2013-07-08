@@ -16,7 +16,7 @@ import org.apache.hadoop.mapred.JobConf;
 public class CommandExtractInsertionCalls extends VariantExtractionCommand implements CloudbreakCommand {
 
     @Parameter(names = {"--noCovFilter"}, description = "filter out calls next to a bin with no coverage - recommend on for BWA alignments, off for other aligners")
-    boolean noCovFilter = false;
+    boolean noCovFilter = true;
 
     @Override
     public void run(Configuration conf) throws Exception {
