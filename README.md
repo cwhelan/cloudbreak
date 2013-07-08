@@ -10,16 +10,22 @@ read, in the Hadoop framework. It then contains Hadoop jobs for computing
 genomic features from the alignments, and for calling insertion and deletion
 variants from those features.
 
+You can get Cloudbreak by downloading a pre-packaged release from the "releases"
+tab in the GitHub repository, or by building from source as described below.
+
 ##Building From Source
 
 To build the latest version of Cloudbreak, clone the gitub repository. You'll
 need to install Maven to build the executables. (http://maven.apache.org/)
-Enter the top level directory of the Cloudbreak repository and tyoe command:
+Enter the top level directory of the Cloudbreak repository and type the command:
 
 `mvn package`
 
-This should compile the code, execute tests, and create the final jar file
-in the `target/` directory.
+This should compile the code, execute tests, and create a distribution file,
+ `cloudbreak-$VERSION-dist.tar.gz` in the `target/` directory. You can then copy
+ that distribution file to somewhere else on your system, unpack it with
+ `tar -xzvf cloudbreak-$VERSION-dist.tar.gz` and access the Cloudbreak jar file
+  and related scripts and properties files.
 
 ##Dependencies
 
@@ -40,13 +46,59 @@ supported aligners:
 ##User Guide
 
 You can use Cloudbreak in several different ways, depending on whether you want
-to start with FASTQ files and use Hadoop to create alignments, or if you already
+to start with FASTQ files and use Hadoop to help parallelize your alignments, or if you already
 have an aligned BAM file and just want to use Cloudbreak to call variants. In addition,
 the workflow is slightly different depending on whether you want to run on a local
-hadoop cluster or want to run using a cloud provider like Amazon EC2. Find the scenario
-below that best fits your use case for more details on how to run that workflow. For
-each scenario, we have created a template script that contains all of the steps
-and parameters you need, which you can modify for your particular data set.
+hadoop cluster or want to run using a cloud provider like Amazon EC2. Later in this
+file, we've listed a set of scenarios to describe options for running the Cloudbreak
+pipeline. Find the scenario that best fits your use case for more details on how to
+run that workflow. For each scenario, we have created a template script that contains
+all of the steps and parameters you need, which you can modify for your particular data set.
+
+##Running on a cloud provider like Amazon EC2 with Whirr
+
+Cloudbreak has support for automatically deploying a Hadoop cluster on
+cloud providers such as Amazon EC2, transferring your data there, running the Cloudbreak algorithm, and
+downloading the results.
+
+Of course, renting compute time on EC2 or other clouds costs money, so please be
+familiar with the appropriate usage and billing policies of your cloud provider
+before attempting this.
+
+WE ARE NOT RESPONSIBLE FOR UNEXPECTED CHARGES THAT YOU MIGHT INCUR ON EC2 OR
+OTHER CLOUD PROVIDERS.
+
+Many properties that affect the cluster created can be set in the file
+`cloudbreak-whirr.properties` in this distribution. You will need to edit this file
+to set your AWS access key and secret access key (or your credentials for other
+cloud provider services), and to tell it the location of the public and
+private SSH keys to use to access the cluster. You can also control the number
+and type of nodes to include in the cluster. The default settings in the file
+create 15 nodes of type m1.xlarge, which is sufficient to fully process a 30X
+simulation of human chromsome 2, including read alignment and data transfer time,
+in under an hour. We have only tested this capability using EC2; other cloud providers
+may not work as well. You can also direct Whirr to use Amazon EC2's spot instances, which are
+dramatically cheaper than on-demand instances, although they carry the risk of
+being terminated if your price is out-bid. Using recent spot pricing, it cost
+us about $5 to run the aforementioned chromosome 2 simulation. We recommend
+setting your spot bid price to be the on demand price for the instance type you
+are using to minimize the chance of having your instances terminated.
+
+Please consult Amazon's EC2 documentation and the documentation for Whirr for
+more information on how to configure and deploy clusters in the cloud.
+
+##Running on a Small Example Data Set
+
+To facilitate testing of Cloudbreak, we have publicly hosted the reads from the simulated
+data example described in the Cloudbreak manuscript on a bucket in Amazon's S3 storage
+ service at s3://cloudbreak-example/. We have also provided an example script that creates
+ a cluster in Amazon EC2, copies the data to the cluster, runs the full Cloudbreak
+  workflow including alignments with BWA, and copies the variant calls back to the
+  local machine before destroying the cluster. The script, called `Cloudbreak-EC2-whirr-example.sh`
+  is in the scripts directory of the Cloudbreak distribution. Of course, you will still
+  need to edit the `cloudbreak-whirr.properties` file with your EC2 credentials, and verify
+  that the cluster size, instance types, and spot price are to your liking before
+  executing the example.
 
 ###Scenario 1: Compute alignments in Hadoop, using a local Hadoop cluster
 
@@ -59,11 +111,11 @@ containing chromosome names and lengths, generated by `samtools faidx`.
 
 If your reference file is `reference.fa`, and `bwa aln` has created the files
 
-    `reference.fa.amb`
-    `reference.fa.ann`
-    `reference.fa.bwt`
-    `reference.fa.pac`
-    `reference.fa.sa`
+    reference.fa.amb
+    reference.fa.ann
+    reference.fa.bwt
+    reference.fa.pac
+    reference.fa.sa
 
 and `reference.fa.fai` as described above, issue the following
 commands to load the necessary files into HDFS:
@@ -118,19 +170,15 @@ After that, the workflow is:
 6. Extract insertion calls from the features created in step 3.
 7. Copy the insertion calls from HDFS to a local directory.
 
-The fastest way to accomplish step 1 may vary depending on the type of BAM file you have.
-To prepare alignments for Cloudbreak, they must be sorted by read name. If you already have a
- BAM file in which the reads have been sorted by name (using `samtools sort -n` or a similar
- command), your fastest bet is to load it into HDFS directly using the `readSAMFileIntoHDFS`
- Cloudbreak command. If you don't already have a name-sorted BAM file, it can be faster
- to sort your alignments using Hadoop (Insert example here).
+To prepare alignments for Cloudbreak, they must be sorted by read name. You can then use the
+ `readSAMFileIntoHDFS` Cloudbreak command.
 
-Templates for both of these scenarios are available in the script `Cloudbreak-variants-only.sh`
+A templates for this scenario is available in the script `Cloudbreak-variants-only.sh`
 located in the scripts directory of the Cloudbreak distribution.
 
 ###Scenario 3: Compute alignments in Hadoop, using a cloud provider like EC2
 
-First, see the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below, and modify the file
+First, see the section "Running on a Cloud Provider like Amazon EC2 with Whirr" above, and modify the file
 `cloudbreak-whirr.properties` to include your access credentials and the appropriate cluster
 specifications. After that, the workflow is similar to the workflow described for scenario #1
 above, whith the additionals first steps of copying your reads and dependency files to the cloud and
@@ -144,7 +192,7 @@ to EC2, and runs the algorithm.
 
 ###Scenario 4: Call variants on existing alignments, using a cloud provider like EC2
 
-Again, please read the section "RUNNING ON A CLOUD PROVIDER LIKE EC2 WITH WHIRR" below to learn how to
+Again, please read the section "Running on a Cloud Provider like Amazon EC2 with Whirr" above to learn how to
 update the `cloudbreak-whirr.properties` file with your credentials and cluster specifications. After that,
 follow the template in the script `Cloudbreak-EC2-whirr-variants-only.sh` to create a workflow
 involving calling variants in the cloud.
@@ -153,52 +201,24 @@ involving calling variants in the cloud.
 
 The output from running Cloudbreak using one of the scripts above will be found in the files named
 
-*READ_GROUP_LIBRARY_dels_genotyped.bed
-*READ_GROUP_LIBRARY_ins_genotyped.bed
+    READ_GROUP_LIBRARY_dels_genotyped.bed
+    READ_GROUP_LIBRARY_ins_genotyped.bed
 
 where READ_GROUP and LIBRARY are the names of the reads in your experiment. The
 format of the files is tab-delimited with the following columns:
 
-*CHROMOSOME: The chromosome of the deletion call
-*START: The start coordinate of the deletion call
-*END: The end coordinate of the deletion call
-*NUMBER: The cloudbreak identifier of the deletion call
-*LR: The likelihood ratio of the deletion (higher indicates a call more likely to be true)
-*TYPE: Either "INS" or "DEL"
-*W: The average weight of the estimated GMM mixing parameter alpha, used in genotyping
-*GENOTYPE: The predicted genotype of the call
-
-##Running on a cloud provider like Amazon EC2
-
-Cloudbreak has limited support for automatically deploying a Hadoop cluster on
-cloud providers such as Amazon EC2, transferring your data there, running the Cloudbreak algorithm, and
-downloading the results.
-
-Of course, renting compute time on EC2 or other clouds costs money, so
-we recommend that you be familiar with the appropriate usage and billing before attempting this.
-WE ARE NOT RESPONSIBLE FOR UNEXPECTED CHARGES THAT YOU MIGHT INCUR ON EC2 OR OTHER CLOUD PROVIDERS.
-
-Many properties that affect the cluster created can be set in the file
-cloudbreak-whirr.properties. You will need to edit this file to set your AWS
-access key and secret access key, and to tell it the location of the public and
-private SSH keys to use to access the cluster. You can also control the number
-and type of nodes to include in the cluster. The default settings in the file
-create 40 nodes of type m2.xlarge, which is sufficient to fully process a 30X
-simulation of human chromsome 2, including read alignment, in about 90 minutes.
-We have only tested this capability using EC2; other cloud providers may not work as well.
-You can also direct Whirr to use Amazon EC2's spot instances, which are
-dramatically cheaper than on-demand instances, although they carry the risk of
-being terminated if your price is out-bid. Using recent spot pricing, it cost
-us about $5 to run the aforementioned chromosome 2 simulation. We recommend
-setting your spot bid price to be the on demand price for the instance type you
-are using to minimize the chance of having your instances terminated.
-
-Please consult Amazon's EC2 documentation and the documentation for Whirr for
-more information on how to configure and deploy clusters in the cloud.
+*  CHROMOSOME: The chromosome of the deletion call
+*  START: The start coordinate of the deletion call
+*  END: The end coordinate of the deletion call
+*  NUMBER: The cloudbreak identifier of the deletion call
+*  LR: The likelihood ratio of the deletion (higher indicates a call more likely to be true)
+*  TYPE: Either "INS" or "DEL"
+*  W: The average weight of the estimated GMM mixing parameter alpha, used in genotyping
+*  GENOTYPE: The predicted genotype of the call
 
 ##Contact information
 
-Please contact cwhelan@gmail.com with any questions on running cloudbreak.
+Please contact cwhelan at gmail.com with any questions on running cloudbreak.
 
 ##Reference Guide
 
@@ -449,7 +469,7 @@ Each command is detailed below and its options are listed below. You can view th
                   --noCovFilter          filter out calls next to a bin with no
                                          coverage - recommend on for BWA alignments, off for
                                          other aligners
-                                         Default: false
+                                         Default: true
             *     --outputHDFSDir        HDFS Directory to store the variant calls
                                          in
                   --resolution           Size of the bins to tile the genome with
