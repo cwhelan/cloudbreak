@@ -153,10 +153,12 @@ time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.redu
 echo "=================================="
 echo "Creating a readgroup file"
 echo "=================================="
-echo "creating readgroup file"
 echo "$READ_GROUP_NAME	$LIBRARY_NAME	$INSERT_SIZE	$INSERT_SIZE_SD	false	/user/cloudbreak/alignments" >> readGroupInfo.txt
 hadoop dfs -copyFromLocal readGroupInfo.txt $HDFS_EXPERIMENT_DIR/readGroupInfo.txt
 
+echo "=================================="
+echo "Running GMM Feature Generation"
+echo "=================================="
 hadoop jar $CLOUDBREAK_JAR -Dmapred.reduce.tasks=$GMM_REDUCE_TASKS GMMFitSingleEndInsertSizes \
     --inputFileDescriptor $HDFS_EXPERIMENT_DIR/readGroupInfo.txt  \
     --outputHDFSDir $HDFS_EXPERIMENT_DIR/gmm_features/ \
