@@ -15,7 +15,7 @@ tab in the GitHub repository, or by building from source as described below.
 
 ##Building From Source
 
-To build the latest version of Cloudbreak, clone the gitub repository. You'll
+To build the latest version of Cloudbreak, clone the GitHub repository. You'll
 need to install Maven to build the executables. (http://maven.apache.org/)
 Enter the top level directory of the Cloudbreak repository and type the command:
 
@@ -49,7 +49,7 @@ You can use Cloudbreak in several different ways, depending on whether you want
 to start with FASTQ files and use Hadoop to help parallelize your alignments, or if you already
 have an aligned BAM file and just want to use Cloudbreak to call variants. In addition,
 the workflow is slightly different depending on whether you want to run on a local
-hadoop cluster or want to run using a cloud provider like Amazon EC2. Later in this
+Hadoop cluster or want to run using a cloud provider like Amazon EC2. Later in this
 file, we've listed a set of scenarios to describe options for running the Cloudbreak
 pipeline. Find the scenario that best fits your use case for more details on how to
 run that workflow. For each scenario, we have created a template script that contains
@@ -75,7 +75,7 @@ cloud provider services), and to tell it the location of the public and
 private SSH keys to use to access the cluster. You can also control the number
 and type of nodes to include in the cluster. The default settings in the file
 create 15 nodes of type m1.xlarge, which is sufficient to fully process a 30X
-simulation of human chromsome 2, including read alignment and data transfer time,
+simulation of human chromosome 2, including read alignment and data transfer time,
 in under an hour. We have only tested this capability using EC2; other cloud providers
 may not work as well. You can also direct Whirr to use Amazon EC2's spot instances, which are
 dramatically cheaper than on-demand instances, although they carry the risk of
@@ -181,7 +181,7 @@ located in the scripts directory of the Cloudbreak distribution.
 First, see the section "Running on a Cloud Provider like Amazon EC2 with Whirr" above, and modify the file
 `cloudbreak-whirr.properties` to include your access credentials and the appropriate cluster
 specifications. After that, the workflow is similar to the workflow described for scenario #1
-above, whith the additionals first steps of copying your reads and dependency files to the cloud and
+above, with the additional first steps of copying your reads and dependency files to the cloud and
 creating a cluster before processing begins, and then destroying the cluster after processing has
 completed.
 
