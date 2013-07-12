@@ -13,6 +13,9 @@ variants from those features.
 You can get Cloudbreak by downloading a pre-packaged release from the "releases"
 tab in the GitHub repository, or by building from source as described below.
 
+You can read more about how Cloudbreak works in our paper, which is currently
+available as a preprint at http://arxiv.org/abs/1307.2331.
+
 ##Building From Source
 
 To build the latest version of Cloudbreak, clone the GitHub repository. You'll
