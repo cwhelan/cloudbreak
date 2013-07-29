@@ -5,20 +5,16 @@ import com.beust.jcommander.Parameters;
 import edu.ohsu.sonmezsysbio.cloudbreak.Cloudbreak;
 import edu.ohsu.sonmezsysbio.cloudbreak.io.HDFSWriter;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by IntelliJ IDEA.
@@ -68,7 +64,7 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
         FileSystem hdfs = FileSystem.get(config);
         Path p = new Path(hdfsDataDir + "/" + outFileName);
 
-        HDFSWriter writer = Cloudbreak.getHdfsWriter(config, hdfs, p, compress);
+        HDFSWriter writer = Cloudbreak.getHdfsWriter(config, hdfs, p, compress, LongWritable.class, Text.class);
         try {
             readFile(hdfs, writer, readFile1, readFile2);
         } finally {

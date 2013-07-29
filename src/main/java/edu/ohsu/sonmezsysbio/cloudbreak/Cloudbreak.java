@@ -53,10 +53,10 @@ public class Cloudbreak extends Configured implements Tool
         System.exit(res);
     }
 
-    public static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress) throws IOException {
+    public static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress, Class keyClass, Class valClass) throws IOException {
         HDFSWriter writer = new HDFSWriter();
         if ("snappy".equals(compress)) {
-            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, Text.class, Text.class, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
+            writer.seqFileWriter = SequenceFile.createWriter(hdfs, config, p, keyClass, valClass, SequenceFile.CompressionType.BLOCK, new SnappyCodec());
         } else {
             FSDataOutputStream outputStream = hdfs.create(p);
             BufferedWriter bufferedWriter = null;
