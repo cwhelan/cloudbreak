@@ -15,10 +15,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.GZIPOutputStream;
@@ -46,22 +43,14 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
     @Parameter(names = {"--compress"}, description = "Compression codec to use for the data")
     String compress = "snappy";
 
+    @Parameter(names = {"--filesInHDFS"}, description = "Use this flag if the BAM file has already been copied into HDFS")
+    boolean filesInHDFS = false;
 
     public void run(Configuration conf) throws Exception {
         Configuration config = new Configuration();
 
         FileSystem hdfs = FileSystem.get(config);
-        Path p = new Path(hdfsDataDir + "/" + outFileName);
-
-        //HDFSWriter writer = getHdfsWriter(config, hdfs, p);
-
-//        try {
-//            readFile(writer, samFile);
-//        } finally {
-//            writer.close();
-//        }
-
-        readFile(null, samFile, config, hdfs);
+        readFile(samFile, config, hdfs);
     }
 
     static HDFSWriter getHdfsWriter(Configuration config, FileSystem hdfs, Path p, String compress) throws IOException {
@@ -83,9 +72,16 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         return writer;
     }
 
-    private void readFile(HDFSWriter writer, String samFile, Configuration config, FileSystem hdfs) throws IOException {
+    private void readFile(String samFile, Configuration config, FileSystem hdfs) throws IOException {
         ExecutorService executorService = Executors.newFixedThreadPool(2);
-        SAMFileReader samFileReader = new SAMFileReader(new File(samFile));
+        InputStream inputStream;
+        if (filesInHDFS) {
+            inputStream = hdfs.open(new Path(samFile));
+        } else {
+            inputStream = new FileInputStream(samFile);
+        }
+
+        SAMFileReader samFileReader = new SAMFileReader(inputStream);
         samFileReader.setValidationStringency(SAMFileReader.ValidationStringency.SILENT);
         SAMRecordIterator it = samFileReader.iterator();
 
@@ -93,7 +89,8 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
         int numRecords = 0;
         long lastTime = System.currentTimeMillis();
         Text key = new Text();
-        KeyVal[] buffer = new KeyVal[10000000];
+        int bufferSize = 500000;
+        KeyVal[] buffer = new KeyVal[bufferSize];
         while (it.hasNext()) {
             SAMRecord samRecord = it.next();
             String readName = samRecord.getReadName();
@@ -103,9 +100,9 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
             KeyVal keyVal = new KeyVal();
             keyVal.key = currentReadName;
             keyVal.val = samRecord.getSAMString();
-            buffer[numRecords] = keyVal;
+            buffer[numRecords % bufferSize] = keyVal;
             numRecords++;
-            if (numRecords % 10000000 == 0) {
+            if (numRecords % bufferSize == 0) {
                 long currentTime = System.currentTimeMillis();
                 System.err.println("Loaded " + numRecords + " in " + (currentTime - lastTime) + "ms");
                 lastTime = currentTime;
@@ -116,10 +113,19 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
                 uploadThread.path = p;
                 uploadThread.config = config;
                 uploadThread.hdfs = hdfs;
-                buffer = new KeyVal[10000000];
+                buffer = new KeyVal[bufferSize];
                 executorService.execute(uploadThread);
             }
         }
+        System.err.println("finished reading the file, found " + numRecords);
+        Path p = new Path(hdfsDataDir + "/" + outFileName + "-" + numRecords);
+        UploadThread uploadThread = new UploadThread();
+        uploadThread.recordNum = numRecords;
+        uploadThread.buff = buffer;
+        uploadThread.path = p;
+        uploadThread.config = config;
+        uploadThread.hdfs = hdfs;
+        executorService.execute(uploadThread);
         executorService.shutdown();
         while (!executorService.isTerminated()) {
         }
@@ -146,7 +152,7 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
 
             try {
                 writer = getHdfsWriter(config, hdfs, path, CommandReadSAMFileIntoHDFS.this.compress);
-                for (int i = 0; i < buff.length; i++) {
+                for (int i = 0; i <= (recordNum - 1) % buff.length; i++) {
                     writer.write(new Text(buff[i].key), buff[i].val);
                 }
 
@@ -159,7 +165,6 @@ public class CommandReadSAMFileIntoHDFS implements CloudbreakCommand {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Loaded " + recordNum);
 
         }
     }

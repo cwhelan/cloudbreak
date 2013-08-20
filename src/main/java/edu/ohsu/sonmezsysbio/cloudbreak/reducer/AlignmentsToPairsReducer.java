@@ -29,9 +29,11 @@ public class AlignmentsToPairsReducer extends MapReduceBase
         while (values.hasNext()) {
             String alignment = values.next().toString();
             String[] fields = alignment.split("\t");
-            if ((Integer.valueOf(fields[1]) & 0x40) > 0) {
+            Integer flag = Integer.valueOf(fields[1]);
+            if ((flag & 0x4) > 0) continue;
+            if ((flag & 0x40) > 0) {
                 read1Alignments.add(alignment);
-            } else if ((Integer.valueOf(fields[1]) & 0x80) > 0) {
+            } else if ((flag & 0x80) > 0) {
                 read2Alignments.add(alignment);
             } else {
                 throw new RuntimeException("bad line: " + alignment);

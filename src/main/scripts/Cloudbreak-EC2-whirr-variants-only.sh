@@ -64,6 +64,9 @@ echo "File: $CLOUDBREAK_JAR"
 hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $CLOUDBREAK_JAR
 echo "File: $REFERENCE_FAIDX"
 hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $REFERENCE_FAIDX
+echo "File: $BAM_FILE"
+hadoop jar $CLOUDBREAK_JAR copyToS3 --S3Bucket $MY_BUCKET_NAME --fileName $BAM_FILE
+
 
 # launch cluster with whirr
 echo "=================================="
@@ -90,9 +93,16 @@ echo "=================================="
 echo "Reading alignments into HDFS"
 echo "=================================="
 time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readSAMFileIntoHDFS \
-    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments/ \
-    --samFile  $BAM_FILE
+    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments_import/ \
+    --samFile  /user/cloudbreak/$BAM_FILE \
+    --filesInHDFS
 
+echo "=================================="
+echo "Prepping alignments for Cloudbreak"
+echo "=================================="
+time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=25 prepSAMRecords \
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/alignments_import/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/alignments/
 
 echo "=================================="
 echo "Creating a readgroup file"

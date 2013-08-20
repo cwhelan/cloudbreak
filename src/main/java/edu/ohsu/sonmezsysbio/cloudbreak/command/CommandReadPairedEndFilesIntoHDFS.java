@@ -51,7 +51,7 @@ public class CommandReadPairedEndFilesIntoHDFS implements CloudbreakCommand {
     @Parameter(names = {"--filterBasedOnCasava18Flags"}, description = "Use the CASAVA 1.8 QC filter to filter out read pairs")
     boolean casava18filter = false;
 
-    @Parameter(names = {"--filesInHDFS"}, description = "Use this flag if the BAM file has already been copied into HDFS")
+    @Parameter(names = {"--filesInHDFS"}, description = "Use this flag if the FASTQ files have already been copied into HDFS")
     boolean filesInHDFS = false;
 
     private long numRecords;

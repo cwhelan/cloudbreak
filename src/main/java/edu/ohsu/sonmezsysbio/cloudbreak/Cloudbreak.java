@@ -112,8 +112,8 @@ public class Cloudbreak extends Configured implements Tool
         CommandReadSAMFileIntoHDFS readSamFile = new CommandReadSAMFileIntoHDFS();
         jc.addCommand("readSAMFileIntoHDFS", readSamFile);
 
-//        CommandPrepSAMRecords commandPrepSAMRecords = new CommandPrepSAMRecords();
-//        jc.addCommand("prepSAMRecords", commandPrepSAMRecords);
+        CommandPrepSAMRecords commandPrepSAMRecords = new CommandPrepSAMRecords();
+        jc.addCommand("prepSAMRecords", commandPrepSAMRecords);
 
         // Alignment commands
         CommandBWAPairedEnds bwaPairedEnds  = new CommandBWAPairedEnds();

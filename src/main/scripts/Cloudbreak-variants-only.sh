@@ -57,11 +57,15 @@ GENOTYPING_ALPHA_THRESHOLD=.35
 # experiment name
 NAME=cloudbreak_${LIBRARY_NAME}_${READ_GROUP_NAME}
 
-# read BAM file into HDFS
 echo "reading BAM file into HDFS"
-time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readSAMFileIntoHDFS \
-    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments/ \
+time HADOOP_HEAP_SIZE=4000 hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar readSAMFileIntoHDFS \
+    --HDFSDataDir $HDFS_EXPERIMENT_DIR/alignments_import/ \
     --samFile  $BAM_FILE
+
+echo "preparing the reads for Cloudbreak"
+time hadoop jar $CLOUDBREAK_HOME/cloudbreak-${project.version}.jar -Dmapred.reduce.tasks=25 prepSAMRecords \
+    --inputHDFSDir $HDFS_EXPERIMENT_DIR/alignments_import/ \
+    --outputHDFSDir $HDFS_EXPERIMENT_DIR/alignments/
 
 # write a read group info file and copy into HDFS
 echo "creating readgroup file"
