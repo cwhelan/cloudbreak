@@ -3,13 +3,13 @@
   <groupId>edu.ohsu.sonmezsysbio</groupId>
   <artifactId>cloudbreak</artifactId>
   <packaging>jar</packaging>
-  <version>0.2.2</version>
+  <version>0.3-SNAPSHOT</version>
   <name>cloudbreak</name>
     <scm>
         <connection>scm:git:git://github.com/cwhelan/${project.artifactId}.git</connection>
         <url>http://github.com/cwhelan/${project.artifactId}</url>
         <developerConnection>scm:git:git@github.com:cwhelan/${project.artifactId}.git</developerConnection>
-      <tag>cloudbreak-0.2.2</tag>
+      <tag>HEAD</tag>
   </scm>
   <url>http://maven.apache.org</url>
     <repositories>
