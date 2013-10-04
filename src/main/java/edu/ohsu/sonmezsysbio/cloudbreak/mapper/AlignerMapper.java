@@ -5,6 +5,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.SAMAlignmentReader;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -90,7 +91,10 @@ public abstract class AlignerMapper extends MapReduceBase implements Mapper<Long
                 continue;
             }
 
-            String readPairId = outLine.substring(0,outLine.indexOf('\t')-2);
+            String readPairId = outLine.substring(0,outLine.indexOf('\t'));
+            if (readPairId.endsWith("/1") || readPairId.endsWith("/2")) {
+                readPairId = readPairId.substring(0, readPairId.length() - 2);
+            }
             AlignmentRecord alignment = alignmentReader.parseRecord(outLine);
 
             if (! alignment.isMapped()) {
