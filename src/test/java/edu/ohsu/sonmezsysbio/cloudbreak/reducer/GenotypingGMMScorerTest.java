@@ -6,10 +6,7 @@ import edu.ohsu.sonmezsysbio.cloudbreak.io.ReadPairInfo;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -57,7 +54,10 @@ public class GenotypingGMMScorerTest {
         double[] y = HET_DEL_5X_5N;
         double[] nonnoise = new double[] {260.0736, 197.4272,   194.8618,  1217.8588,
                 1228.2190,  1151.7017};
-        assertArrayEquals(nonnoise, scorer.nnclean(y, scorer.cleanYIndices(y, 30, 2, 5)), 0.000001);
+        double[] result = scorer.nnclean(y, scorer.cleanYIndices(y, 30, 2, 5));
+        Arrays.sort(result);
+        Arrays.sort(nonnoise);
+        assertArrayEquals(nonnoise, result, 0.000001);
     }
 
     @Test
