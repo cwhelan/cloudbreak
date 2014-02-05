@@ -44,6 +44,10 @@ an older installation of Apache's Hadoop distribution, you may not have snappy i
 If so, you will have to install snappy to run Cloudbreak, either by reinstalling from
 the distribution package or as an add-on using the hadoop-snappy package:
 
+https://code.google.com/p/hadoop-snappy/
+
+We are working to fix this dependency on snappy so that those without snappy support can
+run Cloudbreak (without the benefits of its fast compression algorithms, of course).
 
 If you wish to run alignments using Cloudbreak, you will need one of the following
 supported aligners:
