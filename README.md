@@ -37,6 +37,14 @@ mapreduce API). If you don't have a Hadoop cluster, Cloudbreak can also use the
 Apache Whirr API to automatically provision a cluster on the Amazon Elastic
 Compute Cloud (EC2). See the section on using WHIRR below.
 
+Currently Cloudbreak requires that the Hadoop cluster have the native libraries to
+support Snappy compression installed. This comes standard with many Hadoop distributions,
+including Cloudera's distribution and AMIs for use on EC2. However, if you are running
+an older installation of Apache's Hadoop distribution, you may not have snappy installed.
+If so, you will have to install snappy to run Cloudbreak, either by reinstalling from
+the distribution package or as an add-on using the hadoop-snappy package:
+
+
 If you wish to run alignments using Cloudbreak, you will need one of the following
 supported aligners:
 
